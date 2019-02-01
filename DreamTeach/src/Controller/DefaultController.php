@@ -24,4 +24,11 @@ class DefaultController extends AbstractController
         return $this->render("login.html.twig");
     }
 
+    /**
+     * @Route("/signUp", name="signUp")
+     */
+    public function signUp()
+    {
+        return $this->render("signUp.html.twig");
+    }
 }

@@ -45,5 +45,46 @@ class Training
      */
     private $schoolid;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getDuration(): ?string
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(string $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getSchoolid(): ?School
+    {
+        return $this->schoolid;
+    }
+
+    public function setSchoolid(?School $schoolid): self
+    {
+        $this->schoolid = $schoolid;
+
+        return $this;
+    }
+
 
 }

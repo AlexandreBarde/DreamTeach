@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -104,6 +106,133 @@ class Session
     public function __construct()
     {
         $this->studentid = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getStartingtime(): ?\DateTimeInterface
+    {
+        return $this->startingtime;
+    }
+
+    public function setStartingtime(\DateTimeInterface $startingtime): self
+    {
+        $this->startingtime = $startingtime;
+
+        return $this;
+    }
+
+    public function getEndingtime(): ?\DateTimeInterface
+    {
+        return $this->endingtime;
+    }
+
+    public function setEndingtime(\DateTimeInterface $endingtime): self
+    {
+        $this->endingtime = $endingtime;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPlace(): ?string
+    {
+        return $this->place;
+    }
+
+    public function setPlace(string $place): self
+    {
+        $this->place = $place;
+
+        return $this;
+    }
+
+    public function getMaxnbparticipant(): ?int
+    {
+        return $this->maxnbparticipant;
+    }
+
+    public function setMaxnbparticipant(int $maxnbparticipant): self
+    {
+        $this->maxnbparticipant = $maxnbparticipant;
+
+        return $this;
+    }
+
+    public function getIsvirtual(): ?bool
+    {
+        return $this->isvirtual;
+    }
+
+    public function setIsvirtual(bool $isvirtual): self
+    {
+        $this->isvirtual = $isvirtual;
+
+        return $this;
+    }
+
+    public function getOrganizerid(): ?Student
+    {
+        return $this->organizerid;
+    }
+
+    public function setOrganizerid(?Student $organizerid): self
+    {
+        $this->organizerid = $organizerid;
+
+        return $this;
+    }
+
+    public function getSubjectid(): ?Subject
+    {
+        return $this->subjectid;
+    }
+
+    public function setSubjectid(?Subject $subjectid): self
+    {
+        $this->subjectid = $subjectid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Student[]
+     */
+    public function getStudentid(): Collection
+    {
+        return $this->studentid;
+    }
+
+    public function addStudentid(Student $studentid): self
+    {
+        if (!$this->studentid->contains($studentid)) {
+            $this->studentid[] = $studentid;
+        }
+
+        return $this;
+    }
+
+    public function removeStudentid(Student $studentid): self
+    {
+        if ($this->studentid->contains($studentid)) {
+            $this->studentid->removeElement($studentid);
+        }
+
+        return $this;
     }
 
 }

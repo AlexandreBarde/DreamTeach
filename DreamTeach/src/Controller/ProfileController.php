@@ -23,9 +23,10 @@ class ProfileController extends AbstractController
     /**
      * @Route("/profile/{idStudent}", name="profile")
      */
-    public function getInfoStudent($idStudent) {
+    public function getInfoStudent(Student $idStudent) {
         $reqUser = $this->getDoctrine()->getRepository(Student::Class);
         $user = $reqUser->find($idStudent);
         return $this->render("viewProfile.html.twig", ["user" => $user]);
     }
+
 }

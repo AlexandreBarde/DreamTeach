@@ -225,7 +225,7 @@ class Student implements UserInterface
         return $this;
     }
 
-    public function getTrainingid(): int
+    public function getTrainingid()
     {
         return $this->trainingid;
     }

@@ -14,18 +14,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DefaultController extends AbstractController
 {
-
     /**
      * @Route("/", name="HomeController")
-     */
-    public function defaultAction()
-    {
-        if($this->getUser() === null) return $this->redirectToRoute("app_login");
-        else return $this->render('base.html.twig', ["user" => $this->getUser()]);
-    }
-
-    /**
-     * @Route("/register", name="register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $encode)
     {

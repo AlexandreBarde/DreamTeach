@@ -32,7 +32,7 @@
                             <span class="text-danger">{{ form_errors(form.password) }}</span>
                         </div>
                     </div>
-                    <small>Pas encore de compte ? inscrivez-vous</small>
+                    <small class="font-italic">Pas encore de compte ?&nbsp;<a href="{{ path('app_login') }}">Inscrivez-vous</a></small>
                     <input type="submit" value="S'inscrire" class="btn btn-primary float-right">
                     {{ form_end(form) }}
                 </div>

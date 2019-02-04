@@ -53,7 +53,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function register(Request $request)
+    public function register(Request $request, UserPasswordEncoderInterface $encode)
     {
         $student = new Student();
 
@@ -61,7 +61,7 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $hash = $this->get(UserPasswordEncoderInterface::class)->encodePassword($student, $student->getPassword());
+            $hash = $encode->encodePassword($student, $student->getPassword());
             $student->setPassword($hash);
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);

@@ -71,10 +71,12 @@ class DefaultController extends AbstractController
             return $this->redirectToRoute("HomeController");
         }
 
-
-
-
-
+        return $this->render(
+            'register.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
 

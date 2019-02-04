@@ -2,29 +2,32 @@
 
 {% block title %}Inscription{% endblock %}
 
-{% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
-
 {% block body %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-12 form-group">
+            {{ form_widget(form.lastname) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 form-group">
+            {{ form_widget(form.firstname) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 form-group">
+            {{ form_widget(form.emailaddress) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 form-group">
+            {{ form_widget(form.password) }}
+            <span class="text-danger">{{ form_errors(form.password) }}</span>
+        </div>
+    </div>
 
-    <form method="post" action="{{ path('RegisterCheck') }}" class="form-signin">
-        <h2 class="form-signin-heading">Inscription à la plateforme</h2>
-
-        <label for="inputEmail" class="sr-only">Nom</label>
-        <input type="text" id="inputlastName" name="lastname" class="form-control" placeholder="Nom" required autofocus>
-
-        <label for="inputEmail" class="sr-only">Prénom</label>
-        <input type="text" id="inputFirstname" name="firstname" class="form-control" placeholder="Prénom" required autofocus>
-
-        <label for="inputEmail" class="sr-only">Adresse email</label>
-        <input type="email" name="emailaddress" id="inputeEmailaddress" class="form-control" placeholder="Adresse email" required>
-
-        <label for="inputEmail" class="sr-only">Mot de passe</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
-
-        <button class="btn btn-lg btn-primary btn-block" type="submit">S'inscrire</button>
-    </form>
-
-
+    <input type="submit" value="S'inscrire" class="btn btn-primary">
+    {{ form_end(form) }}
 
 {% endblock %}
 

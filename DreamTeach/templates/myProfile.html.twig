@@ -5,17 +5,42 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
 
 {% block body %}
-    <h1>Profil</h1>
+<h1>Profil</h1>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-3 border border-dark">
-            <img src="{{ asset('img/avatarProfile.png') }}" height="90" width="90">
-            <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
-                Single toggle
-            </button>
+    <div class="row justify-content-between">
+        <div class="row border border-dark col-7">
+            <div class="row" style="margin: 5px;">
+                <div class="col-3 border border-dark">
+                    <div class="col-9">
+                        <img src="{{ asset('img/tom_bg.jpg') }}" class="rounded float-left img-fluid" alt="tom" height="100%" width="100%">
+                    </div>
+                    <a href="#"><img src="{{ asset('img/edit.png') }}" class="rounded float-right img-fluid col-3" alt="tom" height="100%" width="100%"></a>
+                </div>
+                <div class="col-9 align-self-start">
+                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing liquet vel et quam. Morbi et dui non urna blandit tristique. Nullam eget rutrum augue, vel convallis leo.  </span>
+                </div>
+                <div class="col-12 border-top border-dark align-center " style="margin: 10px;"></div>
+
+            </div>
+            <div class="row col-12">
+                <p class="col-12 text-center"><strong>Tom adelé</strong></p>
+                <p class="col-12 text-center">21 ans</p>
+                <p class="col-12 text-center">LP DQL | IUT Informatique | Toulouse</p>
+
+            </div>
         </div>
 
+        <div class="row border border-dark col-5">
+            <div class="col-6">
+                <img src="{{ asset('img/tom_bg.jpg') }}" class="rounded float-left img-fluid" alt="tom">
+            </div>
+            <div class="col-6 align-self-center align-self-start">
+                <span class="">Lorem ipsum dolor sit amet, consectetur adipiscing liquet vel et quam. Morbi et dui non urna blandit tristique. Nullam eget rutrum augue, vel convallis leo.  </span>
+            </div>
+
+        </div>
     </div>
+
 
 </div>
 {% endblock %}

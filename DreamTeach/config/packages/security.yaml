@@ -19,13 +19,9 @@ security:
 
             provider: in_database
 
-            form_login:
-                login_path: login
-                check_path: login
-
-            logout:
-                path: logout
-                target: HomeController
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
             # activate different ways to authenticate
 
             # http_basic: true

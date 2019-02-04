@@ -3,31 +3,42 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
     <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.lastname) }}
+        <div class="col-4 mx-auto">
+            <div class="card p-4">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h6>Inscription</h6>
+                    </div>
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.lastname) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.firstname) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.emailaddress) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.password) }}
+                            <span class="text-danger">{{ form_errors(form.password) }}</span>
+                        </div>
+                    </div>
+                    <small>Pas encore de compte ? inscrivez-vous</small>
+                    <input type="submit" value="S'inscrire" class="btn btn-primary float-right">
+                    {{ form_end(form) }}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.firstname) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.emailaddress) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.password) }}
-            <span class="text-danger">{{ form_errors(form.password) }}</span>
-        </div>
-    </div>
-
-    <input type="submit" value="S'inscrire" class="btn btn-primary">
-    {{ form_end(form) }}
 
 {% endblock %}
 

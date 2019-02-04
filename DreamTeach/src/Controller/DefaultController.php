@@ -17,14 +17,6 @@ class DefaultController extends AbstractController
 {
 
     /**
-     * @Route("/", name="HomeController")
-     */
-    public function defaultAction()
-    {
-        return $this->render('base.html.twig');
-    }
-
-    /**
      * @Route("/loginForm", name="loginForm")
      */
     public function login()
@@ -60,7 +52,7 @@ class DefaultController extends AbstractController
 
 
     /**
-     * @Route("/register", name="register")
+     * @Route("/", name="HomeController")
      */
     public function register(Request $request, UserPasswordEncoderInterface $encode)
     {
@@ -78,8 +70,12 @@ class DefaultController extends AbstractController
 
             return $this->redirectToRoute("HomeController");
         }
-        return $this->render('register.html.twig',
-            'form' =>
+
+        return $this->render(
+            'register.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
         );
     }
 

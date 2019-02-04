@@ -41,6 +41,15 @@ class DefaultController extends AbstractController
         return $this->render('login.html.twig');
     }
 
+    /**
+     * @Route("/sessionCreation", name="sessionCreation")
+     */
+    public
+    function sessionCreation()
+    {
+        return $this->render("sessionCreation.html.twig");
+    }
+
 
     /**
      * @Route("/", name="HomeController")
@@ -62,12 +71,11 @@ class DefaultController extends AbstractController
             return $this->redirectToRoute("HomeController");
         }
 
-        return $this->render(
-            "register.html.twig",
-            [
-                'form' => $form->createView(),
-            ]
-        );
+
+
+
+
     }
+
 
 }

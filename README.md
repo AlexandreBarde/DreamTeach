@@ -24,7 +24,7 @@ Modifier le fichier .env (à la racine du projet), et configurer la ligne `DATAB
 
 `php bin/console make:migration` puis `php bin/console doctrine:migrations:migrate`
 
-###Mettre à jour la base de données en fonction des entités présentes dans le projet
+### Mettre à jour la base de données en fonction des entités présentes dans le projet
 
 php bin/console doctrine:schema:update --force
 

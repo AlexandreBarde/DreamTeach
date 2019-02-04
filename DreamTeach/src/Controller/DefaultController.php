@@ -24,7 +24,7 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/loginForm", name="loginForm")
      */
     public function login()
     {
@@ -32,6 +32,22 @@ class DefaultController extends AbstractController
         if($currentUser === null) return $this->render('login.html.twig');
         else return $this->redirectToRoute('HomeController');
     }
+
+    /**
+     * @Route("/loginCheck", name="Login")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function loginCheck(Request $request)
+    {
+        $current_user = $this->getUser();
+        if ($current_user !== null)
+        {
+            return $this->redirectToRoute('HomeController');
+        }
+        return $this->render('login.html.twig');
+    }
+
 
     /**
      * @Route("/register", name="register")

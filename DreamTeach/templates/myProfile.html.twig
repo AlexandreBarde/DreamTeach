@@ -5,7 +5,19 @@
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
 
 {% block body %}
-    <h1>test</h1>
+    <h1>Profil</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 border border-dark">
+            <img src="{{ asset('img/avatarProfile.png') }}" height="90" width="90">
+            <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
+                Single toggle
+            </button>
+        </div>
+
+    </div>
+
+</div>
 {% endblock %}
 
 

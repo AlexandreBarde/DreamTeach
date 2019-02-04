@@ -91,5 +91,13 @@ class DefaultController extends AbstractController
         return $this->render('index.html.twig');
     }
 
+    /**
+     * @Route("/sessionCreation", name="sessionCreation")
+     */
+    public function sessionCreation()
+    {
+        return $this->render("sessionCreation.html.twig");
+    }
+
 
 }

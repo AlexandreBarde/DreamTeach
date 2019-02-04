@@ -27,13 +27,13 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/profil/{student}", name="student_profile")
+     * @Route("/profil/", name="student_profile")
      */
 
-    public function studentProfileAction(Student $student)
+    public function studentProfileAction()
     {
-        $user = $this->getDoctrine()->getRepository(Student::Class)->find($student);
-            $userTraining = $this->getDoctrine()->getRepository(Training::class)->findBy(
+        $user = $this->getUser();
+        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findBy(
             [
                 "id" => $user->getTrainingid(),
             ]

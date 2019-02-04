@@ -12,6 +12,7 @@ use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Training;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,4 +44,21 @@ class ProfileController extends AbstractController
         return $this->render("myProfile.html.twig", ["user" => $user]);
 
     }
+
+    /**
+     * @Route("/deleteProfile", name="deleteProfile")
+     * @IsGranted("ROLE_USER")
+     */
+    public function deleteProfile()
+    {
+        $repository = $this->getDoctrine()->getRepository(Student::class);
+        $user = $repository->find($this->getUser()->getId());
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->render("empty.html.twig");
+    }
+
 }

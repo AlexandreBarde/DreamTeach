@@ -38,6 +38,7 @@ class DefaultController extends AbstractController
             "register.html.twig",
             [
                 'form' => $form->createView(),
+                'user' => $this->getUser(),
             ]
         );
     }

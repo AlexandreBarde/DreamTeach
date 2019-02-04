@@ -35,13 +35,12 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/forgotPassword", name="forgotPassword")
-     * @IsGranted("ROLE_USER")
      * @param Request $request
      * @return Response
      */
     public function forgotPassword(Request $request)
     {
-        return $this->render('forgotPassword.html.twig');
+        return $this->render('forgotPassword.html.twig', ["user" => $this->getUser()]);
     }
 
     /**

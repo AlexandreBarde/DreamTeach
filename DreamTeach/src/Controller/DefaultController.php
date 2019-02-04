@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Training;
@@ -21,34 +20,9 @@ class DefaultController extends AbstractController
      */
     public function defaultAction()
     {
-        return $this->render('base.html.twig');
+        if($this->getUser() === null) return $this->redirectToRoute("app_login");
+        else return $this->render('base.html.twig', ["user" => $this->getUser()]);
     }
-
-    /**
-     * @Route("/loginForm", name="loginForm")
-     */
-    public function login()
-    {
-        $currentUser = $this->getUser();
-        if($currentUser === null) return $this->render('login.html.twig');
-        else return $this->redirectToRoute('HomeController');
-    }
-
-    /**
-     * @Route("/loginCheck", name="Login")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function loginCheck(Request $request)
-    {
-        $current_user = $this->getUser();
-        if ($current_user !== null)
-        {
-            return $this->redirectToRoute('HomeController');
-        }
-        return $this->render('login.html.twig');
-    }
-
 
     /**
      * @Route("/register", name="register")

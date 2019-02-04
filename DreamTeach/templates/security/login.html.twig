@@ -2,35 +2,74 @@
 
 {% block title %}Log in!{% endblock %}
 
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/login.css') }}">{% endblock %}
+
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmailaddress" class="sr-only">Emailaddress</label>
-    <input type="email" value="{{ last_username }}" name="emailaddress" id="inputEmailaddress" class="form-control" placeholder="Emailaddress" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
+<div class="container" id="loginCard">
+    <div class="card">
+        <div class="card-header">
+            <h1>Connexion</h1>
         </div>
-    #}
+        <div class="card-body">
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <label for="inputEmailaddress" class="sr-only">Adresse mail</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-at"></i></div>
+                    </div>
+                    <input type="email" value="{{ last_username }}" class="form-control" name="emailaddress" id="inlineFormInputGroupUsername2" placeholder="Adresse mail">
+                </div>
+
+                <label class="sr-only" for="inlineFormInputGroupUsername2">Mot de passe</label>
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-key"></i></div>
+                    </div>
+                    <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Mot de passe">
+                </div>
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="container">
+                    <div class="row justify-content-between">
+                        <div class="col-4"></div>
+                        <div class="col-3">
+                            <a href="{{ path('forgotPassword') }}">Mot de passe oublié ?</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row justify-content-between">
+                        <div class="col-4"><p>Pas encore de compte ? <a href="{{ path('register') }}">S'inscrire</a></p></div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-primary mb-2">Connexion</button>
+                        </div>
+                    </div>
+                </div>
+
+                {#
+                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                    See https://symfony.com/doc/current/security/remember_me.html
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" name="_remember_me"> Remember me
+                        </label>
+                    </div>
+                #}
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Training;
+use App\Form\RegisterType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,7 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/loginForm", name="loginForm")
      */
     public function login()
     {
@@ -34,63 +35,42 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="register")
-     */
-    public function register()
-    {
-        return $this->render("register.html.twig");
-    }
-
-    /**
-     * @Route("/registerCheck", name="RegisterCheck")
+     * @Route("/loginCheck", name="Login")
      * @param Request $request
-     * @param ObjectManager $manager
-     * @param UserPasswordEncoderInterface $encoder
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function registerCheck(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
+    public function loginCheck(Request $request)
     {
-        $currentUser = $this->getUser();
-        if($currentUser === null)
+        $current_user = $this->getUser();
+        if ($current_user !== null)
         {
-            if($request->request->get('lastname'))
-            {
-                $user = new Student();
-                $user->setEmailaddress($request->request->get('emailaddress'));
-                $user->setPassword($request->request->get('password'));
-                $user->setFirstname($request->request->get('firstname'));
-                $user->setLastname($request->request->get('lastname'));
-                $user->setBiography("");
-                $user->setAvatar("");
-                $user->setXpwon("0");
-
-                $school = new School();
-                $school->setAddress("123 rue des roses");
-                $school->setCity("Toulouse");
-                $school->setName("École");
-                $school->setPostalcode("31000");
-
-                $manager->persist($school);
-
-                $training = new Training();
-                $training->setDuration(0);
-                $training->setTitle("Nom");
-                $training->setSchoolid($school);
-
-                $manager->persist($training);
-
-                $user->setTrainingid($training);
-                /* TODO : Faire que la biographie & avatar puisse être nulle lors de la création */
-
-                $hash = $encoder->encodePassword($user, $user->getPassword());
-                $user->setPassword($hash);
-                $manager->persist($user);
-                $manager->flush();
-            }
+            return $this->redirectToRoute('HomeController');
         }
-        return $this->render('index.html.twig');
+        return $this->render('login.html.twig');
     }
 
+
+    /**
+     * @Route("/register", name="register")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $encode)
+    {
+        $student = new Student();
+
+        $form = $this->createForm(RegisterType::class, $student);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $hash = $encode->encodePassword($student, $student->getPassword());
+            $student->setPassword($hash);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($student);
+            $em->flush();
+
+            return $this->redirectToRoute("HomeController");
+        }
+
+<<<<<<< HEAD
     /**
      * @Route("/sessionCreation", name="sessionCreation")
      */
@@ -99,5 +79,14 @@ class DefaultController extends AbstractController
         return $this->render("sessionCreation.html.twig");
     }
 
+=======
+        return $this->render(
+            "register.html.twig",
+            [
+                'form' => $form->createView(),
+            ]
+        );
+    }
+>>>>>>> 8f3ae657a3912551131710132c161bad5bf0999e
 
 }

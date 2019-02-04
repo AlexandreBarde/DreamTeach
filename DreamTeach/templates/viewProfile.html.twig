@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+    <div class="row">
+        <div class="col-12 col-sm-7 border border-secondary mx-auto p-4 bg-light">
+            <div>
+                <div class="row">
+                    <div class="col-4">
+                        <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">
+                    </div>
+                    <div class="col-8">/
+                        <span> {{ user.biography }} </span>
+                    </div>
+                </div>
+                </div>
+                <hr class="border-left-0 border-secondary ">
+            <div class="text-center">
+                <span class="font-weight-bold h4">{{ user.Lastname }} </span> <span
+                        class="h4"> {{ user.firstName }} </span>
+                <span> {{ user.emailAddress }}</span>
+                </div>
+            </div>
+    </div>
+
+    </div>
+    {% endblock %}
+
+

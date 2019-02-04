@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="student", indexes={@ORM\Index(name="trainingID", columns={"trainingID"})})
  * @ORM\Entity
- * @UniqueEntity(fields = {"$emailaddress"}, message = "L'email que vous avez entré est déjà utilisé")
+ * @UniqueEntity("emailaddress", message = "L'email que vous avez entré est déjà utilisé")
  */
 class Student implements UserInterface
 {
@@ -31,35 +31,35 @@ class Student implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="lastName", type="string", length=40, nullable=false)
+     * @ORM\Column(name="lastName", type="string", length=255, nullable=false)
      */
     private $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string", length=40, nullable=false)
+     * @ORM\Column(name="firstName", type="string", length=255, nullable=false)
      */
     private $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="emailAddress", type="string", length=60, nullable=false)
+     * @ORM\Column(name="emailAddress", type="string", length=255, nullable=false)
      */
     private $emailaddress;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="biography", type="string", length=255, nullable=false)
+     * @ORM\Column(name="biography", type="string", length=255, nullable=true)
      */
-    private $biography;
+    private $biography = null;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=20, nullable=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      * @Assert\Length(min="8", minMessage="min 8 caractères")
      */
     private $password;
@@ -67,19 +67,19 @@ class Student implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="avatar", type="string", length=100, nullable=false)
+     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
-    private $avatar;
+    private $avatar = null;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="xpWon", type="string", length=5, nullable=false)
+     * @ORM\Column(name="xpWon", type="integer", nullable=true)
      */
-    private $xpwon;
+    private $xpwon = 0;
 
     /**
-     * @var \Training
+     * @var integer
      *
      * @ORM\ManyToOne(targetEntity="Training")
      * @ORM\JoinColumns({
@@ -133,6 +133,7 @@ class Student implements UserInterface
         $this->badgeid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sessionid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subjectid = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->xpwon = 0;
     }
 
     public function getId(): ?int
@@ -224,7 +225,7 @@ class Student implements UserInterface
         return $this;
     }
 
-    public function getTrainingid(): ?Training
+    public function getTrainingid()
     {
         return $this->trainingid;
     }
@@ -372,7 +373,7 @@ class Student implements UserInterface
     {
         return array
         (
-            'id'         => $this->id(),
+            'id'         => $this->getId(),
             'email'        => $this->getEmailaddress(),
             'lastname'    => $this->getLastname(),
             'firstname'      => $this->getFirstname(),

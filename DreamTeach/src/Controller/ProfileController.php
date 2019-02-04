@@ -21,10 +21,10 @@ class ProfileController extends AbstractController
 {
 
     /**
-     * @Route("/createProfile", name="createProfile")
+     * @Route("/profile/{idStudent}", name="profile")
      */
-    public function createProfile()
+    public function profile($idStudent)
     {
-        return $this->render("createProfile.html.twig");
+        return $this->render("viewProfile.html.twig");
     }
 }

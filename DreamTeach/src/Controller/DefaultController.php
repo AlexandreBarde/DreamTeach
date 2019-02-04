@@ -19,6 +19,8 @@ class DefaultController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $encode)
     {
+        if($this->getUser() !== null)
+            return $this->redirectToRoute("default_student_connected");
         $student = new Student();
 
         $form = $this->createForm(RegisterType::class, $student);
@@ -38,6 +40,7 @@ class DefaultController extends AbstractController
             "register.html.twig",
             [
                 'form' => $form->createView(),
+                'user' => $this->getUser(),
             ]
         );
     }

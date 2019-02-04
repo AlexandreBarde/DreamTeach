@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
+
+{% block body %}
+    <h1>Profil</h1>
+    <h1> Nom : {{ user.lastName }}</h1>
+{% endblock %}
+
+

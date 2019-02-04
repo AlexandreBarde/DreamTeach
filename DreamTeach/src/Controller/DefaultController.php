@@ -61,6 +61,8 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $hash = $this->get(UserPasswordEncoderInterface::class)->encodePassword($student, $student->getPassword());
+            $student->setPassword($hash);
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();

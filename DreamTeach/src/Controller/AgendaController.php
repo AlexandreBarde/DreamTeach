@@ -8,26 +8,28 @@
 
 namespace App\Controller;
 
+use App\Entity\Sessionparticipants;
 use App\Entity\Student;
 use App\Entity\Training;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class StudentController
- * @package App\Controller
- * @Route("/dashboard")
- * @IsGranted("ROLE_USER")
- */
-class AgendaController
+
+class AgendaController extends AbstractController
 {
     /**
-     * @Route("/accueil/agenda", name="agenda")
+     * @Route("dashboard/agenda", name="agenda")
      */
 
-    public function homeAgendaAction()
+    public function sessionAction()
     {
-        return $this->render("myAgenda.html.twig");
+        $user = $this->getUser();
+        return $this->render(
+            "myAgenda.html.twig",
+            [
+                "user" => $user,
+            ]
+        );
     }
 }

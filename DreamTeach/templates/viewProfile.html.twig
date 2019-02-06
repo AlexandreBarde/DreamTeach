@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Profil - {{ user.lastName }} {{ user.firstName }}{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,7 +16,7 @@
                 <div class="row">
                     {% if isCurrentStudent %}
                         <div class="col-4">
-                            <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">
+                            <img class="rounded-circle" src={{ asset('uploads/avatars/' ~ user.avatar) }} height="150px">
                         </div>
                         <div class="col-6">
                             <span> </br> {{ user.biography }} </span>

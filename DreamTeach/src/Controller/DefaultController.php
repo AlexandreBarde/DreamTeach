@@ -26,8 +26,10 @@ class DefaultController extends AbstractController
         $form = $this->createForm(RegisterType::class, $student);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $hash = $encode->encodePassword($student, $student->getPassword());
+            $student->setAvatar("");
             $student->setPassword($hash);
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);

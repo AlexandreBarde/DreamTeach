@@ -9,6 +9,9 @@
 /.env
 ###< symfony/framework-bundle ###
 /.idea/
+/.DS_Store/
+/public/.DS_Store/
+/Migrations/
 ###> symfony/phpunit-bridge ###
 .phpunit
 /phpunit.xml

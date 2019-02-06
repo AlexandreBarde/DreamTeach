@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <script src="{{ asset('js/jQuery.js') }}"></script>
         {% block stylesheets %}
@@ -11,18 +12,23 @@
     </head>
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">DreamTeach</a>
+        <a class="navbar-brand" href="/">DreamTeach</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto"></ul>
-            <button type="button" class="btn btn-light">Bouton</button>
-        </div>
+        {% if is_granted('ROLE_USER') %}
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"></ul>
+                <a href="{{ path("profile", {idStudent: user.id}) }}" type="button" class="button-navbar btn btn-light">Mon profil</a>
+                <a href="{{ path("app_logout") }}" type="button" class="button-navbar btn btn-light">Déconnexion</a>
+            </div>
+        {% endif %}
+
+
     </nav>
+    </br>
     {% block body %}
-        <h1>Bienvenue sur ce projet !</h1>
     {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

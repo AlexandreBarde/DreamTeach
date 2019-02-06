@@ -18,43 +18,19 @@ class RegisterType extends AbstractType
         $builder
             ->add(
                 'lastname',
-                TextType::class,
-                [
-                    "attr" => [
-                        "class" => "form-control",
-                        "placeholder" => "Nom de famille..",
-                    ],
-                ]
+                TextType::class
             )
             ->add(
                 'firstname',
-                TextType::class,
-                [
-                    "attr" => [
-                        "class" => "form-control",
-                        "placeholder" => "Prénom..",
-                    ],
-                ]
+                TextType::class
             )
             ->add(
                 'emailaddress',
-                EmailType::class,
-                [
-                    "attr" => [
-                        "class" => "form-control",
-                        "placeholder" => "Votre email..",
-                    ],
-                ]
+                EmailType::class
             )
             ->add(
                 'password',
-                PasswordType::class,
-                [
-                    "attr" => [
-                        "class" => "form-control",
-                        "placeholder" => "Mot de passe..",
-                    ],
-                ]
+                PasswordType::class
             );
     }
 

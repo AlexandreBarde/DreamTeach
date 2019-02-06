@@ -23,6 +23,9 @@ security:
                     path: app_logout
                     target: HomeController
 
+            form_login:
+                default_target_path: default_student_connected
+
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator

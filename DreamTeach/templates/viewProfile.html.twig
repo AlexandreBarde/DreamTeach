@@ -32,10 +32,11 @@
             <div class="col-1"></div>
             <div class="col-5 border border-secondary p-4 bg-light">
 
-                <div class="h4 text-center">Niveau {{ (user.xpWon / 50)|slice(0,1)}}</div>
+                <div class="h4 text-center">Niveau {{ (user.xpWon / 50)|slice(0,1) }}</div>
                 <div class="progress mt-3">
                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                         aria-valuemax="100" style="width:{{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)}}%;">
+                         aria-valuemax="100"
+                         style="width:{{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;">
                     </div>
                 </div>
                 <span class="text-center"> Vous avez {{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
@@ -63,9 +64,12 @@
 
             <div class="col-6 border border-secondary p-4 bg-light mt-4">
 
-                <span>VBA : &nbsp; </span>
-                {% for i in 1..2%}
-                    <span class="fa fa-star" style="color:orange"></span>
+                {% for i in noteUser %}
+                    <span>   {{ i.getSubjectid().getName() }} :  </span>
+                    {% for j in 1..i.mark %}
+                        <span class="fa fa-star" style="color:orange"></span>
+                    {% endfor %}
+                    </br>
                 {% endfor %}
 
             </div>

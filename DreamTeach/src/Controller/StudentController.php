@@ -6,6 +6,8 @@ namespace App\Controller;
 use App\Entity\Badge;
 use App\Entity\School;
 use App\Entity\Student;
+use App\Entity\Subject;
+use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,21 +46,20 @@ class StudentController extends AbstractController
         $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
             "id" => $userTraining->getSchoolid(),
         ]);
-        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
-           "id" => $user->getId(),
+        $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
+            "studentid" => $user->getId(),
         ]);
-       // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
-       //     "idStudent" => $user->getStudentid(),
-       //     "idTraining" => $user->getTrainingid(),
-       // ]);
+       // $nomMatirere = $this->getDoctrine()->getRepository(Subject::class)->find(array(
+         //   "id" => $noteUser->getsubjectID(),
+        //));
         return $this->render(
             "viewProfile.html.twig",
             [
                 "user" => $user,
                 "userTraining" => $userTraining,
                 "schoolUser" => $schoolUser,
-               "badgeUser" => $badgeUser,
-               // "noteUser" => $noteUser,
+               "noteUser" => $noteUser,
+             //   "nomMatirere" => $nomMatirere,
             ]
         );
 

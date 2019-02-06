@@ -3,21 +3,23 @@
 {% block title %}Inscription{% endblock %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/register.css') }}">
 
 {% endblock %}
+
 
 {% block body %}
     <div class="container align-content-center mt-5">
         <div class="row">
             <div class="col-6 border border-secondary p-4 bg-light">
                 <div class="row">
-                <div class="col-5">
-                    <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">
-                </div>
-                <div class="col-6">
-                    <span> </br> {{ user.biography }} </span>
-                </div>
+                    <div class="col-5">
+                        <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">
+                    </div>
+                    <div class="col-6">
+                        <span> </br> {{ user.biography }} </span>
+                    </div>
                 </div>
                 <hr class="border-left-0 border-secondary ">
                 <div class="text-center">
@@ -30,12 +32,13 @@
             <div class="col-1"></div>
             <div class="col-5 border border-secondary p-4 bg-light">
 
-                <div class="h4 text-center">Niveau 2</div>
+                <div class="h4 text-center">Niveau {{ (user.xpWon / 50)|slice(0,1)}}</div>
                 <div class="progress mt-3">
                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                         aria-valuemax="100" style="width: 60%;">
+                         aria-valuemax="100" style="width:{{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)}}%;">
                     </div>
                 </div>
+                <span class="text-center"> Vous avez {{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
                 <div class="mt-4 h5 mb-4"> Badges :</div>
                 <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
                 <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
@@ -57,8 +60,14 @@
 
             </div>
 
+
             <div class="col-6 border border-secondary p-4 bg-light mt-4">
-                aa
+
+                <span>VBA : &nbsp; </span>
+                {% for i in 1..2%}
+                    <span class="fa fa-star" style="color:orange"></span>
+                {% endfor %}
+
             </div>
         </div>
     </div>

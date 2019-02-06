@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Badge;
 use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Training;
@@ -43,12 +44,21 @@ class StudentController extends AbstractController
         $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
             "id" => $userTraining->getSchoolid(),
         ]);
+        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
+           "id" => $user->getId(),
+        ]);
+       // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
+       //     "idStudent" => $user->getStudentid(),
+       //     "idTraining" => $user->getTrainingid(),
+       // ]);
         return $this->render(
             "viewProfile.html.twig",
             [
                 "user" => $user,
                 "userTraining" => $userTraining,
                 "schoolUser" => $schoolUser,
+               "badgeUser" => $badgeUser,
+               // "noteUser" => $noteUser,
             ]
         );
 

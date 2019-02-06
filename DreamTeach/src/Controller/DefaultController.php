@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Training;
@@ -15,46 +14,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DefaultController extends AbstractController
 {
-
     /**
      * @Route("/", name="HomeController")
      */
-    public function defaultAction()
-    {
-        return $this->render('base.html.twig');
-    }
-
-    /**
-     * @Route("/loginForm", name="loginForm")
-     */
-    public function login()
-    {
-        $currentUser = $this->getUser();
-        if($currentUser === null) return $this->render('login.html.twig');
-        else return $this->redirectToRoute('HomeController');
-    }
-
-    /**
-     * @Route("/loginCheck", name="Login")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function loginCheck(Request $request)
-    {
-        $current_user = $this->getUser();
-        if ($current_user !== null)
-        {
-            return $this->redirectToRoute('HomeController');
-        }
-        return $this->render('login.html.twig');
-    }
-
-
-    /**
-     * @Route("/register", name="register")
-     */
     public function register(Request $request, UserPasswordEncoderInterface $encode)
     {
+        if($this->getUser() !== null)
+            return $this->redirectToRoute("default_student_connected");
         $student = new Student();
 
         $form = $this->createForm(RegisterType::class, $student);
@@ -74,6 +40,7 @@ class DefaultController extends AbstractController
             "register.html.twig",
             [
                 'form' => $form->createView(),
+                'user' => $this->getUser(),
             ]
         );
     }

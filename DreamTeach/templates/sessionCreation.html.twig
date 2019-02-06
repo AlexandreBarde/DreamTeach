@@ -1,0 +1,128 @@
+{% extends "base.html.twig" %}
+{% block title %}Bonjour{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Description séance</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+
+                    <div class="form-row">
+
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Nom Session </label>
+                            <input type="email" class="form-control" id="inputEmail4" placeholder="Nom...">
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Matière étudiée </label>
+                            <input type="email" class="form-control" id="inputEmail4" placeholder="Matière...">
+
+                        </div>
+                    </div>
+
+
+                    <label for="exampleFormControlTextarea1">Description séance</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                              placeholder="Description..."></textarea>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Plannification</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputEmail4">Heure de début</label>
+                    <input type="time" class="form-control" id="inputEmail4" placeholder="Email">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputPassword4">Heure de fin</label>
+                    <input type="time" class="form-control" id="inputPassword4" placeholder="Password">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputPassword4">Date</label>
+                    <input type="date" class="form-control" id="inputPassword4" placeholder="Password">
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                        <label class="custom-control-label" for="customSwitch1">La séance est-elle
+                            virtuelle?</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-row">
+
+                <div class="form-group col-md-4">
+                    <label for="inputEmail4">Nombre max de participants</label>
+                    <input type="number" class="form-control" id="inputEmail4"
+                           placeholder="Nombre max de participants...">
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="inputEmail4">Logiciel vocal</label>
+                    <input type="text" class="form-control" id="inputLogiciel" placeholder="Logiciel vocal" disabled>
+                </div>
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Ville </label>
+                    <input type="text" class="form-control" id="inputVille" placeholder="Ville...">
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Etablissement </label>
+                    <input type="text" class="form-control" id="inputEtablissement" placeholder="Etablissement...">
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% block javascripts %}
+        <script>
+            $(document).ready(function () {
+
+
+                var ckbox = $('#customSwitch1');
+
+                $('input').on('click',function () {
+                    //run code
+                    if (ckbox.is(':checked')) {
+
+                        $("input#inputEtablissement").prop('disabled', true);
+                        $("input#inputVille").prop('disabled', true);
+                        $("input#inputLogiciel").prop('disabled', false);
+                    }
+                    else{
+                        $("input#inputLogiciel").prop('disabled', true);
+                        $("input#inputEtablissement").prop('disabled', false);
+                        $("input#inputVille").prop('disabled', false);
+                    }
+                })
+
+
+
+            });
+        </script>
+    {% endblock %}
+
+
+    {% endblock %}

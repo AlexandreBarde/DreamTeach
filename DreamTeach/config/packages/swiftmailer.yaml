@@ -1,3 +1,14 @@
 swiftmailer:
-    url: '%env(MAILER_URL)%'
+    transport: smtp
+    username: ptutdreamteach@gmail.com
+    password:
+    host: smtp.gmail.com
+    port: 587
+    encryption: tls
+    auth-mode: login
     spool: { type: 'memory' }
+    stream_options:
+        ssl:
+            allow_self_signed: true
+            verify_peer: false
+            verify_peer_name: false

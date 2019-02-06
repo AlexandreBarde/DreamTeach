@@ -3,6 +3,7 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
+use App\Entity\Student;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Types\DateType;
 use Doctrine\DBAL\Types\TextType;
@@ -27,6 +28,12 @@ class SessionController extends AbstractController
         $form = $this->createForm(SessionFormType::class, $session);
         $form->handleRequest($request);
 
+        if($form->isSubmitted() && $form->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $session->setOrganizerid($this->getUser());
+            $em->persist($session);
+            $em->flush();
+        }
         return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView()]);
     }
 }

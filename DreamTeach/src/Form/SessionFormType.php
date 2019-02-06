@@ -10,10 +10,13 @@ namespace App\Form;
 
 
 use App\Entity\Session;
+use App\Entity\Subject;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,72 +28,74 @@ class SessionFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class,[
+            ->add('name', TextType::class, [
                 'attr' => [
                     'placeholder' => "Nom de la séance...",
                     'class' => 'form-control'
                 ]
             ])
-            ->add('subjectid',TextType::class,[
+            ->add('subjectid', EntityType::class, [
+                'class' => Subject::class,
+                'choice_label' => 'getName',
+
                 'attr' => [
                     'placeholder' => "Matière étudiée...",
-                    'class' => 'form-control'
+                    'class' => "custom-select"
+
                 ]
             ])
-            ->add('description',TextareaType::class,[
+            ->add('description', TextareaType::class, [
                 'attr' => [
                     'placeholder' => "Description..",
                     'class' => 'form-control'
 
                 ]
             ])
-            ->add('startingTime', TimeType::class,[
+            ->add('startingTime', TimeType::class, [
                 'attr' => [
                     'placeholder' => "Heure de début...",
                     'class' => 'form-control'
                 ]
             ])
-            ->add('endingTime', TimeType::class,[
+            ->add('endingTime', TimeType::class, [
                 'attr' => [
                     'placeholder' => "Heure de fin...",
                     'class' => 'form-control'
                 ]
             ])
-            ->add('date', DateType::class,[
+            ->add('date', DateType::class, [
                 'attr' => [
                     'placeholder' => "Date...",
                     'class' => 'form-control'
                 ]
             ])
-            ->add('isVirtual', CheckboxType::class,[
-                'attr' => [
-                    'class' => 'custom-control-input',
-                    'id' => 'customSwitch1'
-                ]
-            ])
-            ->add('maxnbparticipant', NumberType::class,[
+            ->add('isVirtual', CheckboxType::class)
+            ->add('maxnbparticipant', NumberType::class, [
                 'attr' => [
 
                     'placeholder' => "Nombre max de participants...",
                     'class' => 'form-control'
                 ]
             ])
-            ->add('vocalSoftware',TextType::class,[
+            ->add('vocalSoftware', TextType::class, [
                 'attr' => [
                     'placeholder' => "Logiciel vocal...",
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'disabled' => 'true'
                 ]
             ])
-            ->add('city',TextType::class,[
+            ->add('city', TextType::class, [
                 'attr' => [
                     'placeholder' => "Ville...",
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+
                 ]
             ])
-            ->add('place',TextType::class,[
+            ->add('place', TextType::class, [
                 'attr' => [
                     'placeholder' => "Etablissement...",
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+
                 ]
             ]);
 

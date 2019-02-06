@@ -17,21 +17,17 @@
 
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Nom Session </label>
-                            <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Nom...">-->
                             {{ form_widget(formSessionCreation.name) }}
 
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Matière étudiée </label>
-                            <!--<input type="email" class="form-control" id="inputEmail4" placeholder="Matière...">-->
                             {{ form_widget(formSessionCreation.subjectid) }}
                         </div>
                     </div>
 
 
                     <label for="exampleFormControlTextarea1">Description séance</label>
-                    <!--<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                              placeholder="Description..."></textarea>-->
                     {{ form_widget(formSessionCreation.description) }}
 
 
@@ -50,23 +46,20 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="inputEmail4">Heure de début</label>
-                    <!--<input type="time" class="form-control" id="inputEmail4" placeholder="Email">-->
                     {{ form_widget(formSessionCreation.startingTime) }}
                 </div>
                 <div class="form-group col-md-4">
                     <label for="inputPassword4">Heure de fin</label>
-                    <!--<input type="time" class="form-control" id="inputPassword4" placeholder="Password">-->
                     {{ form_widget(formSessionCreation.endingTime) }}
                 </div>
                 <div class="form-group col-md-4">
                     <label for="inputPassword4">Date</label>
-                    <!--<input type="date" class="form-control" id="inputPassword4" placeholder="Password">-->
                     {{ form_widget(formSessionCreation.date) }}
                 </div>
                 <div class="form-group col-md-6">
                     <div class="custom-control custom-switch">
-                        <!--<input type="checkbox" class="custom-control-input" id="customSwitch1">-->
-                        {{ form_widget(formSessionCreation.isVirtual) }}
+                        {{ form_widget(formSessionCreation.isVirtual,{ 'id': 'customSwitch1','required' : false,'attr': { 'class' : 'custom-control-input' } } ) }}
+
                         <label class="custom-control-label" for="customSwitch1">La séance est-elle
                             virtuelle?</label>
                     </div>
@@ -77,13 +70,10 @@
 
                 <div class="form-group col-md-4">
                     <label for="inputEmail4">Nombre max de participants</label>
-                    <!--<input type="number" class="form-control" id="inputEmail4"
-                           placeholder="Nombre max de participants...">-->
                     {{ form_widget(formSessionCreation.maxnbparticipant) }}
                 </div>
                 <div class="form-group col-md-8">
                     <label for="inputEmail4">Logiciel vocal</label>
-                    <!--<input type="text" class="form-control" id="inputLogiciel" placeholder="Logiciel vocal" disabled>-->
                     {{ form_widget(formSessionCreation.vocalSoftware) }}
                 </div>
             </div>
@@ -92,17 +82,19 @@
 
                 <div class="form-group col-md-6">
                     <label for="inputEmail4">Ville </label>
-                    <!--<input type="text" class="form-control" id="inputVille" placeholder="Ville...">-->
                     {{ form_widget(formSessionCreation.city) }}
 
                 </div>
                 <div class="form-group col-md-6">
                     <label for="inputEmail4">Etablissement </label>
-                   <!-- <input type="text" class="form-control" id="inputEtablissement" placeholder="Etablissement...">-->
                     {{ form_widget(formSessionCreation.place) }}
 
                 </div>
+
             </div>
+
+            <input type="submit" value="Enregistrer" class="btn btn-primary btn-lg btn-block">
+
 
         </div>
 
@@ -121,14 +113,14 @@
                     //run code
                     if (ckbox.is(':checked')) {
 
-                        $("input#inputEtablissement").prop('disabled', true);
-                        $("input#inputVille").prop('disabled', true);
-                        $("input#inputLogiciel").prop('disabled', false);
+                        $("#session_form_place").prop('disabled', true);
+                        $("#session_form_city").prop('disabled', true);
+                        $("#session_form_vocalSoftware").prop('disabled', false);
                     }
                     else{
-                        $("input#inputLogiciel").prop('disabled', true);
-                        $("input#inputEtablissement").prop('disabled', false);
-                        $("input#inputVille").prop('disabled', false);
+                        $("#session_form_vocalSoftware").prop('disabled', true);
+                        $("#session_form_place").prop('disabled', false);
+                        $("#session_form_city").prop('disabled', false);
                     }
                 })
 

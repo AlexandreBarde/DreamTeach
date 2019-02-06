@@ -3,31 +3,42 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
     <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.lastname) }}
+        <div class="col-4 mx-auto">
+            <div class="card p-4">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h6>Inscription</h6>
+                    </div>
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.lastname, {"attr" : {"class" : "form-control", "placeholder" : "Nom de famille...", "required" : ""}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.firstname, {"attr" : {"class" : "form-control", "placeholder" : "Prénom...", "required" : ""}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.emailaddress, {"attr" : {"class" : "form-control", "placeholder" : "Votre email...", "required" : ""}}) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            {{ form_widget(form.password, {"attr" : {"class" : "form-control", "placeholder" : "Mot de passe...", "required" : ""}}) }}
+                            <span class="text-danger">{{ form_errors(form.password)}}</span>
+                        </div>
+                    </div>
+                    <small class="font-italic">Deja un compte ?&nbsp;<a href="{{ path('app_login') }}">Connectez-vous</a></small>
+                    <input type="submit" value="S'inscrire" class="btn btn-primary float-right">
+                    {{ form_end(form) }}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.firstname) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.emailaddress) }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 form-group">
-            {{ form_widget(form.password) }}
-            <span class="text-danger">{{ form_errors(form.password) }}</span>
-        </div>
-    </div>
-
-    <input type="submit" value="S'inscrire" class="btn btn-primary">
-    {{ form_end(form) }}
 
 {% endblock %}
 

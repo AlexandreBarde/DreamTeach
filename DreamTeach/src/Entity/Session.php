@@ -66,6 +66,13 @@ class Session
     private $isvirtual;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="vocalSoftware", type="string", length=100, nullable=true)
+     */
+    private $vocalSoftware;
+
+    /**
      * @var \Student
      *
      * @ORM\ManyToOne(targetEntity="Student")
@@ -99,6 +106,16 @@ class Session
      * )
      */
     private $studentid;
+
+    /**
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
 
     /**
      * Constructor
@@ -234,5 +251,39 @@ class Session
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+
 
 }

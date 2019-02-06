@@ -20,7 +20,7 @@ class SessionController extends AbstractController
 {
 
     /**
-     * @Route("accueil/sessionCreation", name="sessionCreation")
+     * @Route("/nouvellesession", name="sessionCreation")
      */
     public function sessionCreation(Request $request)
     {

@@ -9,18 +9,18 @@ use App\Entity\Student;
 use App\Entity\Training;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class StudentController
  * @package App\Controller
- * @Route("/accueil")
  * @IsGranted("ROLE_USER")
  */
 class StudentController extends AbstractController
 {
     /**
-     * @Route("/", name="default_student_connected")
+     * @Route("/dashboard", name="default_student_connected")
      */
 
     public function homeStudentAction()
@@ -29,38 +29,29 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/profil/{student}", name="student_profile")
+     * @Route("/mon-profil/", name="student_profile")
      */
 
-    public function studentProfileAction(Student $student)
+    public function studentProfileAction(Request $request)
     {
-        $user = $this->getDoctrine()->getRepository(Student::Class)->find($student);
-        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findOneBy(
-            [
-                "id" => $user->getTrainingid(),
-            ]
-        );
-
-        $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
-            "id" => $userTraining->getSchoolid(),
-        ]);
-        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
-           "id" => $user->getId(),
-        ]);
-       // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
-       //     "idStudent" => $user->getStudentid(),
-       //     "idTraining" => $user->getTrainingid(),
-       // ]);
         return $this->render(
-            "viewProfile.html.twig",
-            [
-                "user" => $user,
-                "userTraining" => $userTraining,
-                "schoolUser" => $schoolUser,
-               "badgeUser" => $badgeUser,
-               // "noteUser" => $noteUser,
-            ]
+            "viewProfile.html.twig"
         );
+    }
 
+    /**
+     * @Route("/profil/{student}", name="student_other_profile")
+     */
+    public function studentOtherProfileAction($student)
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($student);
+        $user = $this->getUser();
+        if (!$student) {
+            return $this->redirectToRoute("default_student_connected");
+        } elseif ($student == $user) {
+            return $this->redirectToRoute('student_profile');
+        }
+
+        return $this->render('viewOtherProfile.html.twig');
     }
 }

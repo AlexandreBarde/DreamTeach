@@ -18,11 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * Class StudentController
+ * @package App\Controller
+ * @IsGranted("ROLE_USER")
+ */
 class ProfileController extends AbstractController
 {
 
     /**
-     * @Route("/profile/{idStudent}", name="profile")
+     * @Route("/profilaa/{idStudent}", name="profile")
      */
     public function getInfoStudent($idStudent)
     {

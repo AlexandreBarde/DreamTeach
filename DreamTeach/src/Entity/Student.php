@@ -67,8 +67,6 @@ class Student implements UserInterface
     /**
      * @ORM\Column(type="string", nullable=true)
      *
-     * @Assert\NotBlank(message="Ajouter une image jpg")
-     * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $avatar = null;
 
@@ -125,6 +123,16 @@ class Student implements UserInterface
      * )
      */
     private $subjectid;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $birthDate;
 
     /**
      * Constructor
@@ -378,6 +386,30 @@ class Student implements UserInterface
             'lastname'    => $this->getLastname(),
             'firstname'      => $this->getFirstname(),
         );
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(?\DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
     }
 
 

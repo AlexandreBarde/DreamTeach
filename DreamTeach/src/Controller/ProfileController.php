@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ProfileController extends AbstractController
 {
@@ -73,8 +74,15 @@ class ProfileController extends AbstractController
             ->add('emailAddress')
             ->add('trainingID', ChoiceType::class, [
                     'choices' => $formations,
-                ]
-            )
+                    'choice_label' => function($choiceValue, $key, $value) {
+                        return $choiceValue->getTitle();
+                    }
+                ])
+            ->add('birthDate', DateType::class, [
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+            ])
+            ->add('city')
             ->getForm();
 
         $form->handleRequest($request);

@@ -20,7 +20,7 @@
         {% if app.user is defined %}
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto"></ul>
-                <a href="{{ path("myProfile", {idStudent: app.user.id}) }}" type="button" class="button-navbar btn btn-light">Mon profil</a>
+                <a href="{{ path("profile", {idStudent: app.user.id}) }}" type="button" class="button-navbar btn btn-light">Mon profil</a>
                 <a href="{{ path("app_logout") }}" type="button" class="button-navbar btn btn-light">Déconnexion</a>
             </div>
         {% endif %}

@@ -3,17 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\School;
+use App\Entity\Badge;
 use App\Entity\Session;
 use App\Entity\Student;
 use App\Entity\Training;
 use App\Form\UploadPicture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ProfileController extends AbstractController
 {
@@ -23,27 +26,86 @@ class ProfileController extends AbstractController
      */
     public function getInfoStudent($idStudent)
     {
-        $reqUser = $this->getDoctrine()->getRepository(Student::Class);
-        $user = $reqUser->find($idStudent);
-        $idUser = $user->getId();
-        if($idUser == $this->getUser()->getId()):
-            return $this->render("myProfile.html.twig", ["user" => $user]);
-        else:
-            return $this->render("viewProfile.html.twig", ["user" => $user]);
-        endif;
+        $user = $this->getDoctrine()->getRepository(Student::Class)->find($idStudent);
+        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findOneById(
+            [
+                "id" => $user->getTrainingid(),
+            ]
+        );
+        $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
+            "id" => $userTraining->getSchoolid(),
+        ]);
+        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
+            "id" => $user->getId(),
+        ]);
+        // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
+        //     "idStudent" => $user->getStudentid(),
+        //     "idTraining" => $user->getTrainingid(),
+        // ]);
+
+        return $this->render(
+            "viewProfile.html.twig",
+            [
+                "user" => $user,
+                "userTraining" => $userTraining,
+                "schoolUser" => $schoolUser,
+                "badgeUser" => $badgeUser,
+                "isCurrentId" => $this->getUser()->getId() == $idStudent,
+                'idStudent' => $idStudent
+            ]
+        );
     }
 
     /**
-     * @Route("/myProfile/{idStudent}", name="profile")
+     * @Route("/updateInfosProfile", name="updateInfosProfile")
      */
-    public function viewMyProfile($idStudent)
+    public function updateProfile(Request $request, ObjectManager $manager)
     {
-        $reqUser = $this->getDoctrine()->getRepository(Student::Class);
-        $user = $reqUser->find($idStudent);
-        $idUser = $user->getId();
-        return $this->render("myProfile.html.twig", ["user" => $user]);
+        $training = $this->getDoctrine()->getRepository(Training::class);
+        /** @var Training $formations */
+        $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
+        $user = $this->getUser();
+
+
+        $form = $this->createFormBuilder($user)
+            ->add('firstName')
+            ->add('lastName')
+            ->add('biography')
+            ->add('emailAddress')
+            ->add('trainingID', ChoiceType::class, [
+                    'choices' => $formations,
+                    'choice_value' => function($formations) {
+                        return $formations->getTitle();
+                    }
+                ]
+            )
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($user);
+            $manager->flush();
+            return $this->redirectToRoute("profile", ["user" => $user]);
+        }
+        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView()]);
     }
 
+    /**
+     * @Route("/deleteProfile", name="deleteProfile")
+     * @IsGranted("ROLE_USER")
+     */
+    public function deleteProfile()
+    {
+        $repository = $this->getDoctrine()->getRepository(Student::class);
+        $user = $repository->find($this->getUser()->getId());
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->render("empty.html.twig");
+    }
 
     /**
      * @Route("/accueil/uploadPicture", name="uploadPicture")
@@ -130,7 +192,7 @@ class ProfileController extends AbstractController
             // On ajoute les séances
             array_push($tmp, $session->getId());
         }
-        
+
         foreach ($tmp as $ss)
         {
             // On ajoute les ID des sessions

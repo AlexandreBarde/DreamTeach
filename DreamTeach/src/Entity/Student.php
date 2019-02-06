@@ -115,7 +115,7 @@ class Student implements UserInterface
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Subject", inversedBy="studentid")
-     * @ORM\JoinTable(name="subjectlevel",
+     * @ORM\JoinTable(name="subject_level",
      *   joinColumns={
      *     @ORM\JoinColumn(name="studentID", referencedColumnName="id")
      *   },

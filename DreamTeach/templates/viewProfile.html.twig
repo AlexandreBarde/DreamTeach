@@ -14,20 +14,20 @@
         <div class="row">
             <div class="col-6 border border-secondary p-4 bg-light">
                 <div class="row">
-                    {% if isCurrentUser %}
+                    {% if isCurrentStudent %}
                         <div class="col-4">
                             <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">
                         </div>
                         <div class="col-6">
-                            <span> {{ user.biography }} </span>
+                            <span> </br> {{ user.biography }} </span>
                         </div>
-                        <a href="{{ path('updateProfile') }}"><i class="far fa-edit col-2"></i></a>
+                        <a href="{{ path('updateInfosProfile') }}"><i class="far fa-edit col-1"></i></a>
                     {% else %}
-                        <div class="col-4">
+                        <div class="col-5">
                             <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">
                         </div>
-                        <div class="col-8">
-                            <span> {{ user.biography }} </span>
+                        <div class="col-6">
+                            <span> </br> {{ user.biography }} </span>
                         </div>
                     {% endif %}
                 </div>

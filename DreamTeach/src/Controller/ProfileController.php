@@ -62,6 +62,7 @@ class ProfileController extends AbstractController
             ->add('firstName')
             ->add('lastName')
             ->add('biography')
+            ->add('emailAddress')
             ->add('trainingID', ChoiceType::class, [
                     'choices' => $formations,
                     'choice_value' => function($formations) {

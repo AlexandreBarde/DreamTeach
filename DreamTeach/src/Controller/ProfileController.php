@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\School;
+use App\Entity\Badge;
 use App\Entity\Student;
 use App\Entity\Training;
 use App\Form\UploadPicture;
@@ -20,35 +21,38 @@ class ProfileController extends AbstractController
 {
 
     /**
-     * @Route("/profile/{idStudent}", name="profileView")
+     * @Route("/profile/{idStudent}", name="profile")
      */
     public function getInfoStudent($idStudent)
     {
-        $reqUser = $this->getDoctrine()->getRepository(Student::Class);
-        $user = $reqUser->find($idStudent);
-      
-        if ($idStudent == $this->getUser()->getId()) {
-            return $this->redirectToRoute('profile');
-        }
-        return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
+        $user = $this->getDoctrine()->getRepository(Student::Class)->find($idStudent);
+        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findOneById(
+            [
+                "id" => $user->getTrainingid(),
+            ]
+        );
+        $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
+            "id" => $userTraining->getSchoolid(),
+        ]);
+        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
+            "id" => $user->getId(),
+        ]);
+        // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
+        //     "idStudent" => $user->getStudentid(),
+        //     "idTraining" => $user->getTrainingid(),
+        // ]);
 
-        $idUser = $user->getId();
-        if($idUser == $this->getUser()->getId()):
-            return $this->render("myProfile.html.twig", ["user" => $user]);
-        else:
-            return $this->render("viewProfile.html.twig", ["user" => $user]);
-        endif;
-    }
-
-    /**
-     * @Route("/profile", name="profile")
-     */
-    public function getInfoCurrentStudent()
-    {
-        $reqUser = $this->getDoctrine()->getRepository(Student::Class);
-        $user = $reqUser->find($this->getUser()->getId());
-
-        return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
+        return $this->render(
+            "viewProfile.html.twig",
+            [
+                "user" => $user,
+                "userTraining" => $userTraining,
+                "schoolUser" => $schoolUser,
+                "badgeUser" => $badgeUser,
+                "isCurrentId" => $this->getUser()->getId() == $idStudent,
+                'idStudent' => $idStudent
+            ]
+        );
     }
 
     /**
@@ -100,14 +104,7 @@ class ProfileController extends AbstractController
         $entityManager->flush();
 
         return $this->render("empty.html.twig");
-    public function viewMyProfile($idStudent)
-    {
-        $reqUser = $this->getDoctrine()->getRepository(Student::Class);
-        $user = $reqUser->find($idStudent);
-        $idUser = $user->getId();
-        return $this->render("myProfile.html.twig", ["user" => $user]);
     }
-
 
     /**
      * @Route("/accueil/uploadPicture", name="uploadPicture")

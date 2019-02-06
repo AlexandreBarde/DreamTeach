@@ -37,12 +37,12 @@ class DefaultController extends AbstractController
         }
 
         return $this->render(
-            "register.html.twig",
-            [
-                'form' => $form->createView(),
-                'user' => $this->getUser(),
-            ]
-        );
+        "register.html.twig",
+        [
+            'form' => $form->createView(),
+            'user' => $this->getUser(),
+        ]
+    );
     }
 
 }

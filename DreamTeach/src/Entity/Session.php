@@ -25,20 +25,6 @@ class Session
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=250, nullable=false)
-     */
-    private $description;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="startingTime", type="time", nullable=false)
@@ -52,8 +38,6 @@ class Session
      */
     private $endingtime;
 
-
-
     /**
      * @var \DateTime
      *
@@ -64,9 +48,16 @@ class Session
     /**
      * @var string
      *
-     * @ORM\Column(name="place", type="string", length=100, nullable=false)
+     * @ORM\Column(name="place", type="string", length=100, nullable=true)
      */
     private $place;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
+     */
+    private $city;
 
     /**
      * @var int
@@ -81,6 +72,13 @@ class Session
      * @ORM\Column(name="isVirtual", type="boolean", nullable=false)
      */
     private $isvirtual;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="vocalSoftware", type="string", length=100, nullable=true)
+     */
+    private $vocalSoftware;
 
     /**
      * @var \Student
@@ -116,6 +114,16 @@ class Session
      * )
      */
     private $studentid;
+
+    /**
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
 
     /**
      * Constructor
@@ -252,28 +260,72 @@ class Session
         return $this;
     }
 
-    public function getName(): ?string
+    /**
+     * @return mixed
+     */
+    public function getName()
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return mixed
+     */
+    public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
     {
         $this->description = $description;
-
-        return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVocalSoftware()
+    {
+        return $this->vocalSoftware;
+    }
+
+    /**
+     * @param string $vocalSoftware
+     */
+    public function setVocalSoftware(string $vocalSoftware): void
+    {
+        $this->vocalSoftware = $vocalSoftware;
+    }
+
+
+
+
 
 }

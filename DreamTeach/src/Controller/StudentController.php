@@ -25,7 +25,7 @@ class StudentController extends AbstractController
 
     public function homeStudentAction()
     {
-        die('test');
+        return $this->render("dashboard.html.twig");
     }
 
     /**

@@ -15,14 +15,14 @@
 
             </div>
             <div class="col-5">
-                <span> Nom : {{ i.nom() }} </span>
+                <span> Nom : {{ i.name() }} </span>
                 <br/>
                 <span> Date : {{ i.date.format('d-m-Y') }} </span>
                 <br/>
                 <span> Heure : {{ i.startingTime.format('H:i') }} </span>
             </div>
             <div class="col-5">
-                <span> Description : {{ i.description }} </span>
+                <span> Description : {{ i.description() }} </span>
             </div>
             {% endfor %}
         </div>

@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AgendaController extends AbstractController
 {
     /**
-     * @Route("dashboard/agenda", name="agenda")
+     * @Route("accueil/agenda", name="student_agenda")
      */
 
     public function sessionAction()

@@ -25,7 +25,7 @@ class ProfileController extends AbstractController
 {
 
     /**
-     * @Route("/profile/{idStudent}", name="profile")
+     * @Route("/profile/{idStudent}", name="profileView")
      */
     public function getInfoStudent($idStudent)
     {
@@ -33,9 +33,26 @@ class ProfileController extends AbstractController
         $user = $reqUser->find($idStudent);
 
         if($idStudent == $this->getUser()->getId()) {
-            return $this->render("myProfile.html.twig", ["user" => $user]);
+            return $this->redirectToRoute('myProfile');
         }
-        return $this->render("viewProfile.html.twig", ["user" => $user]);
+        return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
+    }
+    /**
+     * @Route("/profile", name="myProfile")
+     */
+    public function getInfoCurrentStudent()
+    {
+        $reqUser = $this->getDoctrine()->getRepository(Student::Class);
+        $user = $reqUser->find($this->getUser()->getId());
+
+        return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
+    }
+    /**
+     * @Route("/updateProfile", name="updateProfile")
+     */
+    public function updateProfile()
+    {
+        return $this->render("updateProfile.html.twig");
     }
 
     /**

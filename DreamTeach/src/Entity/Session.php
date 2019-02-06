@@ -47,9 +47,16 @@ class Session
     /**
      * @var string
      *
-     * @ORM\Column(name="place", type="string", length=100, nullable=false)
+     * @ORM\Column(name="place", type="string", length=100, nullable=true)
      */
     private $place;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
+     */
+    private $city;
 
     /**
      * @var int
@@ -283,6 +290,40 @@ class Session
     {
         $this->description = $description;
     }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVocalSoftware()
+    {
+        return $this->vocalSoftware;
+    }
+
+    /**
+     * @param string $vocalSoftware
+     */
+    public function setVocalSoftware(string $vocalSoftware): void
+    {
+        $this->vocalSoftware = $vocalSoftware;
+    }
+
+
 
 
 

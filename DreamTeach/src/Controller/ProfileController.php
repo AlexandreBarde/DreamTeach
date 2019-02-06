@@ -31,13 +31,13 @@ class ProfileController extends AbstractController
         $user = $reqUser->find($idStudent);
 
         if ($idStudent == $this->getUser()->getId()) {
-            return $this->redirectToRoute('myProfile');
+            return $this->redirectToRoute('profile');
         }
         return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
     }
 
     /**
-     * @Route("/profile", name="myProfile")
+     * @Route("/profile", name="profile")
      */
     public function getInfoCurrentStudent()
     {
@@ -77,7 +77,7 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($user);
             $manager->flush();
-            return $this->redirectToRoute("myProfile", ["user" => $user]);
+            return $this->redirectToRoute("profile", ["user" => $user]);
         }
         return $this->render("updateProfile.html.twig", ["formUser" => $form->createView()]);
     }

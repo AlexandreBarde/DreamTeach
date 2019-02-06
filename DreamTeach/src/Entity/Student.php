@@ -65,9 +65,10 @@ class Student implements UserInterface
     private $password;
 
     /**
-     * @var string
+     * @ORM\Column(type="string", nullable=true)
      *
-     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Ajouter une image jpg")
+     * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $avatar = null;
 
@@ -114,7 +115,7 @@ class Student implements UserInterface
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Subject", inversedBy="studentid")
-     * @ORM\JoinTable(name="subjectlevel",
+     * @ORM\JoinTable(name="subject_level",
      *   joinColumns={
      *     @ORM\JoinColumn(name="studentID", referencedColumnName="id")
      *   },
@@ -201,15 +202,14 @@ class Student implements UserInterface
         return $this;
     }
 
-    public function getAvatar(): ?string
+    public function getAvatar()
     {
         return $this->avatar;
     }
 
-    public function setAvatar(string $avatar): self
+    public function setAvatar($avatar)
     {
         $this->avatar = $avatar;
-
         return $this;
     }
 

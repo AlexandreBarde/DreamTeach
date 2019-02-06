@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 
+use App\Entity\Badge;
+use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Training;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -23,27 +25,40 @@ class StudentController extends AbstractController
 
     public function homeStudentAction()
     {
-        die('test');
+        return $this->render("dashboard.html.twig");
     }
 
     /**
-     * @Route("/profil/", name="student_profile")
+     * @Route("/profil/{student}", name="student_profile")
      */
 
-    public function studentProfileAction()
+    public function studentProfileAction(Student $student)
     {
-        $user = $this->getUser();
-        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findBy(
+        $user = $this->getDoctrine()->getRepository(Student::Class)->find($student);
+        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findOneBy(
             [
                 "id" => $user->getTrainingid(),
             ]
         );
 
+        $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
+            "id" => $userTraining->getSchoolid(),
+        ]);
+        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
+           "id" => $user->getId(),
+        ]);
+       // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
+       //     "idStudent" => $user->getStudentid(),
+       //     "idTraining" => $user->getTrainingid(),
+       // ]);
         return $this->render(
             "viewProfile.html.twig",
             [
                 "user" => $user,
                 "userTraining" => $userTraining,
+                "schoolUser" => $schoolUser,
+               "badgeUser" => $badgeUser,
+               // "noteUser" => $noteUser,
             ]
         );
 

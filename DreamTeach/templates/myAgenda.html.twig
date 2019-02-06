@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon agenda{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            {% for i in user.getSessionid() %}
+            <div class="col-2">
+
+                <span> {{ i.id() }} </span>
+
+            </div>
+            <div class="col-5">
+                <span> Nom : {{ i.name() }} </span>
+                <br/>
+                <span> Date : {{ i.date.format('d-m-Y') }} </span>
+                <br/>
+                <span> Heure : {{ i.startingTime.format('H:i') }} </span>
+            </div>
+            <div class="col-5">
+                <span> Description : {{ i.description() }} </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+

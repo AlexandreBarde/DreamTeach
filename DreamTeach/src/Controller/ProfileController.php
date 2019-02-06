@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
                 "userTraining" => $userTraining,
                 "schoolUser" => $schoolUser,
                 "badgeUser" => $badgeUser,
-                "isCurrentId" => $this->getUser()->getId() == $idStudent,
+                "isCurrentStudent" => $this->getUser()->getId() == $idStudent,
                 'idStudent' => $idStudent
             ]
         );
@@ -65,7 +65,6 @@ class ProfileController extends AbstractController
         $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
         $user = $this->getUser();
 
-
         $form = $this->createFormBuilder($user)
             ->add('firstName')
             ->add('lastName')
@@ -73,9 +72,6 @@ class ProfileController extends AbstractController
             ->add('emailAddress')
             ->add('trainingID', ChoiceType::class, [
                     'choices' => $formations,
-                    'choice_value' => function($formations) {
-                        return $formations->getTitle();
-                    }
                 ]
             )
             ->getForm();
@@ -85,9 +81,8 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $manager->persist($user);
             $manager->flush();
-            return $this->redirectToRoute("profile", ["user" => $user]);
         }
-        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView()]);
+        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $user]);
     }
 
     /**

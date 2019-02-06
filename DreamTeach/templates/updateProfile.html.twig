@@ -12,8 +12,7 @@
         {{ form_row(formUser.lastName) }}
         {{ form_row(formUser.biography) }}
         {{ form_row(formUser.emailAddress) }}
-
-        {{ form_widget(formUser.trainingID, {'value' : 'Test'}) }}
+        {{ form_row(formUser.trainingID) }}
 
     <button type="submit">Modifier le profile</button>
     {{ form_end(formUser) }}

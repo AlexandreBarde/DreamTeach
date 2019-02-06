@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ProfileController extends AbstractController
 {
@@ -29,11 +30,12 @@ class ProfileController extends AbstractController
         $reqUser = $this->getDoctrine()->getRepository(Student::Class);
         $user = $reqUser->find($idStudent);
 
-        if($idStudent == $this->getUser()->getId()) {
+        if ($idStudent == $this->getUser()->getId()) {
             return $this->redirectToRoute('myProfile');
         }
         return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
     }
+
     /**
      * @Route("/profile", name="myProfile")
      */
@@ -44,12 +46,37 @@ class ProfileController extends AbstractController
 
         return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
     }
+
     /**
-     * @Route("/updateProfile", name="updateProfile")
+     * @Route("/updateInfosProfile", name="updateInfosProfile")
      */
-    public function updateProfile()
+    public function updateProfile(Request $request, ObjectManager $manager)
     {
-        return $this->render("updateProfile.html.twig");
+        $training = $this->getDoctrine()->getRepository(Training::class);
+        /** @var Training $formations */
+        $arrayFormations = array();
+        $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
+        foreach($formations as $formation => $value) {
+
+        }
+        $user = $this->getUser();
+        $form = $this->createFormBuilder($user)
+            ->add('firstName')
+            ->add('lastName')
+            ->add('trainingID', ChoiceType::class, [
+                    'choices' => $arrayFormations
+                ]
+            )
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($user);
+            $manager->flush();
+            return $this->redirectToRoute("myProfile", ["user" => $user]);
+        }
+        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView()]);
     }
 
     /**

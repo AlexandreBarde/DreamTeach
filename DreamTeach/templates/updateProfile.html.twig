@@ -6,7 +6,17 @@
     <link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
 
 {% block body %}
-    <h1>test</h1>
+    <h1>Modifiez vos informations personnelles</h1>
+    {{ form_start(formUser) }}
+        {{ form_row(formUser.firstName) }}
+        {{ form_row(formUser.lastName) }}
+        {% for formation in formUser.trainingID %}
+            {{ formation.title }}
+        {% endfor %}
+        {{ form_row(formUser.trainingID) }}
+    <button type="submit">Modifier le profile</button>
+    {{ form_end(formUser) }}
+
 {% endblock %}
 
 

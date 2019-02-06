@@ -10,10 +10,9 @@
     {{ form_start(formUser) }}
         {{ form_row(formUser.firstName) }}
         {{ form_row(formUser.lastName) }}
-        {% for formation in formUser.trainingID %}
-            {{ formation.title }}
-        {% endfor %}
+
         {{ form_row(formUser.trainingID) }}
+
     <button type="submit">Modifier le profile</button>
     {{ form_end(formUser) }}
 

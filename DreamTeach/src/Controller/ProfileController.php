@@ -54,17 +54,19 @@ class ProfileController extends AbstractController
     {
         $training = $this->getDoctrine()->getRepository(Training::class);
         /** @var Training $formations */
-        $arrayFormations = array();
         $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
-        foreach($formations as $formation => $value) {
-
-        }
         $user = $this->getUser();
+
+
         $form = $this->createFormBuilder($user)
             ->add('firstName')
             ->add('lastName')
+            ->add('biography')
             ->add('trainingID', ChoiceType::class, [
-                    'choices' => $arrayFormations
+                    'choices' => $formations,
+                    'choice_value' => function($formations) {
+                        return $formations->getTitle();
+                    }
                 ]
             )
             ->getForm();

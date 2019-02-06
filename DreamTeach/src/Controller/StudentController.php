@@ -49,9 +49,7 @@ class StudentController extends AbstractController
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
             "studentid" => $user->getId(),
         ]);
-       // $nomMatirere = $this->getDoctrine()->getRepository(Subject::class)->find(array(
-         //   "id" => $noteUser->getsubjectID(),
-        //));
+
         return $this->render(
             "viewProfile.html.twig",
             [
@@ -59,7 +57,6 @@ class StudentController extends AbstractController
                 "userTraining" => $userTraining,
                 "schoolUser" => $schoolUser,
                "noteUser" => $noteUser,
-             //   "nomMatirere" => $nomMatirere,
             ]
         );
 

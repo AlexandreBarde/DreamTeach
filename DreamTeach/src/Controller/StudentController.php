@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class StudentController
  * @package App\Controller
- * @Route("/accueil")
+ * @Route("/dashboard")
  * @IsGranted("ROLE_USER")
  */
 class StudentController extends AbstractController
@@ -23,7 +23,7 @@ class StudentController extends AbstractController
 
     public function homeStudentAction()
     {
-        die('test');
+        return $this->render("home.student.html.twig");
     }
 
     /**
@@ -46,6 +46,5 @@ class StudentController extends AbstractController
                 "userTraining" => $userTraining,
             ]
         );
-
     }
 }

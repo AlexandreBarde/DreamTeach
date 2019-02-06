@@ -18,7 +18,7 @@
                         <div class="col-6">
                             <span> {{ user.biography }} </span>
                         </div>
-                        <a href=""><i class="far fa-edit col-2"></i></a>
+                        <a href="{{ path('updateProfile') }}"><i class="far fa-edit col-2"></i></a>
                     {% else %}
                         <div class="col-4">
                             <img class="rounded-circle" src={{ asset("img/tom_bg.jpg") }} height="150px">

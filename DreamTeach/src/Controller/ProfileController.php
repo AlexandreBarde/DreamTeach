@@ -44,6 +44,13 @@ class ProfileController extends AbstractController
 
         return $this->render("viewProfile.html.twig", ["user" => $user, "isCurrentUser" => $this->getUser()->getId() == $user->getId()]);
     }
+    /**
+     * @Route("/updateProfile", name="updateProfile")
+     */
+    public function updateProfile()
+    {
+        return $this->render("updateProfile.html.twig");
+    }
 
     /**
      * @Route("/deleteProfile", name="deleteProfile")

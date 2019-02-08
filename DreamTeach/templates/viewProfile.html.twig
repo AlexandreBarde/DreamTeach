@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Profil - {{ user.lastName }} {{ user.firstName }}{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -10,7 +10,6 @@
 
 
 {% block body %}
-    {{ dump(app.user.trainingid.title) }}
     <div class="container align-content-center mt-5">
         <div class="row">
             <div class="col-6 border border-secondary p-4 bg-light">

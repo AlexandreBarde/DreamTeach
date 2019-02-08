@@ -6,7 +6,9 @@ namespace App\Controller;
 use App\Entity\Badge;
 use App\Entity\School;
 use App\Entity\Student;
+use App\Entity\Subject;
 use App\Entity\Training;
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,6 +54,32 @@ class StudentController extends AbstractController
             return $this->redirectToRoute('student_profile');
         }
 
-        return $this->render('viewOtherProfile.html.twig');
+        return $this->render(
+            'viewOtherProfile.html.twig',
+            [
+                'student' => $student,
+            ]
+        );
+    }
+    /**
+     * @Route("/createSubject", name="createSubject")
+     */
+    public function createSubject(Request $request, ObjectManager $manager)
+    {
+        $subject = new Subject();
+        $form = $this->createFormBuilder($subject)
+            ->add('name')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($subject);
+            $manager->flush();
+            return $this->redirectToRoute("student_profile", ['idStudent' => $this->getUser()->getId()]);
+
+        }
+
+        return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
     }
 }

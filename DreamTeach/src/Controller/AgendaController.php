@@ -16,6 +16,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 
+/**
+ * Class StudentController
+ * @package App\Controller
+ * @IsGranted("ROLE_USER")
+ */
 class AgendaController extends AbstractController
 {
     /**

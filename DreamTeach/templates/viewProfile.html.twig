@@ -26,7 +26,9 @@
                 <div class="text-center">
                     <span class="font-weight-bold h4">{{ app.user.Lastname }} </span>
                     <span class="h4"> {{ app.user.firstName }} </span>
-                    <div> {{ app.user.trainingid.title }} | {{ app.user.trainingid.schoolid.name}} | {{ app.user.trainingid.schoolid.city }}</div>
+                    {% if app.user.trainingid is not null %}
+                        <div> {{ app.user.trainingid.title }} | {{ app.user.trainingid.schoolid.name}} | {{ app.user.trainingid.schoolid.city }}</div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-1"></div>

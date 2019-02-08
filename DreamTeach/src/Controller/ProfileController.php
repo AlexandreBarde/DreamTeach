@@ -19,44 +19,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
+/**
+ * Class StudentController
+ * @package App\Controller
+ * @IsGranted("ROLE_USER")
+ */
 class ProfileController extends AbstractController
 {
-
-    /**
-     * @Route("/profile/{idStudent}", name="profile")
-     */
-    public function getInfoStudent($idStudent)
-    {
-        $user = $this->getDoctrine()->getRepository(Student::Class)->find($idStudent);
-        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findOneById(
-            [
-                "id" => $user->getTrainingid(),
-            ]
-        );
-        $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
-            "id" => $userTraining->getSchoolid(),
-        ]);
-        $badgeUser = $this->getDoctrine()->getRepository(Badge::class)->findBy([
-            "id" => $user->getId(),
-        ]);
-        // $noteUser = $this->getDoctrine()->getRepository(Subject::class)->findOneBy([
-        //     "idStudent" => $user->getStudentid(),
-        //     "idTraining" => $user->getTrainingid(),
-        // ]);
-
-        return $this->render(
-            "viewProfile.html.twig",
-            [
-                "user" => $user,
-                "userTraining" => $userTraining,
-                "schoolUser" => $schoolUser,
-                "badgeUser" => $badgeUser,
-                "isCurrentStudent" => $this->getUser()->getId() == $idStudent,
-                'idStudent' => $idStudent
-            ]
-        );
-    }
-
     /**
      * @Route("/updateInfosProfile", name="updateInfosProfile")
      */

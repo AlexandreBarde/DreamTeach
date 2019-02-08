@@ -3,19 +3,18 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
-use App\Entity\Student;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\DBAL\Types\DateType;
-use Doctrine\DBAL\Types\TextType;
-use Doctrine\DBAL\Types\TimeType;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\SessionFormType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class StudentController
+ * @package App\Controller
+ * @IsGranted("ROLE_USER")
+ */
 class SessionController extends AbstractController
 {
 

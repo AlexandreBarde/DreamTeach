@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\School;
+
 use App\Entity\Student;
-use App\Entity\Training;
 use App\Form\RegisterType;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

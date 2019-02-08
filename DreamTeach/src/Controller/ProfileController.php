@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\School;
-use App\Entity\Badge;
+
 use App\Entity\Session;
 use App\Entity\Student;
 use App\Entity\Training;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 

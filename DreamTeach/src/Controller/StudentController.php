@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 
-use App\Entity\Badge;
-use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Subject;
-use App\Entity\Training;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

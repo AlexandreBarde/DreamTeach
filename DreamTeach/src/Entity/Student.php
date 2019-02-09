@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,6 +29,12 @@ class Student implements UserInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $uuid;
 
     /**
      * @var string
@@ -136,6 +144,7 @@ class Student implements UserInterface
 
     /**
      * Constructor
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -143,6 +152,7 @@ class Student implements UserInterface
         $this->sessionid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subjectid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xpwon = 0;
+        $this->uuid = Uuid::uuid4()->toString();
     }
 
     public function getId(): ?int

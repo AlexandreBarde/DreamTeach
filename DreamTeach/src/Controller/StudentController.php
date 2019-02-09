@@ -39,15 +39,19 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/profil/{student}", name="student_other_profile")
+     * @Route("/profil/{uuid_student}", name="student_other_profile")
      */
-    public function studentOtherProfileAction($student)
+    public function studentOtherProfileAction($uuid_student)
     {
-        $student = $this->getDoctrine()->getRepository(Student::class)->find($student);
+        $student = $this->getDoctrine()->getRepository(Student::class)->findBy(
+            [
+                'uuid' => $uuid_student,
+            ]
+        );
         $user = $this->getUser();
         if (!$student) {
             return $this->redirectToRoute("default_student_connected");
-        } elseif ($student == $user) {
+        } elseif ($uuid_student == $user->getUuid()) {
             return $this->redirectToRoute('student_profile');
         }
 

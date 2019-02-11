@@ -135,10 +135,12 @@ class StudentController extends AbstractController
 
             }
 
-            return $this->render(
-                "viewProfile.html.twig", ['user' => $this->getUser(), 'noteUser' => $noteUser]
-            );
         }
+
+        return $this->render(
+            "viewProfile.html.twig",
+            ['user' => $this->getUser(), 'noteUser' => $noteUser]
+        );
     }
 
     /**

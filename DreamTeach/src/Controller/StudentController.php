@@ -105,7 +105,7 @@ class StudentController extends AbstractController
                         'widget' => 'single_text',
                         'format' => 'yyyy-MM-dd',
                     ])
-                    ->add('avatar', FileType::class, ['label' => 'Image (Fichier jpg)'])
+                    ->add('avatar', FileType::class, ['label' => 'Image (Fichier jpg)', 'data_class' => null])
                     ->add('city')
                     ->getForm();
 

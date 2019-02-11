@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\String_;
 
 /**
  * Session
@@ -47,9 +48,16 @@ class Session
     /**
      * @var string
      *
-     * @ORM\Column(name="place", type="string", length=100, nullable=false)
+     * @ORM\Column(name="place", type="string", length=100, nullable=true)
      */
     private $place;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
+     */
+    private $city;
 
     /**
      * @var int
@@ -64,6 +72,13 @@ class Session
      * @ORM\Column(name="isVirtual", type="boolean", nullable=false)
      */
     private $isvirtual;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="vocalSoftware", type="string", length=100, nullable=true)
+     */
+    private $vocalSoftware;
 
     /**
      * @var \Student
@@ -99,6 +114,16 @@ class Session
      * )
      */
     private $studentid;
+
+    /**
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
 
     /**
      * Constructor
@@ -234,5 +259,73 @@ class Session
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVocalSoftware()
+    {
+        return $this->vocalSoftware;
+    }
+
+    /**
+     * @param string $vocalSoftware
+     */
+    public function setVocalSoftware(string $vocalSoftware): void
+    {
+        $this->vocalSoftware = $vocalSoftware;
+    }
+
+
+
+
 
 }

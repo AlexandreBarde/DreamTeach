@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon agenda{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Vos séances</h1>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Date</th>
+                <th scope="col">Heure</th>
+                <th scope="col">Description</th>
+                <th>État</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in user.getSessionid() %}
+                <tr>
+                    <th scope="row">{{ i.id() }}</th>
+                    <td>{{ i.name() }}</td>
+                    <td>{{ i.date.format('d-m-Y') }}</td>
+                    <td>{{ i.startingTime.format('H:i') }}</td>
+                    <td>{{ i.description() }}</td>
+                    <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+

@@ -3,62 +3,112 @@
 namespace App\Controller;
 
 
-use App\Entity\Badge;
-use App\Entity\School;
 use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
+use App\Entity\Session;
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class StudentController
  * @package App\Controller
- * @Route("/accueil")
  * @IsGranted("ROLE_USER")
  */
 class StudentController extends AbstractController
 {
     /**
-     * @Route("/", name="default_student_connected")
+     * @Route("/dashboard", name="default_student_connected")
      */
 
     public function homeStudentAction()
     {
-        die('test');
+        $session = $this->getDoctrine()->getRepository(Session::class)->findAll();
+        $student = $this->getUser();
+        /** @var Session $listeSession */
+        $listeSession = $student->getSessionid();
+
+        $tmp = array();
+        $listeSessionEtudiant = array();
+
+        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
+        foreach($listeSession as $sessionTMP)
+        {
+            // On ajoute les séances
+            array_push($tmp, $sessionTMP->getId());
+        }
+
+        foreach ($tmp as $ss)
+        {
+            // On ajoute les ID des sessions
+            array_push($listeSessionEtudiant, $ss);
+        }
+        return $this->render("dashboard.html.twig", ['session' => $session, 'sessionUser' => $listeSessionEtudiant]);
     }
 
     /**
-     * @Route("/profil/{student}", name="student_profile")
+     * @Route("/mon-profil/", name="student_profile")
      */
 
-    public function studentProfileAction(Student $student)
+    public function studentProfileAction(Request $request)
     {
-        $user = $this->getDoctrine()->getRepository(Student::Class)->find($student);
-        $userTraining = $this->getDoctrine()->getRepository(Training::class)->findOneBy(
+        return $this->render(
+            "viewProfile.html.twig", ['user' => $this->getUser()]
+        );
+    }
+
+    /**
+     * @Route("/profil/{uuid_student}", name="student_other_profile")
+     */
+    public function studentOtherProfileAction($uuid_student)
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->findBy(
             [
-                "id" => $user->getTrainingid(),
+                'uuid' => $uuid_student,
             ]
         );
-
-        $schoolUser = $this->getDoctrine()->getRepository(School::class)->findOneBy([
-            "id" => $userTraining->getSchoolid(),
-        ]);
-        $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
-            "studentid" => $user->getId(),
-        ]);
+        $user = $this->getUser();
+        if (!$student) {
+            return $this->redirectToRoute("default_student_connected");
+        } elseif ($uuid_student == $user->getUuid()) {
+            return $this->redirectToRoute('student_profile');
+        }
 
         return $this->render(
-            "viewProfile.html.twig",
+            'viewOtherProfile.html.twig',
             [
-                "user" => $user,
-                "userTraining" => $userTraining,
-                "schoolUser" => $schoolUser,
-               "noteUser" => $noteUser,
+                'student' => $student,
             ]
         );
+    }
+    /**
+     * @Route("/createSubject", name="createSubject")
+     */
+    public function createSubject(Request $request, ObjectManager $manager)
+    {
+        $subject = new Subject();
+        $form = $this->createFormBuilder($subject)
+            ->add('name')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($subject);
+            $manager->flush();
+            return $this->redirectToRoute("student_profile", ['idStudent' => $this->getUser()->getId()]);
+
+        }
+
+        return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
+    }
+
+    public function sessionAction()
+    {
 
     }
 }

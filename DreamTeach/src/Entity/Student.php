@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -27,6 +27,12 @@ class Student implements UserInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $uuid;
 
     /**
      * @var string
@@ -65,10 +71,8 @@ class Student implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
-     * @Assert\NotBlank(message="Ajouter une image jpg")
-     * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $avatar = null;
 
@@ -115,7 +119,7 @@ class Student implements UserInterface
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Subject", inversedBy="studentid")
-     * @ORM\JoinTable(name="subjectlevel",
+     * @ORM\JoinTable(name="subject_level",
      *   joinColumns={
      *     @ORM\JoinColumn(name="studentID", referencedColumnName="id")
      *   },
@@ -127,7 +131,18 @@ class Student implements UserInterface
     private $subjectid;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $birthDate;
+
+    /**
      * Constructor
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -135,6 +150,7 @@ class Student implements UserInterface
         $this->sessionid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->subjectid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xpwon = 0;
+        $this->uuid = Uuid::uuid4()->toString();
     }
 
     public function getId(): ?int
@@ -380,5 +396,43 @@ class Student implements UserInterface
         );
     }
 
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
 
+    public function setCity(?string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(?\DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     */
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
 }

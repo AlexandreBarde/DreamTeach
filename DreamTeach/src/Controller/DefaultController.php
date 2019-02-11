@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\School;
+
 use App\Entity\Student;
-use App\Entity\Training;
 use App\Form\RegisterType;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,8 +24,10 @@ class DefaultController extends AbstractController
         $form = $this->createForm(RegisterType::class, $student);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $hash = $encode->encodePassword($student, $student->getPassword());
+            $student->setAvatar("");
             $student->setPassword($hash);
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
@@ -37,12 +37,12 @@ class DefaultController extends AbstractController
         }
 
         return $this->render(
-            "register.html.twig",
-            [
-                'form' => $form->createView(),
-                'user' => $this->getUser(),
-            ]
-        );
+        "register.html.twig",
+        [
+            'form' => $form->createView(),
+            'user' => $this->getUser(),
+        ]
+    );
     }
 
 }

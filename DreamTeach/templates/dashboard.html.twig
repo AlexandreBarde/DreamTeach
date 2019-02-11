@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Dashboard - DreamTeach
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-8">
+            <h5>Bonjour {{ app.user.firstname }} !</h5>
+            Bienvenue sur votre espace personnel
+        </div>
+        <div class="col-4 alert alert-success">
+
+        </div>
+    </div>
+    <div class="row justify-content-between mt-5">
+        <div class="col-6 col-sm-2 alert alert-danger text-center"><h6>Séances dirigées</h6>23</div>
+        <div class="col-6 col-sm-2 alert alert-warning"></div>
+        <div class="col-6 col-sm-2 alert alert-primary"></div>
+        <div class="col-6 col-sm-2 alert alert-secondary"></div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h6><i class="fa fa-graduation-cap fa-lg"></i>&nbsp;Prochaines séances</h6>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Messages récents</h6>
+                </div>
+                <div class="card-body"></div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Séances à venir</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Heure</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">État</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in session %}
+                                <tr>
+                                    <td>{{ i.name() }}</td>
+                                    <td>{{ i.date.format('d-m-Y') }}</td>
+                                    <td>{{ i.startingTime.format('H:i') }}</td>
+                                    <td>{{ i.description() }}</td>
+                                    {% if i.id() in sessionUser %}
+                                        <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                                    {% else %}
+                                        <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+
+

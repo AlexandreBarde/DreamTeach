@@ -39,6 +39,32 @@
                 <div class="card-body"></div>
             </div>
         </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Séances à venir</h6>
+                </div>
+                <div class="row">
+                    {% for i in session%}
+                        <div class="col-2">
+                            <span> {{ i.id() }} </span>
+                        </div>
+                        <div class="col-5">
+                            <span> Nom : {{ i.name() }} </span>
+                            <br/>
+                            <span> Date : {{ i.date.format('d-m-Y') }} </span>
+                            <br/>
+                            <span> Heure : {{ i.startingTime.format('H:i') }} </span>
+                        </div>
+                        <div class="col-5">
+                            <span> Description : {{ i.description() }} </span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-body"></div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

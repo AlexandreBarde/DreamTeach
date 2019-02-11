@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Student;
 use App\Entity\Subject;
+use App\Entity\Session;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +25,10 @@ class StudentController extends AbstractController
 
     public function homeStudentAction()
     {
-        return $this->render("dashboard.html.twig");
+        $session = $this->getDoctrine()->getRepository(Session::class)->findAll(
+        );
+        //dump($session);exit;
+        return $this->render("dashboard.html.twig", ['session' => $session]);
     }
 
     /**
@@ -82,5 +86,10 @@ class StudentController extends AbstractController
         }
 
         return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
+    }
+
+    public function sessionAction()
+    {
+
     }
 }

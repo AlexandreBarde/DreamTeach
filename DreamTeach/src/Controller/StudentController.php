@@ -15,7 +15,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Form\ProfileFormType;
 
 
 /**
@@ -98,26 +101,47 @@ class StudentController extends AbstractController
                 $studentId = $repository->find($this->getUser()->getId());
 
                 $form = $this->createFormBuilder($user)
-                    ->add('firstName')
-                    ->add('lastName')
-                    ->add('biography')
-                    ->add('emailAddress')
+                    ->add('firstName', TextType::class, [
+                        'attr' => [
+                            'class' => 'form-control']
+                    ])
+                    ->add('lastName', TextType::class, [
+                        'attr' => [
+                            'class' => 'form-control']
+                    ])
+                    ->add('biography', TextType::class, [
+                        'attr' => [
+                            'class' => 'form-control']
+                    ])
+                    ->add('emailAddress', TextType::class, [
+                    'attr' => [
+                        'class' => 'form-control']
+                    ])
                     ->add('trainingID', ChoiceType::class, [
                         'choices' => $formations,
+                        'attr' => [
+                            'class' => 'form-control'],
                         'choice_label' => function($choiceValue, $key, $value) {
                             return $choiceValue->getTitle();
                         }
                     ])
                     ->add('birthDate', DateType::class, [
                         'widget' => 'single_text',
-                        'format' => 'yyyy-MM-dd',
+                        'attr' => [
+                            'class' => 'form-control'],
+                        'format' => 'yyyy-MM-dd'
                     ])
-                    ->add('avatar', FileType::class, ['label' => 'Image (Fichier jpg)', 'data_class' => null])
-                    ->add('city')
+                    ->add('avatar', FileType::class, [
+                        'attr' => [
+                            'class' => 'form-control']
+                    ])
+                    ->add('city', TextType::class, [
+                    'attr' => [
+                        'class' => 'form-control']
+                    ])
                     ->getForm();
 
                 $form->handleRequest($request);
-
                 if ($form->isSubmitted() && $form->isValid()) {
                     $file = $studentId->getAvatar();
                     $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
@@ -172,12 +196,6 @@ class StudentController extends AbstractController
             ['user' => $this->getUser(), 'noteUser' => $noteUser]
         );
     }
-
-    /**
-     * @Route(name="updateInfosProfile")
-     */
-    public function updateProfile(Request $request, ObjectManager $manager)
-    {}
 
     /**
      * @Route("/profil/{uuid_student}", name="student_other_profile")

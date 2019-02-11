@@ -11,6 +11,8 @@ namespace App\Form;
 
 use App\Entity\Session;
 use App\Entity\Subject;
+use DateTime;
+use DateTimeZone;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -27,6 +29,8 @@ class SessionFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
+
         $builder
             ->add('name', TextType::class, [
                 'attr' => [
@@ -52,21 +56,26 @@ class SessionFormType extends AbstractType
                 ]
             ])
             ->add('startingTime', TimeType::class, [
+                'widget' => 'single_text',
                 'attr' => [
                     'placeholder' => "Heure de début...",
                     'class' => 'form-control'
                 ]
             ])
             ->add('endingTime', TimeType::class, [
+                'widget' => 'single_text',
                 'attr' => [
                     'placeholder' => "Heure de fin...",
                     'class' => 'form-control'
                 ]
             ])
             ->add('date', DateType::class, [
+                'widget' => 'single_text',
                 'attr' => [
+
                     'placeholder' => "Date...",
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'min' => $now->format("Y-m-d")
                 ]
             ])
             ->add('isVirtual', CheckboxType::class)

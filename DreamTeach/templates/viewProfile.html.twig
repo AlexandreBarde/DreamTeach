@@ -23,15 +23,16 @@
                         {% endif %}
                     </div>
                     <div class="col-6">
-                        <span> </br> {{ user.biography }} </span>
+                        <span> </br> {{ app.user.biography }} </span>
                     </div>
                 </div>
                 <hr class="border-left-0 border-secondary ">
                 <div class="text-center">
                     </br>
-                    <span class="font-weight-bold h4">{{ user.Lastname }} </span>
-                    <span class="h4"> {{ user.firstName }} </span>
-                    <div> {{ userTraining.title }} | {{ schoolUser.name }} | {{ schoolUser.city }}</div>
+                    <span class="font-weight-bold h4">{{ app.user.Lastname }} </span>
+                    <span class="h4"> {{ app.user.firstName }} </span>
+                    <div> {{ app.user.trainingid.title }} | {{ app.user.trainingid.schoolid.name }}
+                        | {{ app.user.trainingid.schoolid.city }}</div>
                 </div>
             </div>
             <div class="border border-secondary p-4 mt-5 bg-light">
@@ -42,22 +43,21 @@
                     {% for j in 1..i.mark %}
                         <span class="fa fa-star" style="color:orange"></span>
                     {% endfor %}
-                    </br>
                 {% endfor %}
             </div>
         </div>
         <div class="col-5">
             <div class="border border-secondary p-4 bg-light">
-                <div class="h4 text-center">Niveau {{ (user.xpWon / 50)|slice(0,1) }}</div>
+                <div class="h4 text-center">Niveau {{ (app.user.xpWon / 50)|slice(0,1) }}</div>
                 <div class="progress mt-3">
                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
                          aria-valuemax="100"
-                         style="width:{{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;">
+                         style="width:{{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;">
                     </div>
                 </div>
-                <span class="text-center"> Vous avez {{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
+                <span class="text-center"> Vous avez {{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
                 <div class="mt-4 h5 mb-4"> Badges </div>
-                {% for i in user.getBadgeid() %}
+                {% for i in app.user.getBadgeid() %}
                     <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
                     {{ i.getName() }}
                     <br/> <br/>

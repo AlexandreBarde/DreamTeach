@@ -46,6 +46,9 @@ class SessionController extends AbstractController
                 $session->setOrganizerid($this->getUser());
                 $em->persist($session);
                 $em->flush();
+                $id=$session->getId();
+                return $this->redirectToRoute('AddSession', ["idSession"=>$id]);
+
                 return $this->redirectToRoute('student_agenda');
             } else {
 

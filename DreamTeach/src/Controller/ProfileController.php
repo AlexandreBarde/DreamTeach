@@ -149,7 +149,7 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
-            return $this->redirectToRoute("HomeController");
+            return $this->redirectToRoute("showSessions");
         }
     }
 
@@ -192,7 +192,7 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
-            return $this->redirectToRoute("HomeController");
+            return $this->redirectToRoute("showSessions");
         }
         else
         {

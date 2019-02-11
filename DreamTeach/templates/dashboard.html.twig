@@ -54,7 +54,7 @@
                                 <th scope="col">Date</th>
                                 <th scope="col">Heure</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">S'inscrire</th>
+                                <th scope="col">État</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -65,7 +65,7 @@
                                     <td>{{ i.startingTime.format('H:i') }}</td>
                                     <td>{{ i.description() }}</td>
                                     {% if i.id() in sessionUser %}
-                                        <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                                        <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
                                     {% else %}
                                         <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
                                     {% endif %}

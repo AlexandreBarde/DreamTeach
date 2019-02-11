@@ -149,9 +149,55 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
-            die("Ajouté dans ton agenda !");
+            return $this->redirectToRoute("HomeController");
+        }
+    }
+
+    /**
+     * Permet de supprimer la séance idSession de l'utilisateur connecté
+     * @Route("/accueil/removeSession/{idSession}", name="RemoveSession")
+     * @param $idSession
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeSession($idSession)
+    {
+        /** @var Student $student */
+        $student = $this->getUser();
+        /** @var Session $listeSession */
+        $listeSession = $student->getSessionid();
+
+        $tmp = array();
+        $listeSessionEtudiant = array();
+
+        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
+        foreach($listeSession as $session)
+        {
+            // On ajoute les séances
+            array_push($tmp, $session->getId());
         }
 
+        foreach ($tmp as $ss)
+        {
+            // On ajoute les ID des sessions
+            array_push($listeSessionEtudiant, $ss);
+        }
+
+        if(in_array($idSession,$listeSessionEtudiant))
+        {
+            // On supprime
+            $repository = $this->getDoctrine()->getRepository(Session::class);
+            /** @var Session $session */
+            $session = $repository->find($idSession);
+            $student->removeSessionid($session);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($student);
+            $em->flush();
+            return $this->redirectToRoute("HomeController");
+        }
+        else
+        {
+            die("Ce n'est pas dans ton agenda !");
+        }
     }
 
 }

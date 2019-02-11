@@ -4,7 +4,9 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
+use App\Entity\Subject;
 
+use App\Form\SubjectType;
 use DateTime;
 use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -29,16 +31,24 @@ class SessionController extends AbstractController
     public function sessionCreationAndUpdate(Request $request, $idSession=null)
     {
         $session = new Session();
+        $subject = new Subject();
         if ($idSession!=null) {
             $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         }
 
         $form = $this->createForm(SessionFormType::class, $session);
+        $formSubject = $this->createForm(SubjectType::class, $subject);
         $form->handleRequest($request);
+        $formSubject->handleRequest($request);
 
+        if($formSubject->isSubmitted() && $formSubject->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($subject);
+            $em->flush();
+            return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
 
+        }
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             if (($form->get('endingTime')->getData()) > ($form->get('startingTime')->getData())) {
 
@@ -57,7 +67,7 @@ class SessionController extends AbstractController
 
             }
         }
-        return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView()]);
+        return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
     }
 
     /**

@@ -154,21 +154,27 @@ class StudentController extends AbstractController
      */
     public function studentOtherProfileAction($uuid_student)
     {
-        $student = $this->getDoctrine()->getRepository(Student::class)->findBy(
+        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(
             [
                 'uuid' => $uuid_student,
             ]
         );
-        $user = $this->getUser();
         if (!$student) {
             return $this->redirectToRoute("default_student_connected");
-        } elseif ($uuid_student == $user->getUuid()) {
+        } elseif ($uuid_student == $this->getUser()->getUuid()) {
             return $this->redirectToRoute('student_profile');
         }
+        $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
+            [
+            "studentid" => $student,
+
+            ]);
+
 
         return $this->render(
             'viewOtherProfile.html.twig',
             [
+                'noteUser' => $noteUser,
                 'student' => $student,
             ]
         );

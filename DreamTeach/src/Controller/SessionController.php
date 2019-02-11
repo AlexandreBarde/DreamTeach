@@ -23,10 +23,16 @@ class SessionController extends AbstractController
 
     /**
      * @Route("/nouvellesession", name="sessionCreation")
+     * @Route("/accueil/updateSession/{idSession}", name="updateSession")
+     * @param $idSession
      */
-    public function sessionCreation(Request $request)
+    public function sessionCreationAndUpdate(Request $request, $idSession=null)
     {
         $session = new Session();
+        if ($idSession!=null) {
+            $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+        }
+
         $form = $this->createForm(SessionFormType::class, $session);
         $form->handleRequest($request);
 
@@ -40,13 +46,19 @@ class SessionController extends AbstractController
                 $session->setOrganizerid($this->getUser());
                 $em->persist($session);
                 $em->flush();
+                $id=$session->getId();
+                return $this->redirectToRoute('AddSession', ["idSession"=>$id]);
+
+                return $this->redirectToRoute('student_agenda');
             } else {
 
                 $this->addFlash("error", "L'heure de fin ne peut pas être infériere à l'heure de début.");
-                return $this->redirectToRoute('sessionCreation');
+                return $this->redirectToRoute('sessionCreationAndUpdate');
 
             }
         }
         return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView()]);
     }
+
+
 }

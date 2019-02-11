@@ -15,18 +15,25 @@
                 <th scope="col">Date</th>
                 <th scope="col">Heure</th>
                 <th scope="col">Description</th>
-                <th>État</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for i in user.getSessionid() %}
                 <tr>
-                    <th scope="row">{{ i.id() }}</th>
+
                     <td>{{ i.name() }}</td>
                     <td>{{ i.date.format('d-m-Y') }}</td>
                     <td>{{ i.startingTime.format('H:i') }}</td>
                     <td>{{ i.description() }}</td>
-                    <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" type="button" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                    <td>
+                    {% if app.user.id==i.organizerId.id %}
+                        <a href="{{ path('updateSession', {"idSession" : i.id()}) }}" type="button"
+                               class="btn btn-primary"><i class="fas fa-edit"></i> Modifier</a>
+                    {% endif %}
+
+                    <a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" type="button"
+                           class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
                 </tr>
             {% endfor %}
             </tbody>

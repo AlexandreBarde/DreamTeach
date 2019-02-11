@@ -8,19 +8,58 @@
 {% block body %}
     <h1>Modifiez vos informations personnelles</h1>
     {% if(formUser) %}
-        <div class="form-group">
-            {{ form_start(formUser) }}
-                {{ form_row(formUser.firstName) }}
-                {{ form_row(formUser.lastName) }}
-                {{ form_row(formUser.biography) }}
-                {{ form_row(formUser.emailAddress) }}
-                {{ form_row(formUser.birthDate) }}
-                {{ form_row(formUser.city) }}
-                {{ form_row(formUser.trainingID) }}
-                {{ form_row(formUser.avatar) }}
-            <button type="submit">Modifier le profile</button>
-            {{ form_end(formUser) }}
-        </div>
+<div class="form-group">
+    {{ form_start(formUser) }}
+<div class="container-fluid">
+    <div class="card">
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+
+                    <div class="form-row">
+
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Prenom </label>
+                            {{ form_widget(formUser.firstName) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Nom </label>
+                            {{ form_widget(formUser.lastName) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Biographie </label>
+                            {{ form_widget(formUser.biography) }}
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Mail </label>
+                            {{ form_widget(formUser.emailAddress) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Date de naissance </label>
+                            {{ form_widget(formUser.birthDate) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Ville </label>
+                            {{ form_widget(formUser.city) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Formation </label>
+                            {{ form_widget(formUser.trainingID) }}
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Avatar </label>
+                            {{ form_widget(formUser.avatar) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input name="editer" type="submit" value="dsfdsffdsf">        </div>
+    </div>
+    {{ form_end(formUser) }}
+</div>
     {% endif %}
 
 

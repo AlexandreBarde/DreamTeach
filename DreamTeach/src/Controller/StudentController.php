@@ -33,6 +33,9 @@ class StudentController extends AbstractController
     {
         $tpm = array();
         $session = $this->getDoctrine()->getRepository(Session::class)->findall();
+        $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
+            $this->getUser()
+        );
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
@@ -59,7 +62,11 @@ class StudentController extends AbstractController
             array_push($listeSessionEtudiant, $ss);
         }
 
-        return $this->render("dashboard.html.twig", ['session' => $tpm, 'sessionUser' => $listeSessionEtudiant]);
+        return $this->render("dashboard.html.twig", [
+            'session' => $tpm,
+            'sessionUser' => $listeSessionEtudiant,
+            'nbSessionOrganized' => $nbSessionOrganized
+        ]);
     }
 
     /**

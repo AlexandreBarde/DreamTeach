@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\String_;
  * Session
  *
  * @ORM\Table(name="session", indexes={@ORM\Index(name="subjectID", columns={"subjectID"}), @ORM\Index(name="organizerID", columns={"organizerID"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\SessionRepository")
  */
 class Session
 {

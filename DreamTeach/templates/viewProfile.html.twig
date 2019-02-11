@@ -5,7 +5,7 @@
 
 
 {% block body %}
-<div class="container align-content-center mt-5">
+    <div class="container align-content-center mt-5">
     <div class="row justify-content-between">
         <div class="col-6">
             <div class="border border-secondary p-4 bg-light" id="infoPerso">
@@ -29,13 +29,17 @@
                     </br>
                     <span class="font-weight-bold h4">{{ app.user.Lastname }} </span>
                     <span class="h4"> {{ app.user.firstName }} </span>
-                    <div> {{ app.user.trainingid.title }} | {{ app.user.trainingid.schoolid.name }}
-                        | {{ app.user.trainingid.schoolid.city }}</div>
+                    {% if  app.user.trainingid is not null %}
+                        <div> {{ app.user.trainingid.title }} | {{ app.user.trainingid.schoolid.name }}
+                            | {{ app.user.trainingid.schoolid.city }}</div>
+                    {% else %}
+                        <div> n/a | n/a | n/a</div>
+                    {% endif %}
                 </div>
             </div>
             <div class="border border-secondary p-4 mt-5 bg-light">
 
-                <div class="h5 mb-4"> Competences </div>
+                <div class="h5 mb-4"> Competences</div>
                 <hr class="border-left-0 border-secondary ">
                 <form action="{{ path('student_profile') }}" method="POST">
                     <button name="matieres" type="submit"><i class="far fa-edit col-2"></i></button>
@@ -58,7 +62,7 @@
                     </div>
                 </div>
                 <span class="text-center"> Vous avez {{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
-                <div class="mt-4 h5 mb-4"> Badges </div>
+                <div class="mt-4 h5 mb-4"> Badges</div>
                 {% for i in app.user.getBadgeid() %}
                     <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
                     {{ i.getName() }}

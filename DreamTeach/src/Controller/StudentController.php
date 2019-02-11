@@ -8,7 +8,6 @@ use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Entity\Session;
-use App\Entity\Training;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

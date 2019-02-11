@@ -31,10 +31,27 @@ class StudentController extends AbstractController
 
     public function homeStudentAction()
     {
-        $session = $this->getDoctrine()->getRepository(Session::class)->findAll(
-        );
-        //dump($session);exit;
-        return $this->render("dashboard.html.twig", ['session' => $session]);
+        $session = $this->getDoctrine()->getRepository(Session::class)->findAll();
+        $student = $this->getUser();
+        /** @var Session $listeSession */
+        $listeSession = $student->getSessionid();
+
+        $tmp = array();
+        $listeSessionEtudiant = array();
+
+        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
+        foreach($listeSession as $sessionTMP)
+        {
+            // On ajoute les séances
+            array_push($tmp, $sessionTMP->getId());
+        }
+
+        foreach ($tmp as $ss)
+        {
+            // On ajoute les ID des sessions
+            array_push($listeSessionEtudiant, $ss);
+        }
+        return $this->render("dashboard.html.twig", ['session' => $session, 'sessionUser' => $listeSessionEtudiant]);
     }
 
     /**

@@ -7,7 +7,11 @@
 {% block body %}
     <div class="row">
         <div class="col-8">
-            <h5>Bonjour {{ app.user.firstname }} !</h5>
+            {% if "now"|date("H") >= 15 %}
+                <h5>Bonsoir {{ app.user.firstname }} ! <i style="color: dimgrey" class="fas fa-moon"></i></h5>
+            {% else %}
+                <h5>Bonjour {{ app.user.firstname }} ! <i style="color: yellow" class="fas fa-sun"></i></h5>
+            {% endif %}
             Bienvenue sur votre espace personnel
         </div>
         <div class="col-4 alert alert-success">

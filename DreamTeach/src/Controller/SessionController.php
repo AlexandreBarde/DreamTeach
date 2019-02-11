@@ -60,5 +60,43 @@ class SessionController extends AbstractController
         return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView()]);
     }
 
+    /**
+     * @Route("showSessions", name="showSessions")
+     */
+    public function showSessions()
+    {
+        $tpm = array();
+        $session = $this->getDoctrine()->getRepository(Session::class)->findall();
+
+        foreach ($session as $key => $value) {
+            $now = new \DateTime();
+            if ($value->getDate() > $now) {
+                array_push($tpm, $value);
+            }
+        }
+
+        $student = $this->getUser();
+        /** @var Session $listeSession */
+        $listeSession = $student->getSessionid();
+
+        $tmp = array();
+        $listeSessionEtudiant = array();
+
+        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
+        foreach($listeSession as $sessionTMP) {
+            // On ajoute les séances
+            array_push($tmp, $sessionTMP->getId());
+        }
+
+        foreach ($tmp as $ss) {
+            // On ajoute les ID des sessions
+            array_push($listeSessionEtudiant, $ss);
+        }
+
+        return $this->render("showSessions.html.twig", [
+            'session' => $tpm,
+            'sessionUser' => $listeSessionEtudiant
+        ]);
+    }
 
 }

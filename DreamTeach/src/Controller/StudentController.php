@@ -70,7 +70,7 @@ class StudentController extends AbstractController
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
-        if($request->getMethod() == 'POST') {
+        if(!is_null($request->request->get('editer' ))) {
             $repository = $this->getDoctrine()->getRepository(Student::class);
             $training = $this->getDoctrine()->getRepository(Training::class);
             /** @var Training $formations */

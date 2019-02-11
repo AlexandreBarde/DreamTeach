@@ -55,7 +55,7 @@ class StudentController extends AbstractController
     public function studentProfileAction(Request $request)
     {
         return $this->render(
-            "viewProfile.html.twig"
+            "viewProfile.html.twig", ['user' => $this->getUser()]
         );
     }
 

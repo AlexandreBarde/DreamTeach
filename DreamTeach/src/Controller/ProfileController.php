@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 /**
  * Class StudentController
@@ -29,10 +30,13 @@ class ProfileController extends AbstractController
      */
     public function updateProfile(Request $request, ObjectManager $manager)
     {
+        $repository = $this->getDoctrine()->getRepository(Student::class);
+
         $training = $this->getDoctrine()->getRepository(Training::class);
         /** @var Training $formations */
         $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
         $user = $this->getUser();
+        $studentId = $repository->find($this->getUser()->getId());
 
         $form = $this->createFormBuilder($user)
             ->add('firstName')
@@ -49,16 +53,32 @@ class ProfileController extends AbstractController
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
             ])
+            ->add('avatar', FileType::class, ['label' => 'Image (Fichier jpg)'])
             ->add('city')
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $studentId->getAvatar();
+            $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+            try
+            {
+                $file->move(
+                    $this->getParameter('avatar_directory'),
+                    $fileName
+                );
+            }
+            catch (FileException $e)
+            {
+                // TODO Gérer les erreurs
+            }
+
+            $user->setAvatar($fileName);
             $manager->persist($user);
             $manager->flush();
         }
-        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $user]);
+        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
     }
 
     /**
@@ -75,58 +95,6 @@ class ProfileController extends AbstractController
         $entityManager->flush();
 
         return $this->render("empty.html.twig");
-    }
-
-    /**
-     * @Route("/accueil/uploadPicture", name="uploadPicture")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function uploadPicture(Request $request)
-    {
-        $repository = $this->getDoctrine()->getRepository(Student::class);
-        /** @var Student $user */
-        $student = $repository->find($this->getUser()->getId());
-
-        $form = $this->createForm(UploadPicture::class, $student);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid())
-        {
-
-            /** @var UploadedFile $file */
-            $file = $student->getAvatar();
-            $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-
-            try
-            {
-                $file->move(
-                    $this->getParameter('avatar_directory'),
-                    $fileName
-                );
-            }
-            catch (FileException $e)
-            {
-                // TODO Gérer les erreurs
-            }
-
-            $student->setAvatar($fileName);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($student);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('HomeController'));
-
-        }
-
-        return $this->render(
-            "uploadPicture.html.twig",
-            [
-                'form' => $form->createView(),
-                'user' => $this->getUser(),
-            ]
-        );
     }
 
     /**

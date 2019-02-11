@@ -16,7 +16,11 @@
             <div class="border border-secondary p-4 bg-light" id="infoPerso">
                 <div class="row">
                     <div class="col-5">
-                        <img class="rounded-circle img-fluid" src={{ asset("img/tom_bg.jpg") }} >
+                        {% if user.avatar %}
+                            <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
+                        {% else %}
+                            <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}" height="150px">
+                        {% endif %}
                     </div>
                     <div class="col-6">
                         <span> </br> {{ app.user.biography }} </span>
@@ -63,5 +67,4 @@
         </div>
     </div>
 
-
-    {% endblock %}
+{% endblock %}

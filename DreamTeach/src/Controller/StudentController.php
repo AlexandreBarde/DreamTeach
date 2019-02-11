@@ -8,7 +8,6 @@ use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Entity\Session;
-use App\Entity\Training;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -72,6 +71,9 @@ class StudentController extends AbstractController
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
+        $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
+            "studentid" => $this->getUser()->getId(),
+        ]);
         if($request->getMethod() == 'POST') {
             $repository = $this->getDoctrine()->getRepository(Student::class);
             $training = $this->getDoctrine()->getRepository(Training::class);
@@ -126,7 +128,7 @@ class StudentController extends AbstractController
 
         }
         return $this->render(
-            "viewProfile.html.twig", ['user' => $this->getUser()]
+            "viewProfile.html.twig", ['user' => $this->getUser(), 'noteUser' => $noteUser]
         );
     }
 

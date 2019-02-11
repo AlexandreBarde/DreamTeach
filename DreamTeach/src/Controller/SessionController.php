@@ -98,5 +98,21 @@ class SessionController extends AbstractController
             'sessionUser' => $listeSessionEtudiant
         ]);
     }
+    /**
+     * @Route("/accueil/deleteSession/{idSession}", name="deleteSession")
+     * @param $idSession
+     */
+    public function deleteSession($idSession){
+        if ($idSession!=null) {
+            $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($session);
+            $em->flush();
+            return $this->redirectToRoute('student_agenda');
+        }
+
+
+    }
+
 
 }

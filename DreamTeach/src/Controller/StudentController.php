@@ -133,6 +133,29 @@ class StudentController extends AbstractController
 
                 return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
 
+            } else if(!is_null($request->request->get('matieres'))) {
+                $repository = $this->getDoctrine()->getRepository(Subject::class);
+                $subject = new Subject();
+                $form = $this->createFormBuilder($subject)
+                    ->add('name')
+                    ->getForm();
+
+                $form->handleRequest($request);
+
+                if($form->isSubmitted() && $form->isValid()) {
+                    if($repository->findBy(
+                        ['name' => $form->get('name')->getData()]
+                    )) {
+
+                    } else {
+                        $manager->persist($subject);
+                        $manager->flush();
+
+                        return $this->redirectToRoute("student_profile");
+                    }
+                }
+
+                return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
             }
 
         }
@@ -179,28 +202,7 @@ class StudentController extends AbstractController
      */
     public function createSubject(Request $request, ObjectManager $manager)
     {
-        $repository = $this->getDoctrine()->getRepository(Subject::class);
-        $subject = new Subject();
-        $form = $this->createFormBuilder($subject)
-            ->add('name')
-            ->getForm();
 
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            if($repository->findBy(
-                ['name' => $form->get('name')->getData()]
-            )) {
-
-            } else {
-                $manager->persist($subject);
-                $manager->flush();
-
-                return $this->redirectToRoute("student_profile");
-            }
-        }
-
-        return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
     }
 
     public function sessionAction()

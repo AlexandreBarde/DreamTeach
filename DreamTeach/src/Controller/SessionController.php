@@ -7,6 +7,7 @@ use App\Entity\Session;
 
 use DateTime;
 use DateTimeZone;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,6 +59,22 @@ class SessionController extends AbstractController
             }
         }
         return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/accueil/deleteSession/{idSession}", name="deleteSession")
+     * @param $idSession
+     */
+    public function deleteSession($idSession){
+        if ($idSession!=null) {
+            $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($session);
+            $em->flush();
+            return $this->redirectToRoute('student_agenda');
+        }
+
+
     }
 
 

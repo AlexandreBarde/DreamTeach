@@ -32,7 +32,17 @@ class StudentController extends AbstractController
 
     public function homeStudentAction()
     {
-        $session = $this->getDoctrine()->getRepository(Session::class)->findAll();
+        $tpm = array();
+        $session = $this->getDoctrine()->getRepository(Session::class)->findall();
+
+        foreach($session as $key => $value)
+        {
+            $now = new \DateTime();
+            if($value->getDate() > $now){
+            array_push($tpm, $value);
+            }
+        }
+
         $student = $this->getUser();
         /** @var Session $listeSession */
         $listeSession = $student->getSessionid();
@@ -52,7 +62,8 @@ class StudentController extends AbstractController
             // On ajoute les ID des sessions
             array_push($listeSessionEtudiant, $ss);
         }
-        return $this->render("dashboard.html.twig", ['session' => $session, 'sessionUser' => $listeSessionEtudiant]);
+
+        return $this->render("dashboard.html.twig", ['session' => $tpm, 'sessionUser' => $listeSessionEtudiant]);
     }
 
     /**

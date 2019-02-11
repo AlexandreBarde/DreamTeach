@@ -10,71 +10,53 @@
 
 
 {% block body %}
-    <div class="container align-content-center mt-5">
-        <div class="row">
-            <div class="col-6 border border-secondary p-4 bg-light">
+<div class="container align-content-center mt-5">
+    <div class="row justify-content-between">
+        <div class="col-6">
+            <div class="border border-secondary p-4 bg-light" id="infoPerso">
                 <div class="row">
-                    <div class="col-4">
-                        {% if user.avatar %}
-                            <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
-                        {% else %}
-                            <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}" height="150px">
-                        {% endif %}
+                    <div class="col-5">
+                        <img class="rounded-circle img-fluid" src={{ asset("img/tom_bg.jpg") }} >
                     </div>
                     <div class="col-6">
-                        <span>{{ app.user.biography }} </span>
+                        <span> </br> {{ user.biography }} </span>
                     </div>
-                    <form action="{{ path('student_profile') }}" method="POST">
-                        <button name="editer" type="submit"><i class="far fa-edit col-2"></i></button>
-                    </form>
-
                 </div>
                 <hr class="border-left-0 border-secondary ">
                 <div class="text-center">
-                    <span class="font-weight-bold h4">{{ app.user.Lastname }} </span>
-                    <span class="h4"> {{ app.user.firstName }} </span>
-                    {% if app.user.trainingid is not null %}
-                        <div> {{ app.user.trainingid.title }} | {{ app.user.trainingid.schoolid.name}} | {{ app.user.trainingid.schoolid.city }}</div>
-                    {% endif %}
+                    </br>
+                    <span class="font-weight-bold h4">{{ user.Lastname }} </span>
+                    <span class="h4"> {{ user.firstName }} </span>
+                    <div> {{ userTraining.title }} | {{ schoolUser.name }} | {{ schoolUser.city }}</div>
                 </div>
             </div>
-            <div class="col-1"></div>
-            <div class="col-5 border border-secondary p-4 bg-light">
-
-                <div class="h4 text-center">Niveau {{ (app.user.xpWon / 50)|slice(0,1)}}</div>
+            <div class="border border-secondary p-4 mt-5 bg-light">
+                <div class="h5 mb-4"> Competences </div>
+                <hr class="border-left-0 border-secondary ">
+                {% for i in noteUser %}
+                    <span>   {{ i.getSubjectid().getName() }} :  </span>
+                    {% for j in 1..i.mark %}
+                        <span class="fa fa-star" style="color:orange"></span>
+                    {% endfor %}
+                    </br>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="border border-secondary p-4 bg-light">
+                <div class="h4 text-center">Niveau {{ (user.xpWon / 50)|slice(0,1) }}</div>
                 <div class="progress mt-3">
                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                         aria-valuemax="100" style="width:{{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)}}%;">
+                         aria-valuemax="100"
+                         style="width:{{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;">
                     </div>
                 </div>
-                <span class="text-center"> Vous avez {{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
-                <div class="mt-4 h5 mb-4"> Badges :</div>
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                </br>
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-                <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
-
-            </div>
-
-
-            <div class="col-6 border border-secondary p-4 bg-light mt-4">
-
-                <span>VBA : &nbsp; </span>
-                {% for i in 1..2%}
-                    <span class="fa fa-star" style="color:orange"></span>
+                <span class="text-center"> Vous avez {{ ((user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
+                <div class="mt-4 h5 mb-4"> Badges </div>
+                {% for i in user.getBadgeid() %}
+                    <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;
+                    {{ i.getName() }}
+                    <br/> <br/>
                 {% endfor %}
 
             </div>
@@ -82,4 +64,4 @@
     </div>
 
 
-{% endblock %}
+    {% endblock %}

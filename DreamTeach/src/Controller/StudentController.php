@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\Student;
 use App\Entity\Subject;
+use App\Entity\Subjectlevel;
+use App\Entity\Training;
 use App\Entity\Session;
 use App\Entity\Training;
 use Doctrine\Common\Persistence\ObjectManager;

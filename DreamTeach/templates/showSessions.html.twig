@@ -27,16 +27,39 @@
                         </thead>
                         <tbody>
                         {% for i in session %}
-                            <tr>
-                                <td>{{ i.name() }}</td>
+                            {% if i.closed %}
+                                <tr class="table-active">
+                            {% else %}
+                                <tr>
+                            {% endif %}
+                            <td><u><a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name() }}</a></u></td>
                                 <td>{{ i.date.format('d-m-Y') }}</td>
                                 <td>{{ i.startingTime.format('H:i') }}</td>
                                 <td>{{ i.description()|slice(0, 50)}}{% if i.description()|length > 50 %}....{% endif %}</td>
-                                {% if i.id() in sessionUser %}
-                                    <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                                {% if i.closed %}
+                                    {% if app.user.id==i.organizerId.id %}
+                                        <td><a href="#" class="btn btn-danger disabled"><i class="fas fa-door-closed"></i> Clôturer</td>
+                                    {% else %}
+                                        {% if i.id() in sessionUser %}
+                                            <td><a href="#" class="btn btn-danger disabled"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                                        {% else %}
+                                            <td><a href="#" class="btn btn-success disabled"><i class="fa fa-check"></i> S'inscrire</a></td>
+                                        {% endif %}
+                                    {% endif %}
                                 {% else %}
-                                    <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}" class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
+                                    {% if app.user.id==i.organizerId.id %}
+                                        <td><a href="{{ path('CloseSession', {"idSession" : i.id()}) }}" class="btn btn-danger"><i class="fas fa-door-closed"></i> Clôturer</td>
+                                    {% else %}
+                                        {% if i.id() in sessionUser %}
+                                            <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}" class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a></td>
+                                        {% else %}
+                                            <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}" class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
+                                        {% endif %}
+                                    {% endif %}
                                 {% endif %}
+
+
+
                             </tr>
                         {% endfor %}
                         </tbody>

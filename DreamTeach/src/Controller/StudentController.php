@@ -9,13 +9,10 @@ use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Form\ProfileFormType;
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -39,9 +36,25 @@ class StudentController extends AbstractController
             $this->getUser()
         );
 
+        /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
+        $now = new DateTime("now");
+        $now->format('Y-m-d');
+
+        $listSessionAttended = $this->getUser()->getSessionid();
+        $nbSessionAttended = 0;
+        foreach ($listSessionAttended as $sessionAttended) {
+            if ($sessionAttended->getDate() < $now) {
+                $nbSessionAttended++;
+            }
+        }
+
+
+
+
+
         foreach ($session as $key => $value) {
             $now = new \DateTime();
-            if ($value->getDate() > $now) {
+            if ($value->getDate() > $now && sizeOf($tpm) < 3) {
                 array_push($tpm, $value);
             }
         }
@@ -67,7 +80,8 @@ class StudentController extends AbstractController
         return $this->render("dashboard.html.twig", [
             'session' => $tpm,
             'sessionUser' => $listeSessionEtudiant,
-            'nbSessionOrganized' => $nbSessionOrganized
+            'nbSessionOrganized' => $nbSessionOrganized,
+            'nbSessionAttended' => $nbSessionAttended,
         ]);
     }
 
@@ -112,55 +126,24 @@ class StudentController extends AbstractController
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
             "studentid" => $this->getUser()->getId(),
         ]);
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+            'SELECT s.name FROM App\Entity\Student st, App\Entity\Subject s, App\Entity\Subjectlevel sl WHERE st.id = ?1 AND s.id = sl.subjectid AND sl.studentid != ?2'
+        );
+        $query->setParameter(1, $this->getUser()->getId());
+        $query->setParameter(2, $this->getUser()->getId());
+        $subjectNotInfo = $query->getResult();
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
-                $training = $this->getDoctrine()->getRepository(Training::class);
+
                 /** @var Training $formations */
-                $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
+
                 $user = $this->getUser();
                 $studentId = $repository->find($this->getUser()->getId());
 
-                $form = $this->createFormBuilder($user)
-                    ->add('firstName', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('lastName', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('biography', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('emailAddress', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control']
-                    ])
-                    ->add('trainingID', ChoiceType::class, [
-                        'choices' => $formations,
-                        'attr' => [
-                            'class' => 'form-control'],
-                        'choice_label' => function($choiceValue, $key, $value) {
-                            return $choiceValue->getTitle();
-                        }
-                    ])
-                    ->add('birthDate', DateType::class, [
-                        'widget' => 'single_text',
-                        'attr' => [
-                            'class' => 'form-control'],
-                        'format' => 'yyyy-MM-dd'
-                    ])
-                    ->add('avatar', FileType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('city', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control']
-                    ])
-                    ->getForm();
+                $form = $this->createForm(ProfileFormType::class, $user);
+
 
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {
@@ -207,14 +190,14 @@ class StudentController extends AbstractController
                     }
                 }
 
-                return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
+                return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
             }
 
         }
 
         return $this->render(
             "viewProfile.html.twig",
-            ['user' => $this->getUser(), 'noteUser' => $noteUser]
+            ['user' => $this->getUser(), 'noteUser' => $noteUser, "subjectNotInfo" => $subjectNotInfo]
         );
     }
 
@@ -253,6 +236,14 @@ class StudentController extends AbstractController
      * @Route("/createSubject", name="createSubject")
      */
     public function createSubject(Request $request, ObjectManager $manager)
+    {
+
+    }
+
+    /**
+     * @Route("/informASubject", name="informASubject")
+     */
+    public function informASubject(Request $request, ObjectManager $manager)
     {
 
     }

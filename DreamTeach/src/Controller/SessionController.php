@@ -54,6 +54,7 @@ class SessionController extends AbstractController
 
                 $em = $this->getDoctrine()->getManager();
                 $session->setOrganizerid($this->getUser());
+                $session->setClosed(false);
                 $em->persist($session);
                 $em->flush();
                 $id=$session->getId();
@@ -108,20 +109,62 @@ class SessionController extends AbstractController
             'sessionUser' => $listeSessionEtudiant
         ]);
     }
+
+    /**
+     * @Route("/accueil/displaySession/{idSession}", name="displaySession")
+     * @param $idSession
+     */
+    public function displaySession($idSession){
+
+        $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+
+        return $this->render("displaySession.html.twig",[
+
+            'session' => $session
+            
+        ]);
+    }
+
     /**
      * @Route("/accueil/deleteSession/{idSession}", name="deleteSession")
      * @param $idSession
      */
-    public function deleteSession($idSession){
-        if ($idSession!=null) {
+    public function deleteSession($idSession)
+    {
+        // TODO : Vérifier que l'utilisateur est bien le créateur
+        if ($idSession!=null)
+        {
             $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
             $em = $this->getDoctrine()->getManager();
             $em->remove($session);
             $em->flush();
             return $this->redirectToRoute('student_agenda');
         }
+    }
 
-
+    /**
+     * @Route("/accueil/closeSession/{idSession}", name="CloseSession")
+     * @param $idSession
+     * @param Request $r
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function closeSession($idSession, Request $r)
+    {
+        if($idSession != null)
+        {
+            $referer = $r->headers->get('referer');
+            $refererSplitted = explode("/", $referer);
+            $path = $refererSplitted[sizeof($refererSplitted) - 1];
+            /** @var Session $session */
+            $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+            $em = $this->getDoctrine()->getManager();
+            $session->setClosed(true);
+            $em->persist($session);
+            $em->flush();
+            if($path === "showSessions") return $this->redirectToRoute("showSessions");
+            else if($path === "agenda") return $this->redirectToRoute("student_agenda");
+        }
+        return $this->redirectToRoute("student_agenda");
     }
 
 

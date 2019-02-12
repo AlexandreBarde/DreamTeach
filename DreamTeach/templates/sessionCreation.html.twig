@@ -14,35 +14,31 @@
 
                     <div class="form-row">
 
-                        <div id="creerMatiere" class="col-md-6" style="display: none">
-                            <div>
-                                {{ form_start(formSubjectCreation) }}
-                                <label for="inputEmail4">Matière étudiée</label>
-                                {{ form_widget(formSubjectCreation.name) }}
-                                <button type="submit" class="btn btn-primary">Créer</button>
-                                {{ form_end(formSubjectCreation) }}
-                            </div>
+                        <div id="creerMatiere" class="form-group col">
+
+                            {{ form_start(formSubjectCreation) }}
+                            <label for="inputEmail4">Matière étudiée</label>
+                            {{ form_widget(formSubjectCreation.name) }}
+                            <br/>
+                            <button type="submit" class="btn btn-primary">Créer</button>
+                            {{ form_end(formSubjectCreation) }}
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <div id="matiereEtudiee">
-                                {{ form_start(formSessionCreation) }}
-                                <label for="inputEmail4">Matière étudiée </label>
-                                {{ form_widget(formSessionCreation.subjectid) }}
-                            </div>
-
+                        <div class="form-group col" id="matiereEtudiee">
+                            {{ form_start(formSessionCreation) }}
+                            <label for="inputEmail4">Matière étudiée </label>
+                            {{ form_widget(formSessionCreation.subjectid) }}
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="col">
                             <label for="inputEmail4">Nom Session </label>
                             {{ form_widget(formSessionCreation.name) }}
-
                         </div>
-
                     </div>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" checked="false" id="customSwitchesCreateSubject">
+                        <input type="checkbox" class="custom-control-input" id="customSwitchesCreateSubject">
                         <label class="custom-control-label" for="customSwitchesCreateSubject">Créer une matière</label>
                     </div>
+                    <br>
 
                     <label for="exampleFormControlTextarea1">Description séance</label>
                     {{ form_widget(formSessionCreation.description) }}
@@ -121,17 +117,26 @@
 
 
                 var ckbox = $('#customSwitch1');
-                var ckboxCreateSubject = $("#customSwitchesCreateSubject");
-
+                $(document).ready(function() {
+                    if ($("#customSwitchesCreateSubject").is(':checked')) {
+                        $("#matiereEtudiee").addClass('d-none');
+                        $("#creerMatiere").addClass('d-block');
+                    } else {
+                        $("#matiereEtudiee").removeClass('d-none').addClass('d-block');
+                        $("#creerMatiere").removeClass('d-block').addClass('d-none');
+                    }
+                })
+                                $('#customSwitchesCreateSubject').on('change', function() {
+                    if ($("#customSwitchesCreateSubject").is(':checked')) {
+                        $("#matiereEtudiee").removeClass('d-block').addClass('d-none');
+                        $("#creerMatiere").removeClass('d-none').addClass('d-block');
+                    } else {
+                        $("#creerMatiere").removeClass('d-block').addClass('d-none');
+                        $("#matiereEtudiee").removeClass('d-none').addClass('d-block');
+                    }
+                })
                 $('input').on('click',function () {
                     //run code
-                    if (ckboxCreateSubject.is(':checked')) {
-                        $("#matiereEtudiee").hide();
-                        $("#creerMatiere").show();
-                    } else {
-                        $("#matiereEtudiee").show();
-                        $("#creerMatiere").hide();
-                    }
                     if (ckbox.is(':checked')) {
 
                         $("#session_form_place").prop('disabled', true);

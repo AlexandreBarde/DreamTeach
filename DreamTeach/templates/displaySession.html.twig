@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Séance - DreamTeach{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Description séance</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+
+                    <div class="form-row">
+
+
+                        <div class="form-group col" id="matiereEtudiee">
+                            <p class="font-weight-bold"> Matière étudiée</p>
+                            {{ session.subjectid.name }}
+                        </div>
+                        <div class="col">
+                            <p class="font-weight-bold">Nom Session </p>
+                            {{ session.name }}
+                        </div>
+                    </div>
+
+                    <p class="font-weight-bold">Description séance</p>
+                    {{ session.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Plannification</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Date</p>
+                    {{ session.date.format('Y-m-d') }}
+                </div>
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Heure de début</p>
+                    {{ session.startingtime.format('h:m') }}
+                </div>
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Heure de fin</p>
+                    {{ session.endingtime.format('h:m') }}
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Nombre max de participants</p>
+                    {{ session.maxnbparticipant }}
+                </div>
+
+                {% if session.isvirtual %}
+                <div class="form-group col-md-8">
+                    <p class="font-weight-bold">Logiciel vocal</p>
+                    {{ session.vocalSoftware }}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if session.isvirtual==false %}
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <p class="font-weight-bold">Ville </p>
+                    {{ session.city }}
+
+                </div>
+                <div class="form-group col-md-6">
+                    <p class="font-weight-bold">Etablissement</p>
+                    {{ session.place }}
+
+                </div>
+
+            </div>
+            {% endif %}
+
+
+        </div>
+
+    </div>
+{% endblock %}

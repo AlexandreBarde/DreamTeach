@@ -15,7 +15,7 @@
                                 <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
                             {% else %}
                                 <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}"
-                                    >
+                                >
                             {% endif %}
                         </div>
                         <div class="col-6">
@@ -42,15 +42,19 @@
 
                     <div class="h5 mb-4"> Competences</div>
                     <hr class="border-left-0 border-secondary ">
-                    <form action="{{ path('student_profile') }}" method="POST">
-                        <button name="matieres" type="submit"><i class="far fa-edit col-2"></i></button>
-                    </form>
+
                     {% for i in noteUser %}
                         <span>   {{ i.getSubjectid().getName() }} :  </span>
                         {% for j in 1..i.mark %}
                             <span class="fa fa-star" style="color:orange"></span>
                         {% endfor %}
+                        <br/>
                     {% endfor %}
+                <br/>
+
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target=".bd-example-modal-lg">Large modal
+                    </button>
                 </div>
             </div>
             <div class="col-5">
@@ -76,5 +80,88 @@
             </div>
         </div>
     </div>
+
+    <!-- Large modal -->
+
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier vos competences</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-1">
+                            </div>
+                            <div class="col-10 border border-secondary p-4 bg-light rounded mt-5">
+                                <div class="mb-4 h4">Modifier une note</div>
+                                {% for i in noteUser %}
+                                <div class="row mb-4">
+                                    <div class="col-8">
+                                            <span>{{ i.getSubjectid().getName() }}</span>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        Note :
+                                    </div>
+                                    <div class="col-2">
+                                        <select class="form-control" id="subject">
+                                            <option value="1" selected="selected"> {{ i.mark }}</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1">
+                            </div>
+                            <div class="col-10 border border-secondary p-4 bg-light rounded mt-5">
+                                <div class="h4 mb-4">Ajouter une note</div>
+                                <div class="row mb-4">
+                                    <div class="col-8">
+                                        <select class="form-control" id="subject">
+                                            {% for i in subjectNotInfo %}
+                                            <option value="5">{{ i.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        Note :
+                                    </div>
+                                    <div class="col-2">
+                                        <select class="form-control" id="subject">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Confirmer</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
 {% endblock %}

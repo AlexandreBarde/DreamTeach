@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
+use App\Entity\SessionParticipants;
 use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
@@ -39,10 +40,14 @@ class StudentController extends AbstractController
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
+        $nbSessionAttended= $this->getDoctrine()->getRepository(SessionParticipants::class)->countNbSessionAttendedByUser(
+            $this->getUser()
+        );
+
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
-            if ($value->getDate() > $now) {
+            if ($value->getDate() > $now && sizeOf($tpm) < 3) {
                 array_push($tpm, $value);
             }
         }
@@ -65,10 +70,12 @@ class StudentController extends AbstractController
             array_push($listeSessionEtudiant, $ss);
         }
 
+
         return $this->render("dashboard.html.twig", [
             'session' => $tpm,
             'sessionUser' => $listeSessionEtudiant,
-            'nbSessionOrganized' => $nbSessionOrganized
+            'nbSessionOrganized' => $nbSessionOrganized,
+            'nbSessionAttended' => $nbSessionAttended
         ]);
     }
 
@@ -94,52 +101,14 @@ class StudentController extends AbstractController
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
-                $training = $this->getDoctrine()->getRepository(Training::class);
+
                 /** @var Training $formations */
-                $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
+
                 $user = $this->getUser();
                 $studentId = $repository->find($this->getUser()->getId());
 
-                $form = $this->createFormBuilder($user)
-                    ->add('firstName', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('lastName', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('biography', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('emailAddress', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control']
-                    ])
-                    ->add('trainingID', ChoiceType::class, [
-                        'choices' => $formations,
-                        'attr' => [
-                            'class' => 'form-control'],
-                        'choice_label' => function($choiceValue, $key, $value) {
-                            return $choiceValue->getTitle();
-                        }
-                    ])
-                    ->add('birthDate', DateType::class, [
-                        'widget' => 'single_text',
-                        'attr' => [
-                            'class' => 'form-control'],
-                        'format' => 'yyyy-MM-dd'
-                    ])
-                    ->add('avatar', FileType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('city', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control']
-                    ])
-                    ->getForm();
+                $form = $this->createForm(ProfileFormType::class, $user);
+
 
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {

@@ -126,6 +126,11 @@ class Session
     private $description;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $closed;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -322,6 +327,18 @@ class Session
     public function setVocalSoftware(string $vocalSoftware): void
     {
         $this->vocalSoftware = $vocalSoftware;
+    }
+
+    public function getClosed(): ?bool
+    {
+        return $this->closed;
+    }
+
+    public function setClosed(bool $closed): self
+    {
+        $this->closed = $closed;
+
+        return $this;
     }
 
 

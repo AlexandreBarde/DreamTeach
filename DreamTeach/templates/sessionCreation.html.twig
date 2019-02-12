@@ -14,15 +14,17 @@
 
                     <div class="form-row">
 
-                        <div class="col" id="creerMatiere">
+                        <div id="creerMatiere" class="form-group col">
+
                             {{ form_start(formSubjectCreation) }}
                             <label for="inputEmail4">Matière étudiée</label>
                             {{ form_widget(formSubjectCreation.name) }}
+                            <br/>
                             <button type="submit" class="btn btn-primary">Créer</button>
                             {{ form_end(formSubjectCreation) }}
                         </div>
 
-                        <div class="col" id="matiereEtudiee">
+                        <div class="form-group col" id="matiereEtudiee">
                             {{ form_start(formSessionCreation) }}
                             <label for="inputEmail4">Matière étudiée </label>
                             {{ form_widget(formSessionCreation.subjectid) }}
@@ -32,11 +34,11 @@
                             {{ form_widget(formSessionCreation.name) }}
                         </div>
                     </div>
-
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="customSwitchesCreateSubject">
                         <label class="custom-control-label" for="customSwitchesCreateSubject">Créer une matière</label>
                     </div>
+                    <br>
 
                     <label for="exampleFormControlTextarea1">Description séance</label>
                     {{ form_widget(formSessionCreation.description) }}
@@ -118,19 +120,19 @@
                 $(document).ready(function() {
                     if ($("#customSwitchesCreateSubject").is(':checked')) {
                         $("#matiereEtudiee").addClass('d-none');
-                        $("#creerMatiere").addClass('d-inline');
+                        $("#creerMatiere").addClass('d-block');
                     } else {
-                        $("#matiereEtudiee").removeClass('d-none').addClass('d-flex');
-                        $("#creerMatiere").removeClass('d-flex').addClass('d-none');
+                        $("#matiereEtudiee").removeClass('d-none').addClass('d-block');
+                        $("#creerMatiere").removeClass('d-block').addClass('d-none');
                     }
                 })
-                $('#customSwitchesCreateSubject').on('change', function() {
+                                $('#customSwitchesCreateSubject').on('change', function() {
                     if ($("#customSwitchesCreateSubject").is(':checked')) {
-                        $("#matiereEtudiee").removeClass('d-flex').addClass('d-none');
-                        $("#creerMatiere").removeClass('d-none').addClass('d-flex');
+                        $("#matiereEtudiee").removeClass('d-block').addClass('d-none');
+                        $("#creerMatiere").removeClass('d-none').addClass('d-block');
                     } else {
-                        $("#creerMatiere").removeClass('d-flex').addClass('d-none');
-                        $("#matiereEtudiee").removeClass('d-none').addClass('d-flex');
+                        $("#creerMatiere").removeClass('d-block').addClass('d-none');
+                        $("#matiereEtudiee").removeClass('d-none').addClass('d-block');
                     }
                 })
                 $('input').on('click',function () {

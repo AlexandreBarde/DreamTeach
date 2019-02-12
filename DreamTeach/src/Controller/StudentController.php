@@ -4,11 +4,11 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
-use App\Entity\SessionParticipants;
 use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Form\ProfileFormType;
+use Symfony\Component\Validator\Constraints\Date;
 
 
 /**
@@ -40,9 +41,18 @@ class StudentController extends AbstractController
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
-        $nbSessionAttended= $this->getDoctrine()->getRepository(SessionParticipants::class)->countNbSessionAttendedByUser(
-            $this->getUser()
-        );
+        $now=new DateTime("now");
+        $now->format('Y-m-d');
+        $listSessionAttended= $this->getUser()->getSessionid();
+        $nbSessionAttended=0;
+        foreach ($listSessionAttended as $sessionAttended){
+            if ($sessionAttended->getDate()<$now){
+                $nbSessionAttended++;
+            }
+        }
+
+
+
 
 
         foreach ($session as $key => $value) {

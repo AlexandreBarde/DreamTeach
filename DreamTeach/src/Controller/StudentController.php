@@ -41,6 +41,8 @@ class StudentController extends AbstractController
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
+
+        /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
         $now=new DateTime("now");
         $now->format('Y-m-d');
         $listSessionAttended= $this->getUser()->getSessionid();

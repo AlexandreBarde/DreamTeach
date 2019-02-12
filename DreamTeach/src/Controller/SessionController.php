@@ -4,10 +4,11 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
+use App\Entity\Subject;
 
+use App\Form\SubjectType;
 use DateTime;
 use DateTimeZone;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,16 +31,24 @@ class SessionController extends AbstractController
     public function sessionCreationAndUpdate(Request $request, $idSession=null)
     {
         $session = new Session();
+        $subject = new Subject();
         if ($idSession!=null) {
             $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         }
 
         $form = $this->createForm(SessionFormType::class, $session);
+        $formSubject = $this->createForm(SubjectType::class, $subject);
         $form->handleRequest($request);
+        $formSubject->handleRequest($request);
 
+        if($formSubject->isSubmitted() && $formSubject->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($subject);
+            $em->flush();
+            return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
 
+        }
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             if (($form->get('endingTime')->getData()) > ($form->get('startingTime')->getData())) {
 
@@ -58,9 +67,47 @@ class SessionController extends AbstractController
 
             }
         }
-        return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView()]);
+        return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
     }
 
+    /**
+     * @Route("showSessions", name="showSessions")
+     */
+    public function showSessions()
+    {
+        $tpm = array();
+        $session = $this->getDoctrine()->getRepository(Session::class)->findall();
+
+        foreach ($session as $key => $value) {
+            $now = new \DateTime();
+            if ($value->getDate() > $now) {
+                array_push($tpm, $value);
+            }
+        }
+
+        $student = $this->getUser();
+        /** @var Session $listeSession */
+        $listeSession = $student->getSessionid();
+
+        $tmp = array();
+        $listeSessionEtudiant = array();
+
+        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
+        foreach($listeSession as $sessionTMP) {
+            // On ajoute les séances
+            array_push($tmp, $sessionTMP->getId());
+        }
+
+        foreach ($tmp as $ss) {
+            // On ajoute les ID des sessions
+            array_push($listeSessionEtudiant, $ss);
+        }
+
+        return $this->render("showSessions.html.twig", [
+            'session' => $tpm,
+            'sessionUser' => $listeSessionEtudiant
+        ]);
+    }
     /**
      * @Route("/accueil/deleteSession/{idSession}", name="deleteSession")
      * @param $idSession

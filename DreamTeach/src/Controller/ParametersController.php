@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Student;
 use App\Form\RegisterType;
+use App\Form\ResetEmailAddressType;
 use App\Form\ResetPasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,27 +20,28 @@ class ParametersController extends AbstractController
     public function parametres(Request $request, UserPasswordEncoderInterface $encode)
     {
         $student = $this->getUser();
-        $formInfosPerso = $this->createForm(ResetPasswordType::class, $student);
-        $formInfosPerso->handleRequest($request);
+        $formPassword = $this->createForm(ResetPasswordType::class, $student);
+        $formEmailAddress = $this->createForm(ResetEmailAddressType::class, $student);
+        $formPassword->handleRequest($request);
+        $formEmailAddress->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
 
-        if ($formInfosPerso->isSubmitted() && $formInfosPerso->isValid())
+        if ($formPassword->isSubmitted())
         {
-            $actualPassword = $request->request->get('motDePasseActuel');
-            dump($encode->isPasswordValid($this->getUser()->getPassword(), $actualPassword, $this->getUser()->getSalt()));
-            exit;
-            if($hashActualPassword == $hashOldPassword) {
-                $student->setPassword($hashNewPassword);
-                $em->persist($student);
-                $em->flush();
-                return $this->redirectToRoute("app_logout");
-            } else {
-                return $this->render(
-                    "parametres.html.twig", ['formUser' => $formInfosPerso->createView()]
-                );
-            }
+            $student->setPassword($encode->encodePassword($student, $this->getUser()->getPassword()));
+            $em->persist($student);
+            $em->flush();
+            return $this->redirectToRoute("app_logout");
+        }
+        if ($formEmailAddress->isSubmitted())
+        {
+            $student->setEmailaddress($this->getUser()->getEmailaddress());
+            $em->persist($student);
+            $em->flush();
+            return $this->redirectToRoute("app_logout");
         }
         return $this->render(
-            "parametres.html.twig", ['formUser' => $formInfosPerso->createView()]
+            "parametres.html.twig", ['formPassword' => $formPassword->createView(), 'formEmailAddress' => $formEmailAddress->createView()]
         );
     }
 

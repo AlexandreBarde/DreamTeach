@@ -8,8 +8,13 @@
     <div class="container align-content-center mt-5">
     <div class="row justify-content-between">
     <div class="col-6">
-        <div class="border border-secondary p-4 bg-light rounded" >
-            <span class="float-right btn btn-primary"><a href="{{ path('add_friend', {'uuid_student': student.uuid}) }}">Ajouter en ami</a></span>
+        <div class="border border-secondary p-4 bg-light rounded">
+            {% if not is_friend %}
+                <span class="float-right btn btn-primary"><a
+                            href="{{ path('add_friend', {'uuid_student': student.uuid}) }}">Ajouter en ami</a></span>
+            {% else %}
+                Vous êtes amis avec
+            {% endif %}
             <div class="row">
                 <div class="col-5">
                     {% if student.avatar %}

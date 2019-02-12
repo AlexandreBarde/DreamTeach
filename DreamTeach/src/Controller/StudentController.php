@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\FriendshipRelation;
 use App\Entity\Session;
 use App\Entity\Student;
 use App\Entity\Subject;
@@ -47,9 +48,6 @@ class StudentController extends AbstractController
                 $nbSessionAttended++;
             }
         }
-
-
-
 
 
         foreach ($session as $key => $value) {
@@ -211,14 +209,19 @@ class StudentController extends AbstractController
                 'uuid' => $uuid_student,
             ]
         );
+        $user = $this->getUser();
         if (!$student) {
             return $this->redirectToRoute("default_student_connected");
         } elseif ($uuid_student == $this->getUser()->getUuid()) {
             return $this->redirectToRoute('student_profile');
         }
+        $is_friend = $this->getDoctrine()->getRepository(FriendshipRelation::class)->checkIfAreFriends(
+            $user,
+            $student
+        );
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
             [
-            "studentid" => $student,
+                "studentid" => $student,
 
             ]);
 
@@ -228,6 +231,7 @@ class StudentController extends AbstractController
             [
                 'noteUser' => $noteUser,
                 'student' => $student,
+                'is_friend' => $is_friend
             ]
         );
     }

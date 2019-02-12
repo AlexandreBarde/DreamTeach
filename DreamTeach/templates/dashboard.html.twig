@@ -64,7 +64,9 @@
                             </br>
                         </div>
                         <div class="col-8 pb-4">
-                            {{ i.subjectID.getName() }}
+                            {% if i.subjectID is not null %}
+                                {{ i.subjectID.getName() }}
+                            {% endif %}
                         </div>
                         <div class="col-4 text-right pt-3">
                           {{ (i.getStudentid)|length}} participant(s)

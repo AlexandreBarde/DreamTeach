@@ -15,10 +15,26 @@
             Bienvenue sur votre espace personnel
         </div>
         <div class="col-4 alert alert-success">
-
         </div>
     </div>
-    <div class="row justify-content-between mt-5">
+<div class="row mt-4">
+    <div class="col-8 mx-auto">
+        <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-8">
+                        <input type="text" class="form-control" placeholder="Recherchez un étudiant.."
+                               name="search_student">
+                    </div>
+                    <div class="col-3">
+                        <input type="submit" value="Rechercher" class="btn btn-primary">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row justify-content-between mt-3">
         <div class="col-6 col-sm-2 alert alert-danger text-center"><h6>Séances dirigées</h6>{{ nbSessionOrganized }}</div>
         <div class="col-6 col-sm-2 alert alert-warning"></div>
         <div class="col-6 col-sm-2 alert alert-primary"></div>
@@ -43,6 +59,17 @@
                 <div class="card-body"></div>
             </div>
         </div>
+        {% block javascripts %}
+            <script>
+                $(document).ready(function () {
+                    $('#search_student_form').submit(function (e) {
+                        if ($("input[name=search_student]").val() === '') {
+                            e.preventDefault();
+                        }
+                    })
+                })
+            </script>
+        {% endblock %}
 {% endblock %}
 
 

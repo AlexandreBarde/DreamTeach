@@ -8,17 +8,16 @@ use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
+use App\Form\ProfileFormType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use App\Form\ProfileFormType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
@@ -70,6 +69,28 @@ class StudentController extends AbstractController
             'sessionUser' => $listeSessionEtudiant,
             'nbSessionOrganized' => $nbSessionOrganized
         ]);
+    }
+
+    /**
+     * @Route("/search", name="search_student_view")
+     */
+
+    public function searchStudent(Request $request)
+    {
+        if ($request->get('search_student')) {
+            $result_student = $this->getDoctrine()->getRepository(Student::class)->searchStudent(
+                $request->get('search_student')
+            );
+
+            return $this->render(
+                'friend.search.html.twig',
+                [
+                    'students' => $result_student
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
     }
 
     /**

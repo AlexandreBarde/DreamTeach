@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
+use App\Entity\SessionParticipants;
 use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
@@ -36,6 +37,10 @@ class StudentController extends AbstractController
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
+        $nbSessionAttended= $this->getDoctrine()->getRepository(SessionParticipants::class)->countNbSessionAttendedByUser(
+            $this->getUser()
+        );
+
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
@@ -62,10 +67,12 @@ class StudentController extends AbstractController
             array_push($listeSessionEtudiant, $ss);
         }
 
+
         return $this->render("dashboard.html.twig", [
             'session' => $tpm,
             'sessionUser' => $listeSessionEtudiant,
-            'nbSessionOrganized' => $nbSessionOrganized
+            'nbSessionOrganized' => $nbSessionOrganized,
+            'nbSessionAttended' => $nbSessionAttended
         ]);
     }
 

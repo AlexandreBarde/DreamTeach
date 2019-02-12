@@ -167,7 +167,7 @@ class StudentController extends AbstractController
                     }
                 }
 
-                return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
+                return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
             }
 
         }
@@ -213,6 +213,13 @@ class StudentController extends AbstractController
      * @Route("/createSubject", name="createSubject")
      */
     public function createSubject(Request $request, ObjectManager $manager)
+    {
+
+    }
+    /**
+     * @Route("/informASubject", name="informASubject")
+     */
+    public function informASubject(Request $request, ObjectManager $manager)
     {
 
     }

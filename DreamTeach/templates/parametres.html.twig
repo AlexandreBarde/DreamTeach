@@ -14,23 +14,21 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
+                    {{ form_start(formUser) }}
                     <label for="adresseEmail">Adresse Email</label>
-                    <input type="email" class="form-control" id="adresseEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                    {{ form_widget(formUser.emailAddress, {'id': 'adresseEmail', 'aria-describedby' : 'emailHelp' }) }}
                     <small id="emailHelp" class="form-text text-muted">Veuillez renseigner une nouvelle adresse e-mail</small>
                 </div>
                 <div class="form-group">
                     <label for="motDePasseActuel">Mot de passe actuel</label>
-                    <input type="password" class="form-control" id="motDePasseActuel" placeholder="mot de passe actuel">
+                    <input type="password" class="form-control" id="motDePasseActuel" placeholder="nouveau mot de passe">
                 </div>
                 <div class="form-group">
                     <label for="nouveauMotDePasse">Nouveau mot de passe</label>
-                    <input type="password" class="form-control" id="nouveauMotDePasse" placeholder="nouveau mot de passe">
-                </div>
-                <div class="form-group">
-                    <label for="confirmationMotDePasse">Confirmer</label>
-                    <input type="password" class="form-control" id="confirmationMotDePasse" placeholder="Confirmer le mot de passe">
+                    {{ form_widget(formUser.password, {'id' :  'nouveauMotDePasse'})}}
                 </div>
                 <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                {{ form_end(formUser) }}
             </div>
         </div>
     </div>

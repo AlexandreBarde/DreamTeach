@@ -94,52 +94,14 @@ class StudentController extends AbstractController
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
-                $training = $this->getDoctrine()->getRepository(Training::class);
+
                 /** @var Training $formations */
-                $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
+
                 $user = $this->getUser();
                 $studentId = $repository->find($this->getUser()->getId());
 
-                $form = $this->createFormBuilder($user)
-                    ->add('firstName', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('lastName', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('biography', TextType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('emailAddress', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control']
-                    ])
-                    ->add('trainingID', ChoiceType::class, [
-                        'choices' => $formations,
-                        'attr' => [
-                            'class' => 'form-control'],
-                        'choice_label' => function($choiceValue, $key, $value) {
-                            return $choiceValue->getTitle();
-                        }
-                    ])
-                    ->add('birthDate', DateType::class, [
-                        'widget' => 'single_text',
-                        'attr' => [
-                            'class' => 'form-control'],
-                        'format' => 'yyyy-MM-dd'
-                    ])
-                    ->add('avatar', FileType::class, [
-                        'attr' => [
-                            'class' => 'form-control']
-                    ])
-                    ->add('city', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control']
-                    ])
-                    ->getForm();
+                $form = $this->createForm(ProfileFormType::class, $user);
+
 
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {

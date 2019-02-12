@@ -117,9 +117,11 @@ class SessionController extends AbstractController
     public function displaySession($idSession){
 
         $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
-        return $this->render("displaySession.html.twig",[
-            'session' => $session
 
+        return $this->render("displaySession.html.twig",[
+
+            'session' => $session
+            
         ]);
     }
 

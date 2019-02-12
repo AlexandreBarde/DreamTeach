@@ -45,6 +45,7 @@ class StudentController extends AbstractController
         /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
         $now=new DateTime("now");
         $now->format('Y-m-d');
+
         $listSessionAttended= $this->getUser()->getSessionid();
         $nbSessionAttended=0;
         foreach ($listSessionAttended as $sessionAttended){

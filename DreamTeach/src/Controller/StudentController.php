@@ -42,7 +42,7 @@ class StudentController extends AbstractController
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
-            if ($value->getDate() > $now) {
+            if ($value->getDate() > $now && sizeOf($tpm) < 3) {
                 array_push($tpm, $value);
             }
         }

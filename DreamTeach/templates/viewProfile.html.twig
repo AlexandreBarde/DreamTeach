@@ -131,7 +131,9 @@
                                 <div class="row mb-4">
                                     <div class="col-8">
                                         <select class="form-control" id="subject">
-                                          
+                                            {% for i in subjectNotInfo %}
+                                            <option value="5">{{ i.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-2 text-center">
@@ -143,6 +145,7 @@
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
+                                            <option value="5">5</option>
                                         </select>
                                     </div>
                                 </div>

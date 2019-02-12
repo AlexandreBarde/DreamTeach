@@ -45,6 +45,7 @@ class StudentController extends AbstractController
         /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
         $now=new DateTime("now");
         $now->format('Y-m-d');
+
         $listSessionAttended= $this->getUser()->getSessionid();
         $nbSessionAttended=0;
         foreach ($listSessionAttended as $sessionAttended){
@@ -110,6 +111,11 @@ class StudentController extends AbstractController
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
             "studentid" => $this->getUser()->getId(),
         ]);
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery('SELECT s.name FROM App\Entity\Student st, App\Entity\Subject s, App\Entity\Subjectlevel sl WHERE st.id = ?1 AND s.id = sl.subjectid AND sl.studentid != ?2');
+        $query->setParameter(1,$this->getUser()->getId());
+        $query->setParameter(2,$this->getUser()->getId());
+        $subjectNotInfo = $query->getResult();
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
@@ -174,7 +180,7 @@ class StudentController extends AbstractController
 
         return $this->render(
             "viewProfile.html.twig",
-            ['user' => $this->getUser(), 'noteUser' => $noteUser]
+            ['user' => $this->getUser(), 'noteUser' => $noteUser,"subjectNotInfo" => $subjectNotInfo]
         );
     }
 

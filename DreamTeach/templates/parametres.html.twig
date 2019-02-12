@@ -20,7 +20,7 @@
                     {{ form_widget(formPassword.password, {'id' :  'nouveauMotDePasse', 'disabled': 'disabled', 'class': 'col'})}}
                     <small id="emailHelp" class="form-text text-muted">Le mot de passe doit contenir 8 caractères min</small>
                 </div>
-                <button type="submit" id="submitPassword" class="btn btn-primary" disabled>Enregistrer le mot de passe</button>
+                <button type="submit" id="submitPassword" class="btn btn-primary" disabled>Modifier</button>
                 {{ form_end(formPassword) }}
             </div>
             {{ form_start(formEmailAddress) }}
@@ -31,7 +31,7 @@
                     {{ form_widget(formEmailAddress.emailAddress, {'id' :  'adresseEmail', 'disabled': 'disabled', 'class': 'col'})}}
                     <small id="emailHelp" class="form-text text-muted">L'e-mail doit être du type xyz@example.com</small>
                 </div>
-                <button type="submit" id="submitEmail" class="btn btn-primary" disabled>Enregistrer l'e-mail</button>
+                <button type="submit" id="submitEmail" class="btn btn-primary" disabled>Modifier</button>
                 {{ form_end(formEmailAddress) }}
             </div>
         </div>

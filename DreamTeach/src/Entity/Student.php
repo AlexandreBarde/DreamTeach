@@ -141,6 +141,11 @@ class Student implements UserInterface
     private $birthDate;
 
     /**
+     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="user")
+     */
+    private $relations;
+
+    /**
      * Constructor
      * @throws \Exception
      */

@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Student
  *
  * @ORM\Table(name="student", indexes={@ORM\Index(name="trainingID", columns={"trainingID"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
  * @UniqueEntity("emailaddress", message = "L'email que vous avez entré est déjà utilisé")
  */
 class Student implements UserInterface
@@ -139,6 +139,11 @@ class Student implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $birthDate;
+
+    /**
+     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="user")
+     */
+    private $relations;
 
     /**
      * Constructor

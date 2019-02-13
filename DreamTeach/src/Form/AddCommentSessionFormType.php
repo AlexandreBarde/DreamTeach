@@ -25,6 +25,8 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 
 class AddCommentSessionFormType extends AbstractType
 {
@@ -36,7 +38,19 @@ class AddCommentSessionFormType extends AbstractType
                 'attr' => [
                     'placeholder' => "Ajouter un commentaire...",
                     'class' => 'form-control',
-                ]
+                    'empty_data' => '',
+                ],
+                'required' => false
+            ])
+            ->add('note', IntegerType::class, [
+                'attr' => [
+                    'placeholder' => 'Noter la séance',
+                    'class' => 'form-control',
+                    'empty_data' => '2.5',
+                    'min' => '0',
+                    'max' => '5'
+                ],
+                'required' => true,
             ]);
     }
 

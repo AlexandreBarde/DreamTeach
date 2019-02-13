@@ -130,6 +130,13 @@ class StudentController extends AbstractController
         );
         $query->setParameter(1, $this->getUser()->getId());
         $query->setParameter(2, $this->getUser()->getId());
+        $query = $em->createQuery('SELECT s.name 
+                                   FROM  App\Entity\Subject s 
+                                   WHERE s.id NOT IN 
+                                    (SELECT sa
+                                    FROM App\Entity\Subjectlevel sa 
+                                    WHERE sa.studentid = ?1)');
+        $query->setParameter(1,$this->getUser()->getId());
         $subjectNotInfo = $query->getResult();
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {

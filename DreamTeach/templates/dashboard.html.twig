@@ -19,8 +19,10 @@
         </div>
     </div>
     <div class="row justify-content-between mt-5">
-        <div class="col-6 col-sm-2 alert alert-danger text-center"><h6>Séances dirigées</h6>{{ nbSessionOrganized }}</div>
-        <div class="col-6 col-sm-2 alert alert-warning text-center"><h6>Séances assistées</h6>{{ nbSessionAttended }}</div>
+        <div class="col-6 col-sm-2 alert alert-danger text-center"><h6>Séances dirigées</h6>{{ nbSessionOrganized }}
+        </div>
+        <div class="col-6 col-sm-2 alert alert-warning text-center"><h6>Séances assistées</h6>{{ nbSessionAttended }}
+        </div>
         <div class="col-6 col-sm-2 alert alert-primary"></div>
         <div class="col-6 col-sm-2 alert alert-secondary"></div>
     </div>
@@ -32,18 +34,15 @@
             </div>
             <div class="card-body pb-0">
                 {% for i in session %}
-
                     <div class="row border ml-1 mr-1">
                         <div class="col-8 pt-4">
-                            <u><a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name()|slice(0, 41)}}{% if i.name()|length > 41 %} ...{% endif %}</a></u>
+                            <u><a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name()|slice(0, 41) }}{% if i.name()|length > 41 %} ...{% endif %}</a></u>
                         </div>
 
                         <div class="col-4">
                             <div class="col-12 text-right pr-0 pt-2">
                                 {{ i.date.format('d-m-Y') }}
                             </div>
-                            <div class="col-4 text-right pt-3">
-                                5 participants
                             <div class="col-12 text-right pr-0">
                                 {{ i.startingTime.format('H:i') }} - {{ i.endingTime.format('H:i') }}
                             </div>
@@ -53,7 +52,7 @@
                             {{ i.subjectID.getName() }}
                         </div>
                         <div class="col-4 text-right pt-3">
-                          {{ (i.getStudentid)|length}} participant(s)
+                            {{ (i.getStudentid)|length }} participant(s)
                         </div>
                         </br>
                     </div>

@@ -12,6 +12,7 @@ use App\Entity\Training;
 use App\Form\ProfileFormType;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -125,19 +126,19 @@ class StudentController extends AbstractController
             "studentid" => $this->getUser()->getId(),
         ]);
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery(
-            'SELECT s.name FROM App\Entity\Student st, App\Entity\Subject s, App\Entity\Subjectlevel sl WHERE st.id = ?1 AND s.id = sl.subjectid AND sl.studentid != ?2'
-        );
-        $query->setParameter(1, $this->getUser()->getId());
-        $query->setParameter(2, $this->getUser()->getId());
-        $query = $em->createQuery('SELECT s.name 
-                                   FROM  App\Entity\Subject s 
-                                   WHERE s.id NOT IN 
-                                    (SELECT sa
-                                    FROM App\Entity\Subjectlevel sa 
-                                    WHERE sa.studentid = ?1)');
-        $query->setParameter(1,$this->getUser()->getId());
-        $subjectNotInfo = $query->getResult();
+
+        $rsm = new ResultSetMapping();
+        $RAW_QUERY ='SELECT subject.name 
+                                   FROM  subject 
+                                   WHERE subject.id NOT IN 
+                                    (SELECT subjectlevel.subjectid
+                                    FROM subjectlevel  
+                                    WHERE subjectlevel.studentid = :id )';
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue('id', $this->getUser()->getId());
+        $statement->execute();
+        $subjectNotInfo = $statement->fetchAll();
+
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);

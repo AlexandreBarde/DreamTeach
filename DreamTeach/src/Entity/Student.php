@@ -141,7 +141,7 @@ class Student implements UserInterface
     private $birthDate;
 
     /**
-     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="student_2")
      */
     private $relations;
 
@@ -204,7 +204,7 @@ class Student implements UserInterface
         return $this->biography;
     }
 
-    public function setBiography(string $biography): self
+    public function setBiography(?string $biography): self
     {
         $this->biography = $biography;
 
@@ -440,4 +440,22 @@ class Student implements UserInterface
     {
         $this->uuid = $uuid;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+
+    /**
+     * @param mixed $relations
+     */
+    public function setRelations($relations)
+    {
+        $this->relations = $relations;
+    }
+
+
 }

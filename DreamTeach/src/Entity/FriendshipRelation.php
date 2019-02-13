@@ -23,6 +23,7 @@ class FriendshipRelation
 
     /**
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="relations", cascade="persist")
+     * Celui qui ajoute l'ami, l'user en cours !!!!
      */
     private $student_1;
 

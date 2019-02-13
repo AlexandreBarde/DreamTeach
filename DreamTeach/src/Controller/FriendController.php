@@ -22,9 +22,60 @@ class FriendController extends AbstractController
      */
     public function listFriendController(Request $request)
     {
-        return $this->render('friend.list.html.twig', [
-
+        $user = $this->getUser();
+        $waitingAcceptations = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy(
+            [
+                'student_2' => $user,
+                'is_accepted' => 0,
         ]);
+
+        $friendsAccepted = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy(
+            [
+            'student_1' => $user,
+            'is_accepted' => 1,
+        ]);
+
+        $friendsAccepted2 = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy(
+            [
+                'student_2' => $user,
+                'is_accepted' => 1,
+            ]
+        );
+
+        $tabFriendsTemp = array_merge($friendsAccepted, $friendsAccepted2);
+        $tabFriends = array_unique($tabFriendsTemp);
+
+        return $this->render('friend.list.html.twig', [
+            'waitingAcceptations' => $waitingAcceptations,
+            'friendsAccepted' => $tabFriends,
+        ]);
+    }
+
+    /**
+     * @Route("/accept/{student1}/{student2}/{id}/{uuid}", name="accept_friend")
+     */
+
+    public function acceptFriend($student1, $student2, $id, $uuid)
+    {
+        $user = $this->getUser();
+        $relation = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findOneBy(
+            [
+                'student_1' => $student1,
+                'student_2' => $student2,
+                'id' => $id,
+                'is_accepted' => 0,
+            ]
+        );
+
+        if (!$relation || $user->getId() != $student2 || $user->getUuid() != $uuid) {
+            return $this->redirectToRoute('friend_list');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $relation->setIsAccepted(1);
+        $em->persist($relation);
+        $em->flush();
+
+        return $this->redirectToRoute('friend_list');
     }
 
     /**

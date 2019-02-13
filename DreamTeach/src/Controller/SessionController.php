@@ -66,7 +66,7 @@ class SessionController extends AbstractController
             } else {
 
                 $this->addFlash("error", "L'heure de fin ne peut pas être infériere à l'heure de début.");
-                return $this->redirectToRoute('sessionCreationAndUpdate');
+                return $this->redirectToRoute('sessionCreation');
 
             }
         }

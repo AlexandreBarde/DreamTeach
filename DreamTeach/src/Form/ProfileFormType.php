@@ -34,6 +34,7 @@ class ProfileFormType extends AbstractType
                     'class' => 'form-control']
             ])
             ->add('biography', TextType::class, [
+                'required' => false,
                 'attr' => [
                     'class' => 'form-control']
             ])
@@ -48,19 +49,26 @@ class ProfileFormType extends AbstractType
                     'class' => "custom-select"]
             ])
             ->add('birthDate', DateType::class, [
+
+                'required' => false,
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'form-control'],
                 'format' => 'yyyy-MM-dd'
             ])
             ->add('avatar', FileType::class, [
+
+                'required' => false,
                 'label' => 'Image (Fichier jpg)', 'data_class' => null,
                 'attr' => [
                     'class' => 'form-control']
             ])
             ->add('city', TextType::class, [
+
+                'required' => false,
                 'attr' => [
-                    'class' => 'form-control']
+                    'class' => 'form-control',
+                    ]
             ]);
 
 

@@ -13,12 +13,12 @@
                 <span class="float-right btn btn-primary"><a
                             href="{{ path('add_friend', {'uuid_student': student.uuid}) }}">Ajouter en ami</a></span>
             {% else %}
-                Vous êtes amis avec
+                <span class="float-right alert alert-success">Vous êtes ami avec</span>
             {% endif %}
             <div class="row">
                 <div class="col-5">
                     {% if student.avatar %}
-                        <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
+                        <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ student.avatar) }}>
                     {% else %}
                         <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}">
                     {% endif %}

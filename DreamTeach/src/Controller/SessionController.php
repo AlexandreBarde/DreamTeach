@@ -5,7 +5,9 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Entity\Subject;
+use App\Entity\Sessioncomment;
 
+use App\Form\AddCommentSessionFormType;
 use App\Form\SubjectType;
 use DateTime;
 use DateTimeZone;
@@ -114,14 +116,25 @@ class SessionController extends AbstractController
      * @Route("/accueil/displaySession/{idSession}", name="displaySession")
      * @param $idSession
      */
-    public function displaySession($idSession){
-
+    public function displaySession($idSession, Request $request){
+        $comment = new Sessioncomment();
         $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+        $sessionComment = $this->createForm(AddCommentSessionFormType::class, $comment);
 
+        $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession));
+        $sessionComment->handleRequest($request);
+        if($sessionComment->isSubmitted() && $sessionComment->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $comment->setIdSession($session);
+            $comment->setIdStudent($this->getUser());
+            $em->persist($comment);
+            $em->flush();
+            return $this->redirectToRoute("default_student_connected");
+        }
         return $this->render("displaySession.html.twig",[
-
-            'session' => $session
-            
+            'allSessionComments' => $allSessionComments,
+            'session' => $session,
+            'formComment' => $sessionComment->createView()
         ]);
     }
 

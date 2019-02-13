@@ -131,6 +131,11 @@ class Session
     private $closed;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $comment;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -337,6 +342,18 @@ class Session
     public function setClosed(bool $closed): self
     {
         $this->closed = $closed;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }

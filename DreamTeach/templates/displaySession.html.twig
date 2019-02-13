@@ -89,4 +89,49 @@
         </div>
 
     </div>
+    <br/>
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Commenter cette séance</h2>
+        </div>
+        <div class="card-body">
+            {% for commentTmp in allSessionComments %}
+                <div class="row">
+                    <div class="col-sm">
+                        <strong>
+                            {{ commentTmp.idStudent.lastName }}
+                            {{ commentTmp.idStudent.firstname }}:
+                        </strong>
+                        <br/>
+                        {{ commentTmp.comment }}
+                    </div>
+                </div>
+            {% endfor %}
+            <br/>
+            <div class="row">
+                {{ form_start(formComment) }}
+                <div class="form-row">
+                    <div class="form-group col" id="matiereEtudiee">
+                        <label for="commentaire">Ajouter un commentaire</label>
+                        {{ form_widget(formComment.comment, {'id': 'commentaire'}) }}
+                    </div>
+                </div>
+                <button id="envoyerCommentaire" type="submit">envoyer</button>
+                {{ form_end(formComment) }}
+            </div>
+        </div>
+    </div>
+    {% block javascripts %}
+        <script>
+            $(document).ready(function () {
+                var sessionDate = "{{ session.date|date('Y-m-d') }}";
+                var sessionEndingTime = "{{ session.endingTime|date('H:i:s') }}";
+
+                if("{{ 'now'|date('Y-m-d') }}" < sessionDate) {
+                    $("#envoyerCommentaire").attr('disabled', true);
+                    $("#commentaire").attr('disabled', true);
+                }
+            });
+        </script>
+    {% endblock %}
 {% endblock %}

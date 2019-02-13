@@ -5,6 +5,9 @@
 {% block body %}
 
     <div class="container-fluid">
+    {% for flash in app.flashes %}
+        {{ flash }}
+    {% endfor %}
     <div class="card">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
             <h2>Description séance</h2>

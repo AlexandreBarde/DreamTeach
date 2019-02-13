@@ -42,12 +42,10 @@ class FriendController extends AbstractController
             ]
         );
 
-        $tabFriendsTemp = array_merge($friendsAccepted, $friendsAccepted2);
-        $tabFriends = array_unique($tabFriendsTemp);
-
         return $this->render('friend.list.html.twig', [
             'waitingAcceptations' => $waitingAcceptations,
-            'friendsAccepted' => $tabFriends,
+            'friendsAccepted' => $friendsAccepted,
+            'friendsAccepted2' => $friendsAccepted2,
         ]);
     }
 

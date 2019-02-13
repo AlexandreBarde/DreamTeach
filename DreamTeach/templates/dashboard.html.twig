@@ -48,10 +48,9 @@
             </div>
             <div class="card-body pb-0">
                 {% for i in session %}
-
-                    <div class="row border ml-1 mr-1">
+                    <div class="row border ml-1 mr-1" onclick="location.href =`{{ path('displaySession', {'idSession' : i.id()}) }}`" style="cursor: pointer">
                         <div class="col-8 pt-4">
-                            <u><a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name()|slice(0, 41)}}{% if i.name()|length > 41 %} ...{% endif %}</a></u>
+                            <u>{{ i.name()|slice(0, 41)}}{% if i.name()|length > 41 %} ...{% endif %}</u>
                         </div>
 
                         <div class="col-4">

@@ -29,13 +29,25 @@ class FriendController extends AbstractController
                 'is_accepted' => 0,
         ]);
 
-        $friendsAccepted = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy([
+        $friendsAccepted = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy(
+            [
             'student_1' => $user,
             'is_accepted' => 1,
         ]);
+
+        $friendsAccepted2 = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy(
+            [
+                'student_2' => $user,
+                'is_accepted' => 1,
+            ]
+        );
+
+        $tabFriendsTemp = array_merge($friendsAccepted, $friendsAccepted2);
+        $tabFriends = array_unique($tabFriendsTemp);
+
         return $this->render('friend.list.html.twig', [
             'waitingAcceptations' => $waitingAcceptations,
-            'friendsAccepted' => $friendsAccepted,
+            'friendsAccepted' => $tabFriends,
         ]);
     }
 

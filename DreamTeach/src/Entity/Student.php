@@ -141,7 +141,7 @@ class Student implements UserInterface
     private $birthDate;
 
     /**
-     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="student_1")
+     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="student_2")
      */
     private $relations;
 

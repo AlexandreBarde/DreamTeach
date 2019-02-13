@@ -22,7 +22,8 @@
                             <span> </br> {{ app.user.biography }} </span>
                         </div>
                         <form action="{{ path('student_profile') }}" method="POST">
-                            <button name="editer" type="submit"><i class="far fa-edit col-2"></i></button>
+                            <button class="btn btn-primary" name="editer" type="submit"><i class="far fa-edit"></i></button>
+
                         </form>
                     </div>
                     <hr class="border-left-0 border-secondary ">
@@ -103,7 +104,7 @@
                                 <div class="mb-4 h4">Modifier une note</div>
                                 {% for i in noteUser %}
                                 <div class="row mb-4">
-                                    <div class="col-8">
+                                    <div class="col-6">
                                             <span>{{ i.getSubjectid().getName() }}</span>
                                     </div>
                                     <div class="col-2 text-center">
@@ -118,6 +119,10 @@
                                             <option value="4">4</option>
                                             <option value="5">5</option>
                                         </select>
+                                    </div>
+                                    <div class="col-1">
+                                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+
                                     </div>
                                 </div>
                                 {% endfor %}

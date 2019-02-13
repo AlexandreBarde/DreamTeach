@@ -17,42 +17,30 @@ class Message
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Student", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $idSender;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Student", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Student")
      * @ORM\JoinColumn(nullable=false)
      */
     private $idReceiver;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Student")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $date;
+    private $idSender;
 
     /**
      * @ORM\Column(type="text")
      */
     private $content;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdSender(): ?Student
-    {
-        return $this->idSender;
-    }
-
-    public function setIdSender(Student $idSender): self
-    {
-        $this->idSender = $idSender;
-
-        return $this;
     }
 
     public function getIdReceiver(): ?Student
@@ -60,21 +48,21 @@ class Message
         return $this->idReceiver;
     }
 
-    public function setIdReceiver(Student $idReceiver): self
+    public function setIdReceiver(?Student $idReceiver): self
     {
         $this->idReceiver = $idReceiver;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getIdSender(): ?Student
     {
-        return $this->date;
+        return $this->idSender;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setIdSender(?Student $idSender): self
     {
-        $this->date = $date;
+        $this->idSender = $idSender;
 
         return $this;
     }
@@ -87,6 +75,18 @@ class Message
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

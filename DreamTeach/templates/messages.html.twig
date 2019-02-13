@@ -17,27 +17,21 @@
             <div class="col col-lg-2 pt-1"><h5>Utilisateur</h5></div>
             <div class="col pt-1"><h5>Derniers messages</h5></div>
         </div>
-        <div class="row text-center">
-            <div class="col col-lg-2 pt-3 pb-3">
-                <h6>Tom Adelé</h6>
-                <img src="{{ asset('img/tom_bg.jpg') }}" alt="..." height="100px" width="100px" class="img-thumbnail img-fluid">
+        {% dump(messages) %}
+        {% for m in messages %}
+            <div class="row text-center">
+                <div class="col col-lg-2 pt-3 pb-3">
+                    <h6>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</h6>
+                    {% if m.idSender.avatar %}
+                        <img class="img-thumbnail img-fluid" height="100px" width="100px" src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
+                    {% else %}
+                        <img class="img-thumbnail img-fluid" height="100px" width="100px" src="{{ asset('img/tom_bg.jpg') }}"
+                        >
+                    {% endif %}
+                </div>
+                <div class="col pt-3"><p>{{ m.content|slice(0, 300)}}{% if m.content|length > 300 %} ...{% endif %}</p></div>
             </div>
-            <div class="col pt-3"><p>Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation....</p></div>
-        </div>
-        <div class="row text-center">
-            <div class="col col-lg-2 pt-3 pb-3">
-                <h6>Tom Adelé</h6>
-                <img src="{{ asset('img/tom_bg.jpg') }}" alt="..." height="100px" width="100px" class="img-thumbnail img-fluid">
-            </div>
-            <div class="col pt-3"><p>Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation....</p></div>
-        </div>
-        <div class="row text-center">
-            <div class="col col-lg-2 pt-3 pb-3">
-                <h6>Tom Adelé</h6>
-                <img src="{{ asset('img/tom_bg.jpg') }}" alt="..." height="100px" width="100px" class="img-thumbnail img-fluid">
-            </div>
-            <div class="col pt-3"><p>Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation....</p></div>
-        </div>
+        {% endfor %}
     </div>
 
 {% endblock %}

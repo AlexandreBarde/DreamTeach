@@ -83,7 +83,7 @@ class SessionController extends AbstractController
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
-            if ($value->getDate() > $now) {
+            if ($value->getDate() >= $now) {
                 array_push($tpm, $value);
             }
         }
@@ -129,7 +129,7 @@ class SessionController extends AbstractController
             $comment->setIdStudent($this->getUser());
             $em->persist($comment);
             $em->flush();
-            return $this->redirectToRoute("default_student_connected");
+            return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
         }
         return $this->render("displaySession.html.twig",[
             'allSessionComments' => $allSessionComments,

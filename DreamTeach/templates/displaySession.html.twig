@@ -130,7 +130,13 @@
                 if("{{ 'now'|date('Y-m-d') }}" < sessionDate) {
                     $("#envoyerCommentaire").attr('disabled', true);
                     $("#commentaire").attr('disabled', true);
+                } else {
+                    if("{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
+                        $("#envoyerCommentaire").attr('disabled', true);
+                        $("#commentaire").attr('disabled', true);
+                    }
                 }
+
             });
         </script>
     {% endblock %}

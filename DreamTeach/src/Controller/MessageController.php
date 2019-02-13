@@ -38,4 +38,13 @@ class MessageController extends AbstractController
         return $this->render("messages.html.twig", ["messages" => $messagesTmp]);
     }
 
+    /**
+     * @Route("showConversation", name="ShowConversation")
+     */
+    public function showConversation()
+    {
+
+    }
+
+
 }

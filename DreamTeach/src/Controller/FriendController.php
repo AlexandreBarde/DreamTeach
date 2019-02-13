@@ -22,6 +22,14 @@ class FriendController extends AbstractController
      */
     public function listFriendController(Request $request)
     {
+        $waitingAcceptation = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy([
+            'student_2' => $this->getUser(),
+            'is_accepted' => 0
+        ]);
+
+        $friendsAccepted = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findBy([
+
+        ]);
         return $this->render('friend.list.html.twig', [
 
         ]);

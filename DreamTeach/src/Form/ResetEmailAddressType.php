@@ -11,16 +11,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ResetPasswordType extends AbstractType
+class ResetEmailAddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add(
-                'password',
-                PasswordType::class, [
+                'emailAddress',
+                EmailType::class, [
                     'attr' => [
-                        'placeholder' => 'mot de passe',
+                        'placeholder' => 'Adresse email',
                         'class' => 'form-control'
                     ],
                     'required' => false

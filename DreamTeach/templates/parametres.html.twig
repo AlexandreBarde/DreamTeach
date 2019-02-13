@@ -12,23 +12,27 @@
             <div class="card-header">
                 <h6><i class="fas fa-user-edit fa-lg"></i>&nbsp;Vos informations personnelles</h6>
             </div>
+            {{ form_start(formPassword) }}
             <div class="card-body">
                 <div class="form-group">
-                    {{ form_start(formUser) }}
-                    <label for="adresseEmail">Adresse Email</label>
-                    {{ form_widget(formUser.emailAddress, {'id': 'adresseEmail', 'aria-describedby' : 'emailHelp' }) }}
-                    <small id="emailHelp" class="form-text text-muted">Veuillez renseigner une nouvelle adresse e-mail</small>
+                    <label for="nouveauMotDePasse">Nouveau mot de passe &nbsp;</label>
+                    <a href="#"><i class="fas fa-pen" id="editPassword"></i></a>
+                    {{ form_widget(formPassword.password, {'id' :  'nouveauMotDePasse', 'disabled': 'disabled', 'class': 'col'})}}
+                    <small id="emailHelp" class="form-text text-muted">Le mot de passe doit contenir 8 caractères min</small>
                 </div>
+                <button type="submit" id="submitPassword" class="btn btn-primary" disabled>Modifier</button>
+                {{ form_end(formPassword) }}
+            </div>
+            {{ form_start(formEmailAddress) }}
+            <div class="card-body">
                 <div class="form-group">
-                    <label for="motDePasseActuel">Mot de passe actuel</label>
-                    <input type="password" class="form-control" id="motDePasseActuel" placeholder="nouveau mot de passe">
+                    <label for="nouvelEmail">Modifier l'e-mail &nbsp;</label>
+                    <a href="#"><i class="fas fa-pen" id="editEmail"></i></a>
+                    {{ form_widget(formEmailAddress.emailAddress, {'id' :  'adresseEmail', 'disabled': 'disabled', 'class': 'col'})}}
+                    <small id="emailHelp" class="form-text text-muted">L'e-mail doit être du type xyz@example.com</small>
                 </div>
-                <div class="form-group">
-                    <label for="nouveauMotDePasse">Nouveau mot de passe</label>
-                    {{ form_widget(formUser.password, {'id' :  'nouveauMotDePasse'})}}
-                </div>
-                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-                {{ form_end(formUser) }}
+                <button type="submit" id="submitEmail" class="btn btn-primary" disabled>Modifier</button>
+                {{ form_end(formEmailAddress) }}
             </div>
         </div>
     </div>
@@ -56,4 +60,42 @@
             </div>
         </div>
     </div>
+    {% block javascripts %}
+        <script>
+            $(document).ready(function () {
+                $("#editEmail").click(function () {
+                  $("#adresseEmail").attr("disabled", false);
+                })
+                $("#editPassword").click(function () {
+                  $("#nouveauMotDePasse").attr("disabled", false);
+                })
+                $("#nouveauMotDePasse").keypress(function () {
+                    if($("#nouveauMotDePasse").val().length >= 7) {
+                        $("#submitPassword").removeAttr('disabled');
+                    }
+                })
+                $("#nouveauMotDePasse").keydown(function(e) {
+                    if($("#nouveauMotDePasse").val().length < 9) {
+                        $("#submitPassword").attr("disabled", true);
+                    }
+                })
+
+                $("#adresseEmail").keypress(function () {
+                    if($("#adresseEmail").val().indexOf("@")  > 0 && ($("#adresseEmail").val().indexOf(".")  > 2 && $("#adresseEmail").val().indexOf(".")  < ($("#adresseEmail").val().length)-1)) {
+                        $("#submitEmail").attr('disabled', false);
+                    } else {
+                        $("#submitEmail").attr('disabled', true);
+                    }
+                })
+                $("#adresseEmail").keyup(function(e) {
+                    if($("#adresseEmail").val().indexOf("@")  > 0 && ($("#adresseEmail").val().indexOf(".")  > 2 && $("#adresseEmail").val().indexOf(".")  < ($("#adresseEmail").val().length)-1)) {
+                        $("#submitEmail").attr('disabled', false);
+                    } else {
+                        $("#submitEmail").attr('disabled', true);
+                    }
+                })
+            });
+        </script>
+    {% endblock %}
+
 {% endblock %}

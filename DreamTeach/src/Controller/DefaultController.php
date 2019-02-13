@@ -33,7 +33,7 @@ class DefaultController extends AbstractController
             $em->persist($student);
             $em->flush();
 
-            return $this->render("login.html.twig", ["last_username" => $student->getEmailaddress(), "error" => ""]);
+            return $this->redirectToRoute("app_login");
         }
 
         return $this->render(

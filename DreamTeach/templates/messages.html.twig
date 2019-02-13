@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+    <style>
+        .col
+        {
+            border: 1px solid rgba(86,61,124,.2);
+        }
+    </style>
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Messagerie</h1>
+    </div>
+    <div class="container mt-5">
+        <div class="row text-center">
+            <div class="col col-lg-2 pt-1"><h5>Utilisateur</h5></div>
+            <div class="col pt-1"><h5>Derniers messages</h5></div>
+        </div>
+        <div class="row text-center">
+            <div class="col col-lg-2 pt-3 pb-3">
+                <h6>Tom Adelé</h6>
+                <img src="{{ asset('img/tom_bg.jpg') }}" alt="..." height="100px" width="100px" class="img-thumbnail img-fluid">
+            </div>
+            <div class="col pt-3"><p>Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation....</p></div>
+        </div>
+        <div class="row text-center">
+            <div class="col col-lg-2 pt-3 pb-3">
+                <h6>Tom Adelé</h6>
+                <img src="{{ asset('img/tom_bg.jpg') }}" alt="..." height="100px" width="100px" class="img-thumbnail img-fluid">
+            </div>
+            <div class="col pt-3"><p>Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation....</p></div>
+        </div>
+        <div class="row text-center">
+            <div class="col col-lg-2 pt-3 pb-3">
+                <h6>Tom Adelé</h6>
+                <img src="{{ asset('img/tom_bg.jpg') }}" alt="..." height="100px" width="100px" class="img-thumbnail img-fluid">
+            </div>
+            <div class="col pt-3"><p>Vous savez, moi je ne crois pas qu’il y ait de bonne ou de mauvaise situation....</p></div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

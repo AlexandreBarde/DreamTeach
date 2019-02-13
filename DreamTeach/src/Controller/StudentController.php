@@ -66,7 +66,7 @@ class StudentController extends AbstractController
         $listeSessionEtudiant = array();
 
         // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
-        foreach($listeSession as $sessionTMP) {
+        foreach ($listeSession as $sessionTMP) {
             // On ajoute les séances
             array_push($tmp, $sessionTMP->getId());
         }
@@ -128,7 +128,7 @@ class StudentController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $rsm = new ResultSetMapping();
-        $RAW_QUERY ='SELECT subject.name 
+        $RAW_QUERY = 'SELECT subject.name 
                                    FROM  subject 
                                    WHERE subject.id NOT IN 
                                     (SELECT subjectlevel.subjectid
@@ -138,8 +138,10 @@ class StudentController extends AbstractController
         $statement->bindValue('id', $this->getUser()->getId());
         $statement->execute();
         $subjectNotInfo = $statement->fetchAll();
+        $avatar = $this->getUser()->getavatar();
 
-        if($request->getMethod() == 'POST') {
+
+        if ($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
 
@@ -150,21 +152,32 @@ class StudentController extends AbstractController
 
                 $form = $this->createForm(ProfileFormType::class, $user);
 
-
                 $form->handleRequest($request);
+
                 if ($form->isSubmitted() && $form->isValid()) {
+
+
                     $file = $studentId->getAvatar();
-                    $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-                    try {
-                        $file->move(
-                            $this->getParameter('avatar_directory'),
-                            $fileName
-                        );
-                    } catch (FileException $e) {
-                        // TODO Gérer les erreurs
+                    if ($file != null) {
+
+                        $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+
+                        try {
+                            $file->move(
+                                $this->getParameter('avatar_directory'),
+                                $fileName
+                            );
+                        } catch (FileException $e) {
+                            // TODO Gérer les erreurs
+                        }
+                        $user->setAvatar($fileName);
+
+                    } else {
+
+                        $studentId->setavatar($avatar);
                     }
 
-                    $user->setAvatar($fileName);
+
                     $manager->persist($user);
                     $manager->flush();
 
@@ -174,7 +187,7 @@ class StudentController extends AbstractController
 
                 return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
 
-            } else if(!is_null($request->request->get('matieres'))) {
+            } else if (!is_null($request->request->get('matieres'))) {
                 $repository = $this->getDoctrine()->getRepository(Subject::class);
                 $subject = new Subject();
                 $form = $this->createFormBuilder($subject)
@@ -183,8 +196,8 @@ class StudentController extends AbstractController
 
                 $form->handleRequest($request);
 
-                if($form->isSubmitted() && $form->isValid()) {
-                    if($repository->findBy(
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if ($repository->findBy(
                         ['name' => $form->get('name')->getData()]
                     )) {
 

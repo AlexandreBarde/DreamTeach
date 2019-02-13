@@ -204,7 +204,7 @@ class Student implements UserInterface
         return $this->biography;
     }
 
-    public function setBiography(string $biography): self
+    public function setBiography(?string $biography): self
     {
         $this->biography = $biography;
 

@@ -124,12 +124,19 @@ class SessionController extends AbstractController
         $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession));
         $sessionComment->handleRequest($request);
         if($sessionComment->isSubmitted() && $sessionComment->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $comment->setIdSession($session);
-            $comment->setIdStudent($this->getUser());
-            $em->persist($comment);
-            $em->flush();
-            return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+            if($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession, 'idStudent' => $this->getUser()->getId()))) {
+                $this->addFlash('success', "Commentaire non envoyé car vous avez déjà envoyé un commentaire pour cette session");
+                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+            } else {
+                $em = $this->getDoctrine()->getManager();
+                $comment->setIdSession($session);
+                $comment->setIdStudent($this->getUser());
+                $this->addFlash('success', "Commentaire envoyé !");
+
+                $em->persist($comment);
+                $em->flush();
+                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+            }
         }
         return $this->render("displaySession.html.twig",[
             'allSessionComments' => $allSessionComments,

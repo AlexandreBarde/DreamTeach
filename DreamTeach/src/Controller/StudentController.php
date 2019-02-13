@@ -3,24 +3,20 @@
 namespace App\Controller;
 
 
+use App\Entity\FriendshipRelation;
 use App\Entity\Session;
 use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
+use App\Form\ProfileFormType;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use App\Form\ProfileFormType;
-use Symfony\Component\Validator\Constraints\Date;
 
 
 /**
@@ -41,18 +37,18 @@ class StudentController extends AbstractController
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
-        $now=new DateTime("now");
+
+        /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
+        $now = new DateTime("now");
         $now->format('Y-m-d');
-        $listSessionAttended= $this->getUser()->getSessionid();
-        $nbSessionAttended=0;
-        foreach ($listSessionAttended as $sessionAttended){
-            if ($sessionAttended->getDate()<$now){
+
+        $listSessionAttended = $this->getUser()->getSessionid();
+        $nbSessionAttended = 0;
+        foreach ($listSessionAttended as $sessionAttended) {
+            if ($sessionAttended->getDate() < $now) {
                 $nbSessionAttended++;
             }
         }
-
-
-
 
 
         foreach ($session as $key => $value) {
@@ -80,13 +76,34 @@ class StudentController extends AbstractController
             array_push($listeSessionEtudiant, $ss);
         }
 
-
         return $this->render("dashboard.html.twig", [
             'session' => $tpm,
             'sessionUser' => $listeSessionEtudiant,
             'nbSessionOrganized' => $nbSessionOrganized,
-            'nbSessionAttended' => $nbSessionAttended
+            'nbSessionAttended' => $nbSessionAttended,
         ]);
+    }
+
+    /**
+     * @Route("/search", name="search_student_view")
+     */
+
+    public function searchStudent(Request $request)
+    {
+        if ($request->get('search_student')) {
+            $result_student = $this->getDoctrine()->getRepository(Student::class)->searchStudent(
+                $request->get('search_student')
+            );
+
+            return $this->render(
+                'friend.search.html.twig',
+                [
+                    'students' => $result_student
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
     }
 
     /**
@@ -108,6 +125,20 @@ class StudentController extends AbstractController
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
             "studentid" => $this->getUser()->getId(),
         ]);
+        $em = $this->getDoctrine()->getManager();
+
+        $rsm = new ResultSetMapping();
+        $RAW_QUERY ='SELECT subject.name 
+                                   FROM  subject 
+                                   WHERE subject.id NOT IN 
+                                    (SELECT subjectlevel.subjectid
+                                    FROM subjectlevel  
+                                    WHERE subjectlevel.studentid = :id )';
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->bindValue('id', $this->getUser()->getId());
+        $statement->execute();
+        $subjectNotInfo = $statement->fetchAll();
+
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
@@ -165,14 +196,14 @@ class StudentController extends AbstractController
                     }
                 }
 
-                return $this->render("createSubject.html.twig", ["formSubject" => $form->createView()]);
+                return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
             }
 
         }
 
         return $this->render(
             "viewProfile.html.twig",
-            ['user' => $this->getUser(), 'noteUser' => $noteUser]
+            ['user' => $this->getUser(), 'noteUser' => $noteUser, "subjectNotInfo" => $subjectNotInfo]
         );
     }
 
@@ -186,14 +217,19 @@ class StudentController extends AbstractController
                 'uuid' => $uuid_student,
             ]
         );
+        $user = $this->getUser();
         if (!$student) {
             return $this->redirectToRoute("default_student_connected");
         } elseif ($uuid_student == $this->getUser()->getUuid()) {
             return $this->redirectToRoute('student_profile');
         }
+        $is_friend = $this->getDoctrine()->getRepository(FriendshipRelation::class)->checkIfAreFriends(
+            $user,
+            $student
+        );
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
             [
-            "studentid" => $student,
+                "studentid" => $student,
 
             ]);
 
@@ -203,6 +239,7 @@ class StudentController extends AbstractController
             [
                 'noteUser' => $noteUser,
                 'student' => $student,
+                'is_friend' => $is_friend
             ]
         );
     }
@@ -211,6 +248,14 @@ class StudentController extends AbstractController
      * @Route("/createSubject", name="createSubject")
      */
     public function createSubject(Request $request, ObjectManager $manager)
+    {
+
+    }
+
+    /**
+     * @Route("/informASubject", name="informASubject")
+     */
+    public function informASubject(Request $request, ObjectManager $manager)
     {
 
     }

@@ -125,13 +125,11 @@ class StudentController extends AbstractController
             "studentid" => $this->getUser()->getId(),
         ]);
         $em = $this->getDoctrine()->getManager();
-<<<<<<< Updated upstream
         $query = $em->createQuery(
             'SELECT s.name FROM App\Entity\Student st, App\Entity\Subject s, App\Entity\Subjectlevel sl WHERE st.id = ?1 AND s.id = sl.subjectid AND sl.studentid != ?2'
         );
         $query->setParameter(1, $this->getUser()->getId());
         $query->setParameter(2, $this->getUser()->getId());
-=======
         $query = $em->createQuery('SELECT s.name 
                                    FROM  App\Entity\Subject s 
                                    WHERE s.id NOT IN 
@@ -139,7 +137,6 @@ class StudentController extends AbstractController
                                     FROM App\Entity\Subjectlevel sa 
                                     WHERE sa.studentid = ?1)');
         $query->setParameter(1,$this->getUser()->getId());
->>>>>>> Stashed changes
         $subjectNotInfo = $query->getResult();
         if($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {

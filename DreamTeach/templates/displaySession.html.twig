@@ -95,32 +95,67 @@
     <br/>
     <div class="card">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
-            <h2>Commenter cette séance</h2>
+            <h2>Commentaires</h2>
         </div>
         <div class="card-body">
-            {% for commentTmp in allSessionComments %}
+            <div class="container">
                 <div class="row">
-                    <div class="col-sm">
-                        <strong>
-                            {{ commentTmp.idStudent.lastName }}
-                            {{ commentTmp.idStudent.firstname }}:
-                        </strong>
-                        <br/>
-                        {{ commentTmp.comment }}
-                    </div>
+                    <h5>Autres commentaires</h5>
                 </div>
-            {% endfor %}
-            <br/>
-            <div class="row">
-                {{ form_start(formComment) }}
-                <div class="form-row">
-                    <div class="form-group col" id="matiereEtudiee">
+                <br/>
+                {% for commentTmp in allSessionComments %}
+                    <div class="row">
+                        <div class="col">
+                            <strong>
+                                {{ commentTmp.idStudent.lastName }}
+                                {{ commentTmp.idStudent.firstname }}:&nbsp;
+                                {% if commentTmp.note > 0 %}
+                                    {% for j in 1..commentTmp.note %}
+                                        <span class="fa fa-star" style="color:orange"></span>
+                                    {% endfor %}
+                                    {% if commentTmp.note < 5 %}
+                                        {% for j in 1..5 - commentTmp.note %}
+                                            <span class="far fa-star"></span>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% else %}
+                                    {% for j in 1..5 %}
+                                        <span class="far fa-star"></span>
+                                    {% endfor %}
+                                {% endif %}
+                            </strong>
+                            <br/>
+                            {{ commentTmp.comment }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <br/>
+
+                <div class="row">
+                    <h5>Donnez votre avis sur la séance</h5>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col">
+                        {{ form_start(formComment) }}
                         <label for="commentaire">Ajouter un commentaire</label>
                         {{ form_widget(formComment.comment, {'id': 'commentaire'}) }}
                     </div>
+                    <div class="col">
+                        <label for="commentaire">Note</label>
+                        {{ form_widget(formComment.note, {'id': 'note'}) }}
+                    </div>
+
+                    <br/>
                 </div>
-                <button id="envoyerCommentaire" type="submit">envoyer</button>
-                {{ form_end(formComment) }}
+                <br/>
+                <div class="row">
+                    <div class="col-3">
+                        <button id="envoyerCommentaire" type="submit">envoyer</button>
+                        {{ form_end(formComment) }}
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

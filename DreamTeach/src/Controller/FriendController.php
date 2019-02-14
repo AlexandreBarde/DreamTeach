@@ -172,4 +172,47 @@ class FriendController extends AbstractController
         );
 
     }
+
+    /**
+     * @Route("/delete/{id_user}/{id_friend}", name="delete_friend")
+     */
+
+    public function deleteFriends($id_user, $id_friend)
+    {
+        $user = $this->getUser();
+        if ($user->getId() != $id_user) {
+            $this->redirectToRoute('default_student_connected');
+        }
+        $relation = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findOneBy(
+            [
+                'student_1' => $user->getId(),
+                'student_2' => $id_friend,
+                'is_accepted' => 1,
+            ]
+        );
+        $relation2 = $this->getDoctrine()->getRepository(FriendshipRelation::class)->findOneBy(
+            [
+                'student_1' => $id_friend,
+                'student_2' => $user->getId(),
+                'is_accepted' => 1,
+            ]
+        );
+
+        $are_friend = $relation || $relation2;
+        if ($are_friend) {
+            $em = $this->getDoctrine()->getManager();
+            if ($relation) {
+                $em->remove($relation);
+            } elseif ($relation2) {
+                $em->remove($relation2);
+            } else {
+                $this->redirectToRoute('default_student_connected');
+            }
+        }
+
+        $em->flush();
+        $this->addFlash('info', "Suppression réussie.");
+
+        return $this->redirectToRoute('friend_list');
+    }
 }

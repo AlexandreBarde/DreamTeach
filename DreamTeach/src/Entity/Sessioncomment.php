@@ -20,7 +20,7 @@ class Sessioncomment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $comment;
 
@@ -43,6 +43,11 @@ class Sessioncomment
      * })
      */
     private $idStudent;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $note;
 
     public function getId(): ?int
     {
@@ -81,6 +86,18 @@ class Sessioncomment
     public function setIdStudent(?Student $idStudent): self
     {
         $this->idStudent = $idStudent;
+
+        return $this;
+    }
+
+    public function getNote(): ?int
+    {
+        return $this->note;
+    }
+
+    public function setNote(int $note): self
+    {
+        $this->note = $note;
 
         return $this;
     }

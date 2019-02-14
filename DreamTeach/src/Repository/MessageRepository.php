@@ -28,10 +28,29 @@ class MessageRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->andWhere('m.idReceiver = :val')
             ->setParameter('val', $idStudent)
-            ->orderBy('m.date', 'DESC')
+            ->orderBy('m.id', 'DESC')
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @param $idReceiver
+     * @param $idSender
+     * @return Message[] Returns an array of Message objects
+     */
+    public function findByStudentAsc($idReceiver, $idSender)
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.idReceiver = :idReceiver')
+            ->andWhere('m.idSender = :idSender')
+            ->orWhere('m.idReceiver = :idSender AND m.idSender = :idReceiver')
+            ->setParameter('idReceiver', $idReceiver)
+            ->setParameter('idSender', $idSender)
+            ->orderBy('m.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     /*

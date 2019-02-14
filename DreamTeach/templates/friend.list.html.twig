@@ -9,6 +9,9 @@
         {% for friend in friendsAccepted %}
             <div class="col-4">
                 <div class="card">
+                    <span class="text-right"><a
+                                href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student2.id}) }}"
+                                class="btn btn-danger fas fa-trash fa-xs m-1 mr-4" title="Supprimer cet ami"></a></span>
                     <div class="card-body">
                         {% if friend.student2.avatar %}
                             <img class="rounded-circle img-fluid" src="{{ asset('uploads/avatars/' ~ friend.student2.avatar) }}" width="60px" height="60px"/>
@@ -25,6 +28,9 @@
         {% for friend in friendsAccepted2 %}
             <div class="col-4">
                 <div class="card">
+                    <span class="text-right"><a
+                                href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student1.id}) }}"
+                                class="btn btn-danger fas fa-trash fa-xs m-1 mr-4" title="Supprimer cet ami"></a></span>
                     <div class="card-body">
                         {% if friend.student1.avatar %}
                             <img class="rounded-circle img-fluid"

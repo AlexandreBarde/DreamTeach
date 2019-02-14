@@ -112,6 +112,11 @@ class FriendshipRelation
         $this->is_accepted = $is_accepted;
     }
 
+    public function getIsAccepted(): ?bool
+    {
+        return $this->is_accepted;
+    }
+
 
 
 }

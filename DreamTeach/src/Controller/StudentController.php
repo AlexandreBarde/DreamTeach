@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 /**
@@ -122,6 +123,9 @@ class StudentController extends AbstractController
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
+        $subjectlevel = new Subjectlevel();
+
+
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
             "studentid" => $this->getUser()->getId(),
         ]);
@@ -287,10 +291,29 @@ class StudentController extends AbstractController
     public function informASubject(Request $request, ObjectManager $manager)
     {
 
+
     }
 
     public function sessionAction()
     {
+
+    }
+
+    /**
+     * @Route("/classementxp", name="classementXp")
+     */
+    public function classementXp(){
+        $classement = $this->getDoctrine()->getEntityManager();
+        $tags = $classement->getRepository(Student::class)->findBy(
+            array(), array('xpwon' => 'ASC')
+        );
+
+        return $this->render(
+            'classementxp.html.twig',
+            [
+                'classementxp' => $tags
+            ]
+        );
 
     }
 }

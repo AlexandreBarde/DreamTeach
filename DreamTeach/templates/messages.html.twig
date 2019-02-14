@@ -20,7 +20,7 @@
             </div>
             {% for m in messages %}
                 <div class="row text-center messageDiv">
-                    <div style="display: none">{{ m.idSender.id }}</div>
+                    <div style="display: none">{{ m.idSender.uuid }}</div>
                     <div class="col col-lg-2 pt-3 pb-3">
                         <h6>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</h6>
                         {% if m.idSender.avatar %}

@@ -2,6 +2,11 @@
 
 {% block title %}Messagerie{% endblock %}
 
+{% block stylesheets %}
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+{% endblock %}
+
 {% block body %}
     <style>
         .col
@@ -10,7 +15,7 @@
         }
     </style>
     <div class="container mt-5">
-        <h1 class="display-4 text-center">Conversation avec {{  }}</h1>
+        <h1 class="display-4 text-center">Conversation avec {{ sender.firstname }} {{ sender.lastname }}</h1>
     </div>
     {% if messages %}
         <div class="container mt-5">
@@ -19,9 +24,8 @@
                 <div class="col pt-1"><h5>Derniers messages</h5></div>
             </div>
             {% for m in messages %}
-                <div class="row text-center messageDiv">
-                    <div style="display: none">{{ m.idSender.id }}</div>
-                    <div class="col col-lg-2 pt-3 pb-3">
+                <div class="row messageDiv">
+                    <div class="text-center col col-lg-2 pt-3 pb-3">
                         <h6>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</h6>
                         {% if m.idSender.avatar %}
                             <img class="img-thumbnail img-fluid" height="100px" width="100px" src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
@@ -30,9 +34,15 @@
                             >
                         {% endif %}
                     </div>
-                    <div class="col pt-3"><p>{{ m.content|slice(0, 300)}}{% if m.content|length > 300 %} ...{% endif %}</p></div>
+                    <div class="col pt-3"><p>{{ m.content}}</p></div>
                 </div>
             {% endfor %}
+            <div class="row">
+                <div class="col pt-3 pb-3">
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea><br />
+                    <button type="button" class="btn btn-primary btn-lg btn-block pt-2 pb-2">Envoyer</button>
+                </div>
+            </div>
         </div>
     {% else %}
         <div class="container pt-4">
@@ -44,20 +54,11 @@
 {% endblock %}
 {% block javascripts %}
     <script>
-        $(".messageDiv").mouseenter(function()
-        {
-            $(this).css("background-color", "#EFEFEF");
-            $('body').css('cursor','pointer');
+        $('#description').summernote({
+            placeholder: '...',
+            tabsize: 2,
+            height: 100
         });
-        $(".messageDiv").mouseleave(function()
-        {
-            $(this).css("background-color", "white");
-            $('body').css('cursor','default');
-        });
-        $(".messageDiv").click(function()
-        {
-            window.open("/showConversation/" + this.childNodes[1].innerHTML, "_self");
-        })
     </script>
 {% endblock %}
 

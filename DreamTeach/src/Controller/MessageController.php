@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use App\Entity\Message;
+use App\Entity\Student;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,12 +41,16 @@ class MessageController extends AbstractController
     }
 
     /**
-     * @Route("showConversation", name="ShowConversation")
+     * Permet d'afficher la conversation entre l'utilisateur courant et celui passé en paramètre
+     * @Route("showConversation/{idStudent}", name="ShowConversation")
+     * @param $idStudent
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showConversation()
+    public function showConversation($idStudent)
     {
-        $messages = $this->getDoctrine()->getRepository(Message::class)->findByStudent($this->getUser()->getId());
-        return $this->render("conversation.html.twig");
+        $studentSender = $this->getDoctrine()->getRepository(Student::class)->findOneByUuid($idStudent);
+        $messages = $this->getDoctrine()->getRepository(Message::class)->findByStudentAsc($this->getUser()->getId(), $studentSender->getId());
+        return $this->render("conversation.html.twig", ["sender" => $studentSender, "messages" => $messages]);
     }
 
 

@@ -34,6 +34,25 @@ class MessageRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @param $idReceiver
+     * @param $idSender
+     * @return Message[] Returns an array of Message objects
+     */
+    public function findByStudentAsc($idReceiver, $idSender)
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.idReceiver = :idReceiver')
+            ->andWhere('m.idSender = :idSender')
+            ->orWhere('m.idReceiver = :idSender AND m.idSender = :idReceiver')
+            ->setParameter('idReceiver', $idReceiver)
+            ->setParameter('idSender', $idSender)
+            ->orderBy('m.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Message
     {

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Student
  *
  * @ORM\Table(name="student", indexes={@ORM\Index(name="trainingID", columns={"trainingID"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
  * @UniqueEntity("emailaddress", message = "L'email que vous avez entré est déjà utilisé")
  */
 class Student implements UserInterface
@@ -131,6 +132,22 @@ class Student implements UserInterface
     private $subjectid;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Student", inversedBy="studentid")
+     * @ORM\JoinTable(name="liked_profile",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="studentID1", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="studentID2", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $studentid;
+
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
@@ -139,6 +156,25 @@ class Student implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $birthDate;
+
+    /**
+     * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="student_2")
+     */
+    private $relations;
+
+
+
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Grade")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="gradeId", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $gradeid;
 
     /**
      * Constructor
@@ -151,6 +187,7 @@ class Student implements UserInterface
         $this->subjectid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xpwon = 0;
         $this->uuid = Uuid::uuid4()->toString();
+        $this->relations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -199,7 +236,7 @@ class Student implements UserInterface
         return $this->biography;
     }
 
-    public function setBiography(string $biography): self
+    public function setBiography(?string $biography): self
     {
         $this->biography = $biography;
 
@@ -334,6 +371,32 @@ class Student implements UserInterface
     }
 
     /**
+     * @return Collection|Student[]
+     */
+    public function getStudentid(): Collection
+    {
+        return $this->studentid;
+    }
+
+    public function addStudentid(Student $studentid): self
+    {
+        if (!$this->subjectid->contains($studentid)) {
+            $this->studentid[] = $studentid;
+        }
+
+        return $this;
+    }
+
+    public function removeStudentid(Student $studentid): self
+    {
+        if ($this->studentid->contains($studentid)) {
+            $this->studenttid->removeElement($studentid);
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns the roles granted to the user.
      *
      *     public function getRoles()
@@ -435,4 +498,57 @@ class Student implements UserInterface
     {
         $this->uuid = $uuid;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+
+    /**
+     * @param mixed $relations
+     */
+    public function setRelations($relations)
+    {
+        $this->relations = $relations;
+    }
+
+    public function addRelation(FriendshipRelation $relation): self
+    {
+        if (!$this->relations->contains($relation)) {
+            $this->relations[] = $relation;
+            $relation->setStudent2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(FriendshipRelation $relation): self
+    {
+        if ($this->relations->contains($relation)) {
+            $this->relations->removeElement($relation);
+            // set the owning side to null (unless already changed)
+            if ($relation->getStudent2() === $this) {
+                $relation->setStudent2(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getGradeid(): ?Grade
+    {
+        return $this->gradeid;
+    }
+
+    public function setGradeid(?Grade $gradeid): self
+    {
+        $this->gradeid = $gradeid;
+
+        return $this;
+    }
+
+
 }

@@ -26,62 +26,6 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("/updateInfosProfile", name="updateInfosProfile")
-     */
-    public function updateProfile(Request $request, ObjectManager $manager)
-    {
-        $repository = $this->getDoctrine()->getRepository(Student::class);
-
-        $training = $this->getDoctrine()->getRepository(Training::class);
-        /** @var Training $formations */
-        $formations = $training->findBySchoolid($this->getUser()->getTrainingid()->getSchoolid());
-        $user = $this->getUser();
-        $studentId = $repository->find($this->getUser()->getId());
-
-        $form = $this->createFormBuilder($user)
-            ->add('firstName')
-            ->add('lastName')
-            ->add('biography')
-            ->add('emailAddress')
-            ->add('trainingID', ChoiceType::class, [
-                    'choices' => $formations,
-                    'choice_label' => function($choiceValue, $key, $value) {
-                        return $choiceValue->getTitle();
-                    }
-                ])
-            ->add('birthDate', DateType::class, [
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',
-            ])
-            ->add('avatar', FileType::class, ['label' => 'Image (Fichier jpg)'])
-            ->add('city')
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $studentId->getAvatar();
-            $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-            try
-            {
-                $file->move(
-                    $this->getParameter('avatar_directory'),
-                    $fileName
-                );
-            }
-            catch (FileException $e)
-            {
-                // TODO Gérer les erreurs
-            }
-
-            $user->setAvatar($fileName);
-            $manager->persist($user);
-            $manager->flush();
-        }
-        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
-    }
-
-    /**
      * @Route("/deleteProfile", name="deleteProfile")
      * @IsGranted("ROLE_USER")
      */
@@ -149,9 +93,55 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
-            die("Ajouté dans ton agenda !");
+            return $this->redirectToRoute("showSessions");
+        }
+    }
+
+    /**
+     * Permet de supprimer la séance idSession de l'utilisateur connecté
+     * @Route("/accueil/removeSession/{idSession}", name="RemoveSession")
+     * @param $idSession
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeSession($idSession)
+    {
+        /** @var Student $student */
+        $student = $this->getUser();
+        /** @var Session $listeSession */
+        $listeSession = $student->getSessionid();
+
+        $tmp = array();
+        $listeSessionEtudiant = array();
+
+        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
+        foreach($listeSession as $session)
+        {
+            // On ajoute les séances
+            array_push($tmp, $session->getId());
         }
 
+        foreach ($tmp as $ss)
+        {
+            // On ajoute les ID des sessions
+            array_push($listeSessionEtudiant, $ss);
+        }
+
+        if(in_array($idSession,$listeSessionEtudiant))
+        {
+            // On supprime
+            $repository = $this->getDoctrine()->getRepository(Session::class);
+            /** @var Session $session */
+            $session = $repository->find($idSession);
+            $student->removeSessionid($session);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($student);
+            $em->flush();
+            return $this->redirectToRoute("showSessions");
+        }
+        else
+        {
+            die("Ce n'est pas dans ton agenda !");
+        }
     }
 
 }

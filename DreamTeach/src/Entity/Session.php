@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\String_;
  * Session
  *
  * @ORM\Table(name="session", indexes={@ORM\Index(name="subjectID", columns={"subjectID"}), @ORM\Index(name="organizerID", columns={"organizerID"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\SessionRepository")
  */
 class Session
 {
@@ -124,6 +124,16 @@ class Session
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $closed;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $comment;
 
     /**
      * Constructor
@@ -322,6 +332,30 @@ class Session
     public function setVocalSoftware(string $vocalSoftware): void
     {
         $this->vocalSoftware = $vocalSoftware;
+    }
+
+    public function getClosed(): ?bool
+    {
+        return $this->closed;
+    }
+
+    public function setClosed(bool $closed): self
+    {
+        $this->closed = $closed;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
 

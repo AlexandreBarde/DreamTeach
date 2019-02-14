@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Séance - DreamTeach{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+    {% for flash in app.flashes %}
+        {{ flash }}
+    {% endfor %}
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Description séance</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+
+                    <div class="form-row">
+
+
+                        <div class="form-group col" id="matiereEtudiee">
+                            <p class="font-weight-bold"> Matière étudiée</p>
+                            {{ session.subjectid.name }}
+                        </div>
+                        <div class="col">
+                            <p class="font-weight-bold">Nom Session </p>
+                            {{ session.name }}
+                        </div>
+                    </div>
+
+                    <p class="font-weight-bold">Description séance</p>
+                    {{ session.description }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Plannification</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Date</p>
+                    {{ session.date.format('Y-m-d') }}
+                </div>
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Heure de début</p>
+                    {{ session.startingtime|date('H:i') }}
+                </div>
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Heure de fin</p>
+                    {{ session.endingtime|date('H:i') }}
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <p class="font-weight-bold">Nombre max de participants</p>
+                    {{ session.maxnbparticipant }}
+                </div>
+
+                {% if session.isvirtual %}
+                <div class="form-group col-md-8">
+                    <p class="font-weight-bold">Logiciel vocal</p>
+                    {{ session.vocalSoftware }}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if session.isvirtual==false %}
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <p class="font-weight-bold">Ville </p>
+                    {{ session.city }}
+
+                </div>
+                <div class="form-group col-md-6">
+                    <p class="font-weight-bold">Etablissement</p>
+                    {{ session.place }}
+
+                </div>
+
+            </div>
+            {% endif %}
+
+
+        </div>
+
+    </div>
+    <br/>
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Commentaires</h2>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <h5>Autres commentaires</h5>
+                </div>
+                <br/>
+                {% for commentTmp in allSessionComments %}
+                    <div class="row">
+                        <div class="col">
+                            <strong>
+                                {{ commentTmp.idStudent.lastName }}
+                                {{ commentTmp.idStudent.firstname }}:&nbsp;
+                                {% if commentTmp.note > 0 %}
+                                    {% for j in 1..commentTmp.note %}
+                                        <span class="fa fa-star" style="color:orange"></span>
+                                    {% endfor %}
+                                    {% if commentTmp.note < 5 %}
+                                        {% for j in 1..5 - commentTmp.note %}
+                                            <span class="far fa-star"></span>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% else %}
+                                    {% for j in 1..5 %}
+                                        <span class="far fa-star"></span>
+                                    {% endfor %}
+                                {% endif %}
+                            </strong>
+                            <br/>
+                            {{ commentTmp.comment }}
+                        </div>
+                    </div>
+                    <br/>
+                {% endfor %}
+                <br/>
+
+                <div class="row">
+                    <h5>Donnez votre avis sur la séance</h5>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col">
+                        {{ form_start(formComment) }}
+                        <label for="commentaire">Ajouter un commentaire</label>
+                        {{ form_widget(formComment.comment, {'id': 'commentaire'}) }}
+                    </div>
+                    <div class="col">
+                        <label for="commentaire">Note</label>
+                        {{ form_widget(formComment.note, {'id': 'note'}) }}
+                    </div>
+
+                    <br/>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-3">
+                        <button id="envoyerCommentaire" type="submit">envoyer</button>
+                        {{ form_end(formComment) }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% block javascripts %}
+        <script>
+            $(document).ready(function () {
+                var sessionDate = "{{ session.date|date('Y-m-d') }}";
+                var sessionEndingTime = "{{ session.endingTime|date('H:i:s') }}";
+
+                if("{{ 'now'|date('Y-m-d') }}" < sessionDate) {
+                    $("#envoyerCommentaire").attr('disabled', true);
+                    $("#commentaire").attr('disabled', true);
+                    $("#note").attr('disabled', true);
+                } else {
+                    if("{{ 'now'|date('Y-m-d') }}" == sessionDate && "{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
+                        $("#envoyerCommentaire").attr('disabled', true);
+                        $("#commentaire").attr('disabled', true);
+                        $("#note").attr('disabled', true);
+                    }
+                }
+
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

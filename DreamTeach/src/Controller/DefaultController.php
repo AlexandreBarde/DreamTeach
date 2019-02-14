@@ -27,13 +27,12 @@ class DefaultController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $hash = $encode->encodePassword($student, $student->getPassword());
-            $student->setAvatar("");
             $student->setPassword($hash);
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
 
-            return $this->redirectToRoute("HomeController");
+            return $this->redirectToRoute("app_login");
         }
 
         return $this->render(

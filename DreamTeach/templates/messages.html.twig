@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+    <style>
+        .col
+        {
+            border: 1px solid rgba(86,61,124,.2);
+        }
+    </style>
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Messagerie</h1>
+    </div>
+        {% if messages %}
+            <div class="container mt-5">
+            <div class="row text-center">
+                <div class="col col-lg-2 pt-1"><h5>Utilisateur</h5></div>
+                <div class="col pt-1"><h5>Derniers messages</h5></div>
+            </div>
+            {% for m in messages %}
+                <div class="row text-center messageDiv">
+                    <div style="display: none">{{ m.idSender.uuid }}</div>
+                    <div class="col col-lg-2 pt-3 pb-3">
+                        <h6>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</h6>
+                        {% if m.idSender.avatar %}
+                            <img class="img-thumbnail img-fluid" height="100px" width="100px" src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
+                        {% else %}
+                            <img class="img-thumbnail img-fluid" height="100px" width="100px" src="{{ asset('img/tom_bg.jpg') }}"
+                            >
+                        {% endif %}
+                    </div>
+                    <div class="col pt-3"><p>{{ m.content|slice(0, 300)}}{% if m.content|length > 300 %} ...{% endif %}</p></div>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="container pt-4">
+                <div class="alert alert-danger" role="alert">
+                    Aucun message disponible !
+                </div>
+            </div>
+        {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(".messageDiv").mouseenter(function()
+        {
+            $(this).css("background-color", "#EFEFEF");
+            $('body').css('cursor','pointer');
+        });
+        $(".messageDiv").mouseleave(function()
+        {
+            $(this).css("background-color", "white");
+            $('body').css('cursor','default');
+        });
+        $(".messageDiv").click(function()
+        {
+            window.open("/showConversation/" + this.childNodes[1].innerHTML, "_self");
+        })
+    </script>
+{% endblock %}
+
+

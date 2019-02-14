@@ -23,11 +23,11 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-8">
-                        <input type="text" class="form-control" placeholder="Recherchez un étudiant.."
+                        <input type="text" id="rechercherInput" class="form-control" placeholder="Recherchez un étudiant.."
                                name="search_student">
                     </div>
                     <div class="col-3">
-                        <input type="submit" value="Rechercher" class="btn btn-primary">
+                        <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
                     </div>
                 </div>
             </div>
@@ -89,12 +89,41 @@
         {% block javascripts %}
             <script>
                 $(document).ready(function () {
+                    if($("#rechercherInput").val().length <= 0) {
+                        $("#rechercherBtn").attr('disabled', true);
+                    } else {
+                        $("#rechercherBtn").attr('disabled', false);
+                    }
+
                     $('#search_student_form').submit(function (e) {
                         if ($("input[name=search_student]").val() === '') {
                             e.preventDefault();
                         }
                     })
-                })
+
+                    $("#rechercherInput").keyup(function () {
+                        if($("#rechercherInput").val().length <= 0) {
+                            $("#rechercherBtn").attr('disabled', true);
+                        } else {
+                            $("#rechercherBtn").attr('disabled', false);
+                        }
+                    })
+
+                    $("#adresseEmail").keypress(function () {
+                        if($("#adresseEmail").val().indexOf("@")  > 0 && ($("#adresseEmail").val().indexOf(".")  > 2 && $("#adresseEmail").val().indexOf(".")  < ($("#adresseEmail").val().length)-1)) {
+                            $("#submitEmail").attr('disabled', false);
+                        } else {
+                            $("#submitEmail").attr('disabled', true);
+                        }
+                    })
+                    $("#adresseEmail").keyup(function(e) {
+                        if($("#adresseEmail").val().indexOf("@")  > 0 && ($("#adresseEmail").val().indexOf(".")  > 2 && $("#adresseEmail").val().indexOf(".")  < ($("#adresseEmail").val().length)-1)) {
+                            $("#submitEmail").attr('disabled', false);
+                        } else {
+                            $("#submitEmail").attr('disabled', true);
+                        }
+                    })
+                });
             </script>
         {% endblock %}
 {% endblock %}

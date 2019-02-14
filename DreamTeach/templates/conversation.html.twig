@@ -39,8 +39,11 @@
             {% endfor %}
             <div class="row">
                 <div class="col pt-3 pb-3">
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea><br />
-                    <button type="button" class="btn btn-primary btn-lg btn-block pt-2 pb-2">Envoyer</button>
+                    {{ form_start(form) }}
+                        {{ form_widget(form.content, {"attr" : {"class" : "form-control", "placeholder" : "Votre message...", "required" : ""}}) }}
+                    <input type="submit" value="Envoyer" class="btn btn-primary btn-lg btn-block pt-2 pb-2">
+                    {{ form_end(form) }}
+                    <!--<textarea class="form-control" id="description" name="description" rows="3"></textarea><br />-->
                 </div>
             </div>
         </div>

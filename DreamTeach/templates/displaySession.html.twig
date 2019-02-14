@@ -48,11 +48,11 @@
                 </div>
                 <div class="form-group col-md-4">
                     <p class="font-weight-bold">Heure de début</p>
-                    {{ session.startingtime.format('h:m') }}
+                    {{ session.startingtime|date('H:i') }}
                 </div>
                 <div class="form-group col-md-4">
                     <p class="font-weight-bold">Heure de fin</p>
-                    {{ session.endingtime.format('h:m') }}
+                    {{ session.endingtime|date('H:i') }}
                 </div>
 
             </div>
@@ -168,10 +168,12 @@
                 if("{{ 'now'|date('Y-m-d') }}" < sessionDate) {
                     $("#envoyerCommentaire").attr('disabled', true);
                     $("#commentaire").attr('disabled', true);
+                    $("#note").attr('disabled', true);
                 } else {
-                    if("{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
+                    if("{{ 'now'|date('Y-m-d') }}" == sessionDate && "{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
                         $("#envoyerCommentaire").attr('disabled', true);
                         $("#commentaire").attr('disabled', true);
+                        $("#note").attr('disabled', true);
                     }
                 }
 

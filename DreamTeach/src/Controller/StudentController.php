@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 /**
@@ -122,6 +123,9 @@ class StudentController extends AbstractController
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
+        $subjectlevel = new Subjectlevel();
+
+
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
             "studentid" => $this->getUser()->getId(),
         ]);
@@ -236,22 +240,38 @@ class StudentController extends AbstractController
         } elseif ($uuid_student == $this->getUser()->getUuid()) {
             return $this->redirectToRoute('student_profile');
         }
-        $is_friend = $this->getDoctrine()->getRepository(FriendshipRelation::class)->checkIfAreFriends(
+        $waiting_for_accept = false;
+        $is_friend = false;
+        $are_not_unknow = false;
+        $are_not_unknow = $this->getDoctrine()->getRepository(FriendshipRelation::class)->checkIfAreUnknow(
             $user,
             $student
         );
+
+        if ($are_not_unknow) {
+            $waiting_for_accept = $this->getDoctrine()->getRepository(FriendshipRelation::class)->checkIfNotAccepted(
+                $user,
+                $student
+            );
+
+            $is_friend = $this->getDoctrine()->getRepository(FriendshipRelation::class)->checkIfAreFriend(
+                $user,
+                $student
+            );
+        }
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
             [
                 "studentid" => $student,
 
             ]);
 
-
         return $this->render(
             'viewOtherProfile.html.twig',
             [
                 'noteUser' => $noteUser,
                 'student' => $student,
+                'are_not_unknow' => $are_not_unknow,
+                'waiting_for_accept' => $waiting_for_accept,
                 'is_friend' => $is_friend
             ]
         );
@@ -270,6 +290,7 @@ class StudentController extends AbstractController
      */
     public function informASubject(Request $request, ObjectManager $manager)
     {
+
 
     }
 

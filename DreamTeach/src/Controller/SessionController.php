@@ -66,7 +66,7 @@ class SessionController extends AbstractController
             } else {
 
                 $this->addFlash("error", "L'heure de fin ne peut pas être infériere à l'heure de début.");
-                return $this->redirectToRoute('sessionCreationAndUpdate');
+                return $this->redirectToRoute('sessionCreation');
 
             }
         }
@@ -83,7 +83,7 @@ class SessionController extends AbstractController
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
-            if ($value->getDate() > $now) {
+            if ($value->getDate() >= $now) {
                 array_push($tpm, $value);
             }
         }
@@ -124,12 +124,19 @@ class SessionController extends AbstractController
         $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession));
         $sessionComment->handleRequest($request);
         if($sessionComment->isSubmitted() && $sessionComment->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $comment->setIdSession($session);
-            $comment->setIdStudent($this->getUser());
-            $em->persist($comment);
-            $em->flush();
-            return $this->redirectToRoute("default_student_connected");
+            if($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession, 'idStudent' => $this->getUser()->getId()))) {
+                $this->addFlash('success', "Commentaire non envoyé car vous avez déjà envoyé un commentaire pour cette session");
+                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+            } else {
+                $em = $this->getDoctrine()->getManager();
+                $comment->setIdSession($session);
+                $comment->setIdStudent($this->getUser());
+                $this->addFlash('success', "Commentaire envoyé !");
+
+                $em->persist($comment);
+                $em->flush();
+                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+            }
         }
         return $this->render("displaySession.html.twig",[
             'allSessionComments' => $allSessionComments,

@@ -9,16 +9,20 @@
     <div class="row justify-content-between">
     <div class="col-6">
         <div class="border border-secondary p-4 bg-light rounded">
-            {% if not is_friend %}
+            {% if are_not_unknow %}
+                {% if is_friend %}
+                    <span class="float-right btn btn-success">Vous êtes amis</span>
+                {% elseif waiting_for_accept %}
+                    <span class="float-right btn btn-info">En attente..</span>
+                {% endif %}
+            {% else %}
                 <span class="float-right btn btn-primary"><a
                             href="{{ path('add_friend', {'uuid_student': student.uuid}) }}">Ajouter en ami</a></span>
-            {% else %}
-                Vous êtes amis avec
             {% endif %}
             <div class="row">
                 <div class="col-5">
                     {% if student.avatar %}
-                        <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
+                        <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ student.avatar) }}>
                     {% else %}
                         <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}">
                     {% endif %}
@@ -48,6 +52,7 @@
                 {% for j in 1..i.mark %}
                     <span class="fa fa-star" style="color:orange"></span>
                 {% endfor %}
+                <br/>
             {% endfor %}
         </div>
     </div>

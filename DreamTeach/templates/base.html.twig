@@ -34,13 +34,22 @@
                 <li><a href="{{ path('classementXp') }}"><i class="fas fa-user-friends"></i>&nbsp;Classement</a></li>
             </ul>
 
-            <ul class="list-unstyled ml-2">
-                <li><a href="{{ path('parametres') }}"><i class="fas fa-cog"></i>&nbsp;  Paramètres</a></li>
-                <li><a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i>  Se déconnecter</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div id="content">
+        <ul class="list-unstyled ml-2">
+            <li><a href="{{ path('parametres') }}"><i class="fas fa-cog"></i>&nbsp; Paramètres</a></li>
+            <li><a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a></li>
+        </ul>
+    </nav>
+</div>
+<div id="content">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-warning" role="alert">
+                <div class="flash-{{ label }}">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
     {% block body %}
     {% endblock %}
     </div>

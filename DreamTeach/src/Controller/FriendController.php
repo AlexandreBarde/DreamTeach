@@ -110,4 +110,66 @@ class FriendController extends AbstractController
             ]
         );
     }
+
+    /**
+     * @Route("/likeProfile/{uuid_student}", name="likeProfile")
+     */
+    public function likeProfile($uuid_student){
+
+
+        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(
+            [
+                'uuid' => $uuid_student,
+            ]
+        );
+
+
+        $em = $this->getDoctrine()->getManager();
+        $this->getUser()->addStudentid($student);
+        $em->persist($this->getUser());
+        $em->flush();
+
+
+        return $this->redirectToRoute(
+            'student_other_profile',
+            [
+                'uuid_student' => $uuid_student,
+            ]
+        );
+
+    }
+
+    /**
+     * @Route("/unlikeProfile/{uuid_student}", name="unlikeProfile")
+     */
+    public function unlikeProfile($uuid_student){
+
+
+        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(
+            [
+                'uuid' => $uuid_student,
+            ]
+        );
+
+
+        $em = $this->getDoctrine()->getManager();
+        $list=$this->getUser()->getStudentid();
+        foreach ($list as $studentinlist){
+            if ($studentinlist=$student){
+               $list->removeElement($studentinlist);
+            }
+        }
+
+        $em->persist($this->getUser());
+        $em->flush();
+
+
+        return $this->redirectToRoute(
+            'student_other_profile',
+            [
+                'uuid_student' => $uuid_student,
+            ]
+        );
+
+    }
 }

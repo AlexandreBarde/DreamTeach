@@ -6,9 +6,13 @@
 
 {% block body %}
     <div class="container align-content-center mt-5">
+
     <div class="row justify-content-between">
+
     <div class="col-6">
+
         <div class="border border-secondary p-4 bg-light rounded">
+
             {% if are_not_unknow %}
                 {% if is_friend %}
                     <span class="float-right btn btn-success">Vous êtes amis</span>
@@ -19,6 +23,7 @@
                 <span class="float-right btn btn-primary"><a
                             href="{{ path('add_friend', {'uuid_student': student.uuid}) }}">Ajouter en ami</a></span>
             {% endif %}
+
             <div class="row">
                 <div class="col-5">
                     {% if student.avatar %}
@@ -26,8 +31,24 @@
                     {% else %}
                         <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}">
                     {% endif %}
+
                 </div>
-                <div class="col-6">
+                <div class="col-7">
+
+                    <!-- système de like du profil-->
+                    {% if student in app.user.getStudentid %}
+
+                        <a href="{{ path('unlikeProfile', {'uuid_student': student.uuid}) }}">
+                            <span class="float-right btn btn-primary"><i
+                                        class="fas fa-thumbs-down"></i> Je n'aime plus </span>
+                        </a>
+
+
+                    {% else %}
+                        <a href="{{ path('likeProfile', {'uuid_student': student.uuid}) }}">
+                            <span class="float-right btn btn-primary"><i class="fas fa-thumbs-up"></i> Like </span>
+                        </a>
+                    {% endif %}
                     <span> </br> {{ student.biography }} </span>
                 </div>
             </div>
@@ -56,18 +77,18 @@
         </div>
     </div>
     <div class="col-5">
-    <div class="border border-secondary p-4 bg-light rounded">
-        <div class="h4 text-center">Niveau {{ (student.xpWon / 50)|slice(0,1) }}</div>
-        <div class="progress mt-3">
-            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                 aria-valuemax="100"
-                 style="width:{{ ((student.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;">
+        <div class="border border-secondary p-4 bg-light rounded">
+            <div class="h4 text-center">Niveau {{ (student.xpWon / 50)|slice(0,1) }}</div>
+            <div class="progress mt-3">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width:{{ ((student.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;">
+                </div>
             </div>
+            <span class="text-center"> Vous avez {{ ((student.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
         </div>
-        <span class="text-center"> Vous avez {{ ((student.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} / 50 pour passer le niveau suivant</span>
-    </div>
         <div class="border border-secondary p-4 bg-light mt-4 rounded">
-        <div class="h5 mb-4"> Badges</div>
+            <div class="h5 mb-4"> Badges</div>
 
             {% for i in student.getBadgeid() %}
                 <img src={{ asset("img/tr.png") }} height="50px"> &nbsp;

@@ -131,6 +131,22 @@ class Student implements UserInterface
     private $subjectid;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Student", inversedBy="studentid")
+     * @ORM\JoinTable(name="liked_profile",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="studentID1", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="studentID2", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $studentid;
+
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
@@ -144,6 +160,10 @@ class Student implements UserInterface
      * @ORM\OneToMany(targetEntity="FriendshipRelation", mappedBy="student_2")
      */
     private $relations;
+
+
+
+
 
     /**
      * Constructor
@@ -333,6 +353,32 @@ class Student implements UserInterface
     {
         if ($this->subjectid->contains($subjectid)) {
             $this->subjectid->removeElement($subjectid);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Student[]
+     */
+    public function getStudentid(): Collection
+    {
+        return $this->studentid;
+    }
+
+    public function addStudentid(Student $studentid): self
+    {
+        if (!$this->subjectid->contains($studentid)) {
+            $this->studentid[] = $studentid;
+        }
+
+        return $this;
+    }
+
+    public function removeStudentid(Student $studentid): self
+    {
+        if ($this->studentid->contains($studentid)) {
+            $this->studenttid->removeElement($studentid);
         }
 
         return $this;

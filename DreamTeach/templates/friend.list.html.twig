@@ -8,8 +8,6 @@
     <div class="row mb-5">
         {% for friend in friendsAccepted %}
             <div class="col-4">
-                <a href="" class="btn btn-danger" data-toggle="title" title="Supprimer cet ami"><i
-                            class="fas fa-trash"></i></a>
                 <div class="card">
                     <span class="text-right"><a
                                 href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student2.id}) }}"

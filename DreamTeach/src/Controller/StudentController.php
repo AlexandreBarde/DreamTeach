@@ -298,4 +298,22 @@ class StudentController extends AbstractController
     {
 
     }
+
+    /**
+     * @Route("/classementxp", name="classementXp")
+     */
+    public function classementXp(){
+        $classement = $this->getDoctrine()->getEntityManager();
+        $tags = $classement->getRepository(Student::class)->findBy(
+            array(), array('xpwon' => 'ASC')
+        );
+
+        return $this->render(
+            'classementxp.html.twig',
+            [
+                'classementxp' => $tags
+            ]
+        );
+
+    }
 }

@@ -7,6 +7,9 @@
 
 {% block body %}
     <div class="container mt-5">
+        {% for flash in app.flashes %}
+            {{ flash }}
+        {% endfor %}
         <h1 class="display-4 text-center">Vos séances</h1>
         {% if user.getSessionid()|length > 0 %}
         <table class="table table-hover">

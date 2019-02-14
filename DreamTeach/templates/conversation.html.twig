@@ -10,10 +10,10 @@
         }
     </style>
     <div class="container mt-5">
-        <h1 class="display-4 text-center">Messagerie</h1>
+        <h1 class="display-4 text-center">Conversation avec {{  }}</h1>
     </div>
-        {% if messages %}
-            <div class="container mt-5">
+    {% if messages %}
+        <div class="container mt-5">
             <div class="row text-center">
                 <div class="col col-lg-2 pt-1"><h5>Utilisateur</h5></div>
                 <div class="col pt-1"><h5>Derniers messages</h5></div>
@@ -33,14 +33,14 @@
                     <div class="col pt-3"><p>{{ m.content|slice(0, 300)}}{% if m.content|length > 300 %} ...{% endif %}</p></div>
                 </div>
             {% endfor %}
+        </div>
+    {% else %}
+        <div class="container pt-4">
+            <div class="alert alert-danger" role="alert">
+                Aucun message disponible !
             </div>
-        {% else %}
-            <div class="container pt-4">
-                <div class="alert alert-danger" role="alert">
-                    Aucun message disponible !
-                </div>
-            </div>
-        {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}
 {% block javascripts %}
     <script>

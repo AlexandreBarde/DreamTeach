@@ -28,7 +28,7 @@ class MessageRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->andWhere('m.idReceiver = :val')
             ->setParameter('val', $idStudent)
-            ->orderBy('m.date', 'DESC')
+            ->orderBy('m.id', 'DESC')
             ->getQuery()
             ->getResult()
         ;

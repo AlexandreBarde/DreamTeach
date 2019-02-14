@@ -44,6 +44,7 @@ class SessionController extends AbstractController
         $formSubject->handleRequest($request);
 
         if($formSubject->isSubmitted() && $formSubject->isValid()) {
+            $this->addFlash("success", "La matière a été créée avec succès");
             $em = $this->getDoctrine()->getManager();
             $em->persist($subject);
             $em->flush();
@@ -53,7 +54,7 @@ class SessionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (($form->get('endingTime')->getData()) > ($form->get('startingTime')->getData())) {
-
+                $this->addFlash("success", "La session a bien été créée");
                 $em = $this->getDoctrine()->getManager();
                 $session->setOrganizerid($this->getUser());
                 $session->setClosed(false);

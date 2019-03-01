@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\FriendshipRelation;
+use App\Entity\Message;
 use App\Entity\Session;
 use App\Entity\Student;
 use App\Entity\Subject;
@@ -77,11 +78,26 @@ class StudentController extends AbstractController
             array_push($listeSessionEtudiant, $ss);
         }
 
+        $messages = $this->getDoctrine()->getRepository(Message::class)->findByStudent($this->getUser()->getId());
+        $messagesTmp = array();
+        $arrayIdSender = array();
+        // On parcourt les messages
+        foreach ($messages as $m)
+        {
+            // Si l'ID de la personne qui a envoyé le message n'est pas dans le tableau
+            if(!( in_array($m->getIdSender()->getId(), $arrayIdSender)))
+            {
+                array_push($arrayIdSender,$m->getIdSender()->getId());
+                array_push($messagesTmp, $m);
+            }
+        }
+
         return $this->render("dashboard.html.twig", [
             'session' => $tpm,
             'sessionUser' => $listeSessionEtudiant,
             'nbSessionOrganized' => $nbSessionOrganized,
             'nbSessionAttended' => $nbSessionAttended,
+            "messages" => $messagesTmp,
         ]);
     }
 

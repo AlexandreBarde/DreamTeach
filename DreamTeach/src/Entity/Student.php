@@ -176,6 +176,25 @@ class Student implements UserInterface
      */
     private $gradeid;
 
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="author", orphanRemoval=true)
+     */
+    private $questions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Qcm", mappedBy="author_id", orphanRemoval=true)
+     */
+    private $qcms;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserResponse", mappedBy="user_id", orphanRemoval=true)
+     */
+    private $responses;
+
+
+
     /**
      * Constructor
      * @throws \Exception
@@ -188,6 +207,9 @@ class Student implements UserInterface
         $this->xpwon = 0;
         $this->uuid = Uuid::uuid4()->toString();
         $this->relations = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->qcms = new ArrayCollection();
+        $this->responses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -550,5 +572,97 @@ class Student implements UserInterface
         return $this;
     }
 
+    /**
+     * @return Collection|Question[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->contains($question)) {
+            $this->questions->removeElement($question);
+            // set the owning side to null (unless already changed)
+            if ($question->getAuthor() === $this) {
+                $question->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Qcm[]
+     */
+    public function getQcms(): Collection
+    {
+        return $this->qcms;
+    }
+
+    public function addQcm(Qcm $qcm): self
+    {
+        if (!$this->qcms->contains($qcm)) {
+            $this->qcms[] = $qcm;
+            $qcm->setAuthorId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQcm(Qcm $qcm): self
+    {
+        if ($this->qcms->contains($qcm)) {
+            $this->qcms->removeElement($qcm);
+            // set the owning side to null (unless already changed)
+            if ($qcm->getAuthorId() === $this) {
+                $qcm->setAuthorId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserResponse[]
+     */
+    public function getResponses(): Collection
+    {
+        return $this->responses;
+    }
+
+    public function addResponse(UserResponse $response): self
+    {
+        if (!$this->responses->contains($response)) {
+            $this->responses[] = $response;
+            $response->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponse(UserResponse $response): self
+    {
+        if ($this->responses->contains($response)) {
+            $this->responses->removeElement($response);
+            // set the owning side to null (unless already changed)
+            if ($response->getUserId() === $this) {
+                $response->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

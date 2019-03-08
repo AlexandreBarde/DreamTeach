@@ -82,7 +82,34 @@
             <div class="card-header">
                 <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Messages récents</h6>
             </div>
-            <div class="card-body"></div>
+            <div class="card-body pb-0">
+                {% for m in messages %}
+
+                    <div class="row border ml-1 mr-1" onclick="location.href =`{{ path('ShowConversation', {'idStudent' : m.idSender.uuid}) }}`" style="cursor: pointer">
+                        <div class="col-8 pt-4">
+                            <u>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</u>
+                        </div>
+                        <div class="col-4">
+                            <div class="col-12 text-right pr-0">
+                                {{ m.date.format('d-m-Y') }}
+                            </div>
+                            </br>
+                        </div>
+                        <div class="col-3 pb-4">
+                            {% if m.idSender.avatar %}
+                                <img class="img-thumbnail img-fluid" height="100px" width="100px" src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
+                            {% else %}
+                                <img class="img-thumbnail img-fluid" height="100px" width="100px" src="{{ asset('img/tom_bg.jpg') }}"
+                                >
+                            {% endif %}
+                        </div>
+                        <div class="col-9 text-right pt-3">
+                            {{ m.content|slice(0, 100)}}{% if m.content|length > 100 %} ...{% endif %}
+                        </div>
+                    </div>
+                    <br />
+                {% endfor %}
+            </div>
         </div>
     </div>
         {% block javascripts %}

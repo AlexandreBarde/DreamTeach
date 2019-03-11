@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Qcms{% endblock %}
+
+{% block body %}
+    <h1>HI</h1>
+    {{ form_start(formCreateQcm) }}
+        {{ form_widget(formCreateQcm.title) }}
+        {{ form_widget(formCreateQcm.deadline) }}
+        {{ form_widget(formCreateQcm.visible) }}
+        <input type="submit" value="Enregistrer" class="btn btn-primary btn-lg btn-block">
+    {{ form_end(formCreateQcm) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
+
+

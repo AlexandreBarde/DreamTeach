@@ -3,6 +3,7 @@
 {% block title %}Qcms{% endblock %}
 
 {% block body %}
+    {% if qcms %}
     <div class="table-responsive m-b-40">
         <table class="table table-borderless table-data3">
             <thead>
@@ -18,20 +19,24 @@
                 <tr>
                     <td>{{ qcm.title }}</td>
                     <td>{{ qcm.deadline|date('d M Y') }}</td>
-                        {% if qcm.visible == 1 %}
-                            <td id="createdMessage{{ qcm.id }}" class="process">Publié</td>
-                        {% else %}
-                            <td id="createdMessage{{ qcm.id }}" class="denied">Non publié</td>
-                        {% endif %}
-                        <td>
-                            <a class="btn btn-warning" href="showQcm/{{ qcm.id }}" role="button"><i class="fas fa-eye"></i> Voir</a>
-                        </td>
+                    {% if qcm.visible == 1 %}
+                        <td id="createdMessage{{ qcm.id }}" class="process">Publié</td>
+                    {% else %}
+                        <td id="createdMessage{{ qcm.id }}" class="denied">Non publié</td>
+                    {% endif %}
+                    <td>
+                        <a class="btn btn-warning" href="showQcm/{{ qcm.id }}" role="button"><i class="fas fa-eye"></i> Voir</a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-
+    {% else %}
+        <div class="container">
+            <div class="alert alert-danger" role="alert">Aucun QCM disponible !</div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

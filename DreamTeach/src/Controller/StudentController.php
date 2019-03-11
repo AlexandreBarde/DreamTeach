@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Badge;
 use App\Entity\FriendshipRelation;
 use App\Entity\Message;
 use App\Entity\Session;
@@ -14,16 +15,18 @@ use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
 /**
  * Class StudentController
- * @package App\Controller
+ *
  * @IsGranted("ROLE_USER")
  */
-class StudentController extends AbstractController
+class StudentController extends Controller
 {
     /**
      * @Route("/dashboard", name="default_student_connected")
@@ -327,5 +330,13 @@ class StudentController extends AbstractController
             ]
         );
 
+    }
+    /**
+     * @Route("/testbadge", name="testbadge")
+     */
+    public function testBadge(){
+        $badge = $this->getDoctrine()->getRepository(Badge::class)->find(3);
+        $this->get('test_service')->ajoutBadge($this->getUser(),$badge);
+        return new JsonResponse();
     }
 }

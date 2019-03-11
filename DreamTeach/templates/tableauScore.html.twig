@@ -9,51 +9,55 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h6>Classement</h6>
-                    <div class="row">
-                        <div class="col-3">
-                            Nom
-                        </div>
-                        <div class="col-3">
-                            Prénom
-                        </div>
-                        <div class="col-2">
-                            Ville
-                        </div>
-                        <div class="col-3">
-                            QCM
-                        </div>
-                        <div class="col-1">
-                            Score
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    {% for j in result %}
-                        {% for i in tableauscore %}
-                            <div class="row">
-                                <div class="col-3">
-                                    {{ i.lastName }}
-                                </div>
-                                <div class="col-3">
-                                    {{ i.firstName }}
-                                </div>
-                                <div class="col-2">
-                                    {{ i.city }}
-                                </div>
-                                <div class="col-3">
-                                    {{ j.result }}
-                                </div>
-                                <div class="col-1">
-                                    {{ i.xpWon }}
-                                </div>
-                            </div>
-                        {% endfor %}
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">
+                        Nom
+                    </th>
+                    <th scope="col">
+
+                        Prénom
+                    </th>
+                    <th scope="col">
+
+                        Ville
+                    </th>
+                    <th scope="col">
+
+                        QCM
+                    </th>
+                    <th scope="col">
+                        Score
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for j in result %}
+                    {% for i in tableauscore %}
+                        <tr>
+
+
+                            <td> {{ i.lastName }}</td>
+
+                            <td>{{ i.firstName }}</td>
+
+                            <td>{{ i.city }}</td>
+
+                            <td>  {{j.qcmid.title }}</td>
+
+                            <td>  {{ j.result }}</td>
+                        </tr>
+
+
                     {% endfor %}
-                </div>
-            </div>
+                {% endfor %}
+                </tbody>
         </div>
     </div>
+    </div>
 {% endblock %}
+
+

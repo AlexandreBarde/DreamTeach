@@ -343,13 +343,15 @@ class StudentController extends AbstractController
         $tags = $entityManager->getRepository(Student::class)->findBy(
             array(), array('xpwon' => 'ASC')
         );
+        $result = $entityManager->getRepository(Result::class)->findAll();
 
-        $result = $entityManager->getRepository(Result::class);
+        //dump($result);exit();
         return $this->render(
             'tableauScore.html.twig',
             [
-                'tableauscore' => $tags,
-                'result' => $result
+                'result' => $result,
+                'tableauscore' => $tags
+
             ]
         );
 

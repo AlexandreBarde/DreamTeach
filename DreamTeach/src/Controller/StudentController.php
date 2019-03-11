@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\FriendshipRelation;
 use App\Entity\Message;
+use App\Entity\Result;
 use App\Entity\Session;
 use App\Entity\Student;
 use App\Entity\Subject;
@@ -328,6 +329,27 @@ class StudentController extends AbstractController
             'classementxp.html.twig',
             [
                 'classementxp' => $tags
+            ]
+        );
+
+    }
+
+
+    /**
+     * @Route("/tableauScore", name="tableauscore")
+     */
+    public function voirTableauScore(){
+        $entityManager = $this->getDoctrine()->getEntityManager();
+        $tags = $entityManager->getRepository(Student::class)->findBy(
+            array(), array('xpwon' => 'ASC')
+        );
+
+        $result = $entityManager->getRepository(Result::class);
+        return $this->render(
+            'tableauScore.html.twig',
+            [
+                'tableauscore' => $tags,
+                'result' => $result
             ]
         );
 

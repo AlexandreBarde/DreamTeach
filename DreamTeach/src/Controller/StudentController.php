@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Badge;
 use App\Entity\FriendshipRelation;
 use App\Entity\Message;
 use App\Entity\Result;
@@ -12,11 +13,14 @@ use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Form\ProfileFormType;
+use App\Form\SubjetLevelFormType;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,10 +28,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class StudentController
- * @package App\Controller
+ *
  * @IsGranted("ROLE_USER")
  */
-class StudentController extends AbstractController
+class StudentController extends Controller
 {
     /**
      * @Route("/dashboard", name="default_student_connected")
@@ -141,24 +145,20 @@ class StudentController extends AbstractController
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
         $subjectlevel = new Subjectlevel();
+        $form = $this->createForm(SubjetLevelFormType::class, $subjectlevel);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $subjectlevel->setStudentid($this->getUser());
+            $em->persist($subjectlevel);
+            $em->flush();
+        }
 
-        $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
-            "studentid" => $this->getUser()->getId(),
+        $subjectLevelStudent = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([
+            'studentid' => $this->getUser()
         ]);
-        $em = $this->getDoctrine()->getManager();
 
-        $rsm = new ResultSetMapping();
-        $RAW_QUERY = 'SELECT subject.name 
-                                   FROM  subject 
-                                   WHERE subject.id NOT IN 
-                                    (SELECT subjectlevel.subjectid
-                                    FROM subjectlevel  
-                                    WHERE subjectlevel.studentid = :id )';
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->bindValue('id', $this->getUser()->getId());
-        $statement->execute();
-        $subjectNotInfo = $statement->fetchAll();
         $avatar = $this->getUser()->getavatar();
 
 
@@ -166,78 +166,81 @@ class StudentController extends AbstractController
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
 
-                /** @var Training $formations */
+        /* @var Training $formations */
 
-                $user = $this->getUser();
-                $studentId = $repository->find($this->getUser()->getId());
+        $user = $this->getUser();
+        $studentId = $repository->find($this->getUser()->getId());
 
-                $form = $this->createForm(ProfileFormType::class, $user);
+        $form = $this->createForm(ProfileFormType::class, $user);
 
-                $form->handleRequest($request);
+        $form->handleRequest($request);
 
-                if ($form->isSubmitted() && $form->isValid()) {
-
-
-                    $file = $studentId->getAvatar();
-                    if ($file != null) {
-
-                        $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-
-                        try {
-                            $file->move(
-                                $this->getParameter('avatar_directory'),
-                                $fileName
-                            );
-                        } catch (FileException $e) {
-                            // TODO Gérer les erreurs
-                        }
-                        $user->setAvatar($fileName);
-
-                    } else {
-
-                        $studentId->setavatar($avatar);
-                    }
+        if ($form->isSubmitted() && $form->isValid()) {
 
 
-                    $manager->persist($user);
-                    $manager->flush();
+            $file = $studentId->getAvatar();
+            if ($file != null) {
 
-                    return $this->redirectToRoute("student_profile");
+                $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
+                try {
+                    $file->move(
+                        $this->getParameter('avatar_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    // TODO Gérer les erreurs
                 }
+                $user->setAvatar($fileName);
 
-                return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
+            } else {
 
-            } else if (!is_null($request->request->get('matieres'))) {
-                $repository = $this->getDoctrine()->getRepository(Subject::class);
-                $subject = new Subject();
-                $form = $this->createFormBuilder($subject)
-                    ->add('name')
-                    ->getForm();
-
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    if ($repository->findBy(
-                        ['name' => $form->get('name')->getData()]
-                    )) {
-
-                    } else {
-                        $manager->persist($subject);
-                        $manager->flush();
-
-                        return $this->redirectToRoute("student_profile");
-                    }
-                }
-
-                return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
+                $studentId->setavatar($avatar);
             }
+
+
+            $manager->persist($user);
+            $manager->flush();
+
+            return $this->redirectToRoute("student_profile");
 
         }
 
+        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
+
+    } else if (!is_null($request->request->get('matieres'))) {
+        $repository = $this->getDoctrine()->getRepository(Subject::class);
+        $subject = new Subject();
+        $form = $this->createFormBuilder($subject)
+            ->add('name')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($repository->findBy(
+                ['name' => $form->get('name')->getData()]
+            )) {
+
+            } else {
+                $manager->persist($subject);
+                $manager->flush();
+
+                return $this->redirectToRoute("student_profile");
+            }
+        }
+
+        return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
+    }
+
+}
+
         return $this->render(
             "viewProfile.html.twig",
-            ['user' => $this->getUser(), 'noteUser' => $noteUser, "subjectNotInfo" => $subjectNotInfo]
+            [
+                'form' => $form->createView(),
+                'subjectlevel' => $subjectLevelStudent
+            ]
         );
     }
 
@@ -322,7 +325,7 @@ class StudentController extends AbstractController
     public function classementXp(){
         $classement = $this->getDoctrine()->getEntityManager();
         $tags = $classement->getRepository(Student::class)->findBy(
-            array(), array('xpwon' => 'ASC')
+            array(), array('xpwon' => 'DESC')
         );
 
         return $this->render(
@@ -355,5 +358,13 @@ class StudentController extends AbstractController
             ]
         );
 
+    }
+    /**
+     * @Route("/testbadge", name="testbadge")
+     */
+    public function testBadge(){
+        $badge = $this->getDoctrine()->getRepository(Badge::class)->find(3);
+        $this->get('test_service')->ajoutBadge($this->getUser(),$badge);
+        return new JsonResponse();
     }
 }

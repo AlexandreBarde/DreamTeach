@@ -4,33 +4,41 @@
 
 {% block body %}
     {% if qcms %}
-    <div class="table-responsive m-b-40">
-        <table class="table table-borderless table-data3">
-            <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Date limite</th>
-                <th>État</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for qcm in qcms %}
+    <div class="container">
+        <div class="table-responsive m-b-40">
+            <table class="table table-borderless table-data3">
+                <thead class="thead-dark">
                 <tr>
-                    <td>{{ qcm.title }}</td>
-                    <td>{{ qcm.deadline|date('d M Y') }}</td>
-                    {% if qcm.visible == 1 %}
-                        <td id="createdMessage{{ qcm.id }}" class="process">Publié</td>
-                    {% else %}
-                        <td id="createdMessage{{ qcm.id }}" class="denied">Non publié</td>
-                    {% endif %}
-                    <td>
-                        <a class="btn btn-warning" href="showQcm/{{ qcm.id }}" role="button"><i class="fas fa-eye"></i> Voir</a>
-                    </td>
+                    <th>Titre</th>
+                    <th>Date limite</th>
+                    <th>État</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for qcm in qcms %}
+                    <tr>
+                        <td>{{ qcm.title }}</td>
+                        <td>{{ qcm.deadline|date('d M Y') }}</td>
+                        {% if qcm.visible == 1 %}
+                            <td id="createdMessage{{ qcm.id }}" class="process">Publié</td>
+                        {% else %}
+                            <td id="createdMessage{{ qcm.id }}" class="denied">Non publié</td>
+                        {% endif %}
+                        {% if qcm.authorId.id == user.id %}
+                            <td class="text-center">
+                                <a class="btn btn-warning" href="editQcm/{{ qcm.id }}" role="button"><i class="far fa-edit"></i> Éditer</a>
+                            </td>
+                        {% else %}
+                            <td class="text-center">
+                                <a class="btn btn-primary" href="answerQcm/{{ qcm.id }}">Répondre au QCM</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% else %}
         <div class="container">
@@ -38,7 +46,7 @@
         </div>
     {% endif %}
     <div class="container">
-        <a href="#" type="button" class="btn btn-success btn-lg btn-block"><i class="fas fa-plus-square"></i> Créer un nouveau QCM</a>
+        <a href="{{ path('createQcm') }}" type="button" class="btn btn-success btn-lg btn-block"><i class="fas fa-plus-square"></i> Créer un nouveau QCM</a>
     </div>
 {% endblock %}
 

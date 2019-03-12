@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Service\BadgeService;
+use App\Service\EmailService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,33 +49,17 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("sendMail", name="sendMail")
+     * @param \Swift_Mailer $mailer
+     * @return Response
      */
     public function index(\Swift_Mailer $mailer)
     {
-        $message = (new \Swift_Message('Hello Email'))
-            ->setFrom('ptutdreamteach@gmail.com')
-            ->setTo('ptutdreamteach@gmail.com')
-            ->setBody(
-                $this->renderView(
-                // templates/emails/registration.html.twig
-                    'base.html.twig'
-                ),
-                'text/html'
-            )
-            /*
-             * If you also want to include a plaintext version of the message
-            ->addPart(
-                $this->renderView(
-                    'emails/registration.txt.twig',
-                    ['name' => $name]
-                ),
-                'text/plain'
-            )
-            */
-        ;
-
-        $mailer->send($message);
-
+        EmailService::sendMail(
+            "ptutdreamteach@gmail.com",
+            "Salut " . $this->getUser()->getLastname() .  " " . $this->getUser()->getFirstname() . " !",
+            $this->renderView("base.mail.html.twig"),
+            $mailer
+        );
         return $this->render("base.html.twig");
     }
 

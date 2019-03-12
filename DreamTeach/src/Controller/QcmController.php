@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Qcm;
 use App\Form\CreateQcmType;
 use App\Form\EditQcm;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,24 +42,23 @@ class QcmController extends AbstractController
      * @Route("editQcm/{idQcm}", name="editQcm")
      * @param Request $request
      * @param $idQcm
+     * @param ObjectManager $manager
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editQcm(Request $request, $idQcm)
+    public function editQcm(Request $request, $idQcm, ObjectManager $manager)
     {
         $repositoryQcm = $this->getDoctrine()->getRepository(Qcm::class);
         $qcm = $repositoryQcm->find($idQcm);
         $user = $this->getUser();
-
         dump($qcm);
-
         $form = $this->createForm(EditQcm::class, $qcm);
         $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {}
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $manager->flush();
+            $manager->persist($qcm);
+        }
         return $this->render('qcm.edit.html.twig', ["editQcm" => $form->createView()]);
-
     }
 
     /**

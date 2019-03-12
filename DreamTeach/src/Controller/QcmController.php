@@ -39,17 +39,23 @@ class QcmController extends AbstractController
 
     /**
      * @Route("editQcm/{idQcm}", name="editQcm")
+     * @param Request $request
      * @param $idQcm
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editQcm($idQcm)
+    public function editQcm(Request $request, $idQcm)
     {
         $repositoryQcm = $this->getDoctrine()->getRepository(Qcm::class);
         $qcm = $repositoryQcm->find($idQcm);
         $user = $this->getUser();
 
+        dump($qcm);
 
         $form = $this->createForm(EditQcm::class, $qcm);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {}
 
         return $this->render('qcm.edit.html.twig', ["editQcm" => $form->createView()]);
 

@@ -32,7 +32,7 @@ class DefaultController extends AbstractController
             $em->persist($student);
             $em->flush();
 
-            return $this->redirectToRoute("/");
+            return $this->redirectToRoute("app_login");
         }
 
         return $this->render(

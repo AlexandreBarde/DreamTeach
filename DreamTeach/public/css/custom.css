@@ -7,3 +7,18 @@
 {
     margin-right: 5px;
 }
+
+.profile-avatar{
+    width: 150px;
+    height: 150px;
+    -webkit-border-radius: 150px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 150px;
+    -moz-background-clip: padding;
+    border-radius: 150px;
+    background-clip: padding-box;
+    margin: 7px 0 0 5px;
+    float: left;
+    background-size: cover;
+    background-position: center center;
+}

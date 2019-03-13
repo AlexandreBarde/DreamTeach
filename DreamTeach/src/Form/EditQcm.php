@@ -23,7 +23,10 @@ class EditQcm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'attr' => [
+                    'class' => 'form-control']
+            ])
             ->add('deadline', DateType::class)
             ->add('visible', CheckboxType::class);
     }

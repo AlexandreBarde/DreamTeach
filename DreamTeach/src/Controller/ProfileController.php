@@ -97,6 +97,7 @@ class ProfileController extends Controller
             /* Ajout du badge  */
             $badge = $this->getDoctrine()->getRepository(Badge::class)->find(2);
             $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
+            $this->get('xp_won')->wonXp($this->getUser(),50);
             return $this->redirectToRoute("showSessions");
         }
     }

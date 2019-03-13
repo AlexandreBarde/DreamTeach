@@ -74,7 +74,7 @@
                     </div>
                     {% set niveau = (app.user.xpWon / 50)|slice(0,1) %}
                     <span class="text-center"> Vous avez  {{ 50-(((niveau+1)*50)-(app.user.xpWon)) }}/50 pour passer le niveau suivant </span>
-                </div>
+                </div> 
                 <div class="border border-secondary p-4 bg-light mt-4 rounded">
                     <div class="h5 mb-4"> Badges</div>
                     {% for i in app.user.getBadgeid() %}

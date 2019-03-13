@@ -326,12 +326,12 @@ class Student implements UserInterface
         return $this;
     }
 
-    public function getXpwon(): ?string
+    public function getXpwon()
     {
         return $this->xpwon;
     }
 
-    public function setXpwon(string $xpwon): self
+    public function setXpwon(int $xpwon): self
     {
         $this->xpwon = $xpwon;
 

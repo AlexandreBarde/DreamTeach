@@ -16,14 +16,11 @@ use App\Form\ProfileFormType;
 use App\Form\SubjetLevelFormType;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 /**
@@ -342,18 +339,14 @@ class StudentController extends Controller
      * @Route("/tableauScore", name="tableauscore")
      */
     public function voirTableauScore(){
-        $entityManager = $this->getDoctrine()->getEntityManager();
-        $tags = $entityManager->getRepository(Student::class)->findBy(
-            array(), array('xpwon' => 'ASC')
-        );
-        $result = $entityManager->getRepository(Result::class)->findAll();
+        $result = $this->getDoctrine()->getRepository(Result::class)->findAll();
 
         //dump($result);exit();
         return $this->render(
             'tableauScore.html.twig',
             [
                 'result' => $result,
-                'tableauscore' => $tags
+                'resulta' => null
 
             ]
         );
@@ -366,5 +359,35 @@ class StudentController extends Controller
         $badge = $this->getDoctrine()->getRepository(Badge::class)->find(3);
         $this->get('test_service')->ajoutBadge($this->getUser(),$badge);
         return new JsonResponse();
+    }
+
+
+    /**
+     * @Route("/searchScore", name="search_score_view")
+     */
+    public function searchStudentInTableauScore(Request $request)
+    {
+        if ($request->get('search_score')) {
+            $result_score = $this->getDoctrine()->getRepository(Student::class)->searchStudent(
+                $request->get('search_score')
+            );
+            $tab = [];
+            foreach ($result_score as $result){
+
+                $tab = $this->getDoctrine()->getRepository(Result::class)->findBy(
+                    [ 'id' => $result->getId(),]
+                );
+            }
+            return $this->render(
+                'tableauScore.html.twig',
+                [
+                    'score' => $result_score,
+                    'result' => null,
+                    'resulta' => $tab
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
     }
 }

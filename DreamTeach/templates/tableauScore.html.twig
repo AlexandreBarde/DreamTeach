@@ -5,6 +5,24 @@
 {% endblock %}
 
 {% block body %}
+    <div class="row mt-4">
+        <div class="col-8 mx-auto">
+            <form action="{{ path('search_score_view') }}" method="get" id="search_score_form">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" id="rechercherInput" class="form-control"
+                                   placeholder="Recherchez un étudiant.."
+                                   name="search_score">
+                        </div>
+                        <div class="col-3">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
     </div>
     <div class="row">
@@ -34,29 +52,43 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if result is not null %}
+                    {% for j in result %}
+                            <tr>
+                                <td>{{ j.userid.lastName }}</td>
 
-                {% for j in result %}
-                    {% for i in tableauscore %}
-                        <tr>
+                                <td>{{ j.userid.firstName }}</td>
 
+                                <td>{{ j.userid.city }}</td>
 
-                            <td> {{ i.lastName }}</td>
+                                <td>{{ j.qcmid.title }}</td>
 
-                            <td>{{ i.firstName }}</td>
-
-                            <td>{{ i.city }}</td>
-
-                            <td>  {{j.qcmid.title }}</td>
-
-                            <td>  {{ j.result }}</td>
-                        </tr>
-
-
+                                <td>{{ j.result }}</td>
+                            </tr>
                     {% endfor %}
-                {% endfor %}
+                {% elseif score is not null %}
+                    {% for t in score %}
+                        {% for y in resulta %}
+                            <tr>
+
+
+                                <td> {{ t.lastName }}</td>
+
+                                <td>{{ t.firstName }}</td>
+
+                                <td>{{ t.city }}</td>
+
+                                <td>  {{ y.qcmid.title }}</td>
+
+                                <td>  {{ y.result }}</td>
+                            </tr>
+
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
                 </tbody>
+            </table>
         </div>
-    </div>
     </div>
 {% endblock %}
 

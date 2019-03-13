@@ -162,9 +162,47 @@ class Student implements UserInterface
      */
     private $relations;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $resetPassword;
 
+    /**
+     * @return mixed
+     */
+    public function getResetId()
+    {
+        return $this->resetId;
+    }
 
+    /**
+     * @param mixed $resetId
+     */
+    public function setResetId($resetId): void
+    {
+        $this->resetId = $resetId;
+    }
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $resetId;
+
+    /**
+     * @return mixed
+     */
+    public function getResetPassword()
+    {
+        return $this->resetPassword;
+    }
+
+    /**
+     * @param mixed $resetPassword
+     */
+    public function setResetPassword($resetPassword): void
+    {
+        $this->resetPassword = $resetPassword;
+    }
 
     /**
      * @var integer

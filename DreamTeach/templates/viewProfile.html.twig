@@ -11,10 +11,10 @@
                 <div class="border border-secondary p-4 bg-light rounded">
                     <div class="row">
                         <div class="col-4">
-                            {% if user.avatar %}
-                                <img class="profile-avatar" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
+                            {% if app.user.avatar %}
+                                <img class="profile-avatar" src={{ asset('uploads/avatars/' ~ app.user.avatar) }}>
                             {% else %}
-                                <img class="profile-avatar" src={{ asset('img/imageBaseProfil.png' ~ user.avatar) }}>
+                                <img class="profile-avatar" src={{ asset('img/imageBaseProfil.png' ~ app.user.avatar) }}>
                             {% endif %}
                         </div>
                         <div class="col-6">
@@ -141,9 +141,6 @@
                                 <div class="row mb-4">
                                     <div class="col-8">
                                         <select class="form-control" id="subject">
-                                            {% for i in subjectNotInfo %}
-                                                <option value="5">{{ i.name }}</option>
-                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-2 text-center">

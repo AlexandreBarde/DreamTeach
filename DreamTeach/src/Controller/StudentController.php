@@ -141,6 +141,11 @@ class StudentController extends Controller
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
+        $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
+            [
+                "studentid" => $this->getUser(),
+
+            ]);
         $subjectlevel = new Subjectlevel();
         $form = $this->createForm(SubjetLevelFormType::class, $subjectlevel);
         $form->handleRequest($request);
@@ -236,7 +241,8 @@ class StudentController extends Controller
             "viewProfile.html.twig",
             [
                 'form' => $form->createView(),
-                'subjectlevel' => $subjectLevelStudent
+                'subjectlevel' => $subjectLevelStudent,
+                'noteUser' => $noteUser
             ]
         );
     }

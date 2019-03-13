@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Session;
+use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Badge;
 use App\Entity\Sessioncomment;
@@ -61,8 +62,11 @@ class SessionController extends Controller
                 $em->persist($session);
                 $em->flush();
                 $id=$session->getId();
+                /* Ajout du badge  */
                 $badge = $this->getDoctrine()->getRepository(Badge::class)->find(1);
                 $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
+                /* Ajout du badge  */
+                $this->get('xp_won')->wonXp($this->getUser(),50);
                 return $this->redirectToRoute('AddSession', ["idSession"=>$id]);
 
                 return $this->redirectToRoute('student_agenda');

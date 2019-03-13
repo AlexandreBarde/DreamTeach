@@ -25,11 +25,16 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    test_service:
+    ajout_badge:
         class: App\Service\BadgeService
         public: true
         arguments:
         - '@doctrine.orm.entity_manager'
 
+    ajout_grade:
+        class: App\Service\GradeService
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

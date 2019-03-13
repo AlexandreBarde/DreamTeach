@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Badge;
 use App\Entity\FriendshipRelation;
+use App\Entity\Grade;
 use App\Entity\Message;
 use App\Entity\Session;
 use App\Entity\Student;
@@ -335,9 +336,18 @@ class StudentController extends Controller
     /**
      * @Route("/testbadge", name="testbadge")
      */
-    public function testBadge(){
+    public function addBadge(){
         $badge = $this->getDoctrine()->getRepository(Badge::class)->find(3);
-        $this->get('test_service')->ajoutBadge($this->getUser(),$badge);
+        $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
+        return new JsonResponse();
+    }
+
+    /**
+     * @Route("/testgrade", name="testgrade")
+     */
+    public function addGrade(){
+        $grade = $this->getDoctrine()->getRepository(Grade::class)->find(2);
+        $this->get('ajout_grade')->addGrade($this->getUser(),$grade);
         return new JsonResponse();
     }
 }

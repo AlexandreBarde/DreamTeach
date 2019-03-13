@@ -2,18 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: boehmhugo
- * Date: 2019-03-11
- * Time: 10:48
+ * Date: 2019-03-13
+ * Time: 10:27
  */
 
 namespace App\Service;
 
-
-use App\Entity\Badge;
+use App\Entity\Grade;
 use App\Entity\Student;
 use Doctrine\ORM\EntityManager;
 
-class BadgeService
+
+class GradeService
 {
     protected $em;
 
@@ -22,9 +22,10 @@ class BadgeService
         $this->em = $em;
     }
 
-    public function addBadge(Student $student,Badge $badge) {
-        $student->addBadgeid($badge);
+    public function addGrade(Student $student, Grade $grade){
+        $student->setGradeid($grade);
         $this->em->flush();
     }
+
 
 }

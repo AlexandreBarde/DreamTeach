@@ -321,7 +321,7 @@ class StudentController extends Controller
     public function classementXp(){
         $classement = $this->getDoctrine()->getEntityManager();
         $tags = $classement->getRepository(Student::class)->findBy(
-            array(), array('xpwon' => 'DESCreg')
+            array(), array('xpwon' => 'DESC')
         );
 
         return $this->render(

@@ -2,18 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: boehmhugo
- * Date: 2019-03-11
- * Time: 10:48
+ * Date: 2019-03-13
+ * Time: 10:43
  */
 
 namespace App\Service;
 
-
-use App\Entity\Badge;
 use App\Entity\Student;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
 
-class BadgeService
+
+class XpWonService
 {
     protected $em;
 
@@ -22,8 +22,9 @@ class BadgeService
         $this->em = $em;
     }
 
-    public function addBadge(Student $student,Badge $badge) {
-        $student->addBadgeid($badge);
+    public function wonXp(Student $student, int $xpWon){
+        $xpBAse = $student->getXpwon();
+        $student->setXpwon(($xpWon+$xpBAse));
         $this->em->flush();
     }
 

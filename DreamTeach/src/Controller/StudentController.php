@@ -7,8 +7,10 @@ use App\Entity\Badge;
 use App\Entity\FriendshipRelation;
 use App\Entity\Grade;
 use App\Entity\Message;
+use App\Entity\Result;
 use App\Entity\Session;
 use App\Entity\Student;
+use App\Entity\Subject;
 use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Form\ProfileFormType;
@@ -16,7 +18,6 @@ use App\Form\SubjetLevelFormType;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -339,6 +340,25 @@ class StudentController extends Controller
         );
 
     }
+
+
+    /**
+     * @Route("/tableauScore", name="tableauscore")
+     */
+    public function voirTableauScore(){
+        $result = $this->getDoctrine()->getRepository(Result::class)->findAll();
+
+        //dump($result);exit();
+        return $this->render(
+            'tableauScore.html.twig',
+            [
+                'result' => $result,
+                'resulta' => null
+
+            ]
+        );
+
+    }
     /**
      * @Route("/testbadge", name="testbadge")
      */
@@ -363,5 +383,35 @@ class StudentController extends Controller
     public function xpWon(){
         $this->get('xp_won')->wonXp($this->getUser(),100);
         return new JsonResponse();
+    }
+
+
+    /**
+     * @Route("/searchScore", name="search_score_view")
+     */
+    public function searchStudentInTableauScore(Request $request)
+    {
+        if ($request->get('search_score')) {
+            $result_score = $this->getDoctrine()->getRepository(Student::class)->searchStudent(
+                $request->get('search_score')
+            );
+            $tab = [];
+            foreach ($result_score as $result){
+
+                $tab = $this->getDoctrine()->getRepository(Result::class)->findBy(
+                    [ 'id' => $result->getId(),]
+                );
+            }
+            return $this->render(
+                'tableauScore.html.twig',
+                [
+                    'score' => $result_score,
+                    'result' => null,
+                    'resulta' => $tab
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
     }
 }

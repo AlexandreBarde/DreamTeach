@@ -385,6 +385,27 @@ class StudentController extends Controller
         return new JsonResponse();
     }
 
+    /**
+     * @Route("/searchClassement", name="search_xp_view")
+     */
+    public function searchStudentInClassementXp(Request $request)
+    {
+        if ($request->get('search_xp')) {
+            $result_xp = $this->getDoctrine()->getRepository(Student::class)->searchStudent(
+                $request->get('search_xp')
+            );
+            return $this->render(
+                'classementxp.html.twig',
+                [
+                    'classementxpSearch' => $result_xp,
+                    'classementxp' => null,
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
+    }
+
 
     /**
      * @Route("/searchScore", name="search_score_view")

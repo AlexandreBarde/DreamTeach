@@ -5,7 +5,23 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row mt-4">
+        <div class="col-8 mx-auto">
+            <form action="{{ path('search_xp_view') }}" method="get" id="search_xp_form">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" id="rechercherInput" class="form-control"
+                                   placeholder="Recherchez un étudiant.."
+                                   name="search_xp">
+                        </div>
+                        <div class="col-3">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -35,7 +51,7 @@
                 </thead>
                 <tbody>
 
-
+                {% if classementxp is not null %}
                 {% for i in classementxp %}
                     <tr>
 
@@ -53,6 +69,25 @@
 
 
                 {% endfor %}
+                {% elseif classementxpSearch is not null %}
+                {% for j in classementxpSearch %}
+                    <tr>
+
+
+                        <td> {{ j.lastName }}</td>
+
+                        <td>{{ j.firstName }}</td>
+
+                        <td>{{ j.city }}</td>
+
+                        <td>  {{ j.trainingID.schoolID.name }}</td>
+
+                        <td>  {{ j.xpWon }}</td>
+                    </tr>
+
+
+                {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
         </div>

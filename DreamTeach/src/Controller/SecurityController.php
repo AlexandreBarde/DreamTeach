@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Student;
 use App\Service\BadgeService;
 use App\Service\EmailService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -45,6 +46,32 @@ class SecurityController extends AbstractController
     public function forgotPassword(Request $request)
     {
         return $this->render('forgotPassword.html.twig', ["user" => $this->getUser()]);
+    }
+
+    /**
+     * @Route("sendMailForgotPassword", name="SendMailForgotPassword")
+     * @param Request $request
+     * @param \Swift_Mailer $mailer
+     * @return string
+     */
+    public function sendMailForgotPassword(Request $request, \Swift_Mailer $mailer)
+    {
+        $email = $request->get('email');
+        /** @var Student $student */
+        $student = $this->getDoctrine()->getRepository(Student::class)->findBy(['emailaddress' => $email]);
+        dump($student);
+        //TODO : Changer le mot de passe de l'utilisateur et faire un formulaire pour lui en demander un nouveau
+        if($student != null)
+        {
+            EmailService::sendMail($email, "Réinitialisez le mot de passe de votre compte", $this->renderView("mail.forgotpassword.html.twig"), $mailer);
+            $this->addFlash("success", "Un email de confirmation a été envoyé à " . $email);
+            return $this->render("forgotPassword.html.twig");
+        }
+        else
+        {
+            $this->addFlash("info", "L'adresse " . $email . " ne correspond à aucun compte.");
+            return $this->render("forgotPassword.html.twig");
+        }
     }
 
     /**

@@ -350,4 +350,12 @@ class StudentController extends Controller
         $this->get('ajout_grade')->addGrade($this->getUser(),$grade);
         return new JsonResponse();
     }
+
+    /**
+     * @Route("/testxp", name="testxp")
+     */
+    public function xpWon(){
+        $this->get('xp_won')->wonXp($this->getUser(),100);
+        return new JsonResponse();
+    }
 }

@@ -5,15 +5,15 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Entity\Subject;
+use App\Entity\Badge;
 use App\Entity\Sessioncomment;
-
 use App\Form\AddCommentSessionFormType;
 use App\Form\SubjectType;
 use DateTime;
 use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\SessionFormType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @package App\Controller
  * @IsGranted("ROLE_USER")
  */
-class SessionController extends AbstractController
+class SessionController extends Controller
 {
 
     /**
@@ -61,6 +61,8 @@ class SessionController extends AbstractController
                 $em->persist($session);
                 $em->flush();
                 $id=$session->getId();
+                $badge = $this->getDoctrine()->getRepository(Badge::class)->find(1);
+                $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
                 return $this->redirectToRoute('AddSession', ["idSession"=>$id]);
 
                 return $this->redirectToRoute('student_agenda');

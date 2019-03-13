@@ -11,11 +11,10 @@
                 <div class="border border-secondary p-4 bg-light rounded">
                     <div class="row">
                         <div class="col-4">
-                            {% if app.user.avatar %}
-                                <img class="rounded-circle img-fluid" src={{ asset('uploads/avatars/' ~ app.user.avatar) }}>
+                            {% if user.avatar %}
+                                <img class="profile-avatar" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
                             {% else %}
-                                <img class="rounded-circle img-fluid" src="{{ asset('img/tom_bg.jpg') }}"
-                                >
+                                <img class="profile-avatar" src={{ asset('img/imageBaseProfil.png' ~ user.avatar) }}>
                             {% endif %}
                         </div>
                         <div class="col-6">
@@ -44,13 +43,14 @@
 
                     <div class="h5 mb-4"> Competences</div>
                     <hr class="border-left-0 border-secondary ">
-                    <div class="row">
-                        {% for sl in subjectlevel %}
-                            <div class="col-12">
-                                {{ sl.subjectid.name }} - {{ sl.mark }}/5
-                            </div>
+
+                    {% for i in noteUser %}
+                        <span>   {{ i.getSubjectid().getName() }} :  </span>
+                        {% for j in 1..i.mark %}
+                            <span class="fa fa-star" style="color:orange"></span>
                         {% endfor %}
-                    </div>
+                        <br/>
+                    {% endfor %}
                     <br/>
 
                     <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -107,7 +107,30 @@
                             </div>
                             <div class="col-10 border border-secondary p-4 bg-light rounded mt-5">
                                 <div class="mb-4 h4">Modifier une note</div>
+                                {% for i in noteUser %}
+                                    <div class="row mb-4">
+                                        <div class="col-6">
+                                            <span>{{ i.getSubjectid().getName() }}</span>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            Note :
+                                        </div>
+                                        <div class="col-2">
+                                            <select class="form-control" id="subject">
+                                                <option value="1" selected="selected"> {{ i.mark }}</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-1">
+                                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
 
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="row">
@@ -117,11 +140,11 @@
                                 <div class="h4 mb-4">Ajouter une note</div>
                                 <div class="row mb-4">
                                     <div class="col-8">
-                                        {{ form_start(form) }}
-                                        {{ form_widget((form.subjectid)) }}
-                                        {{ form_widget(form.mark) }}
-                                        <input type="submit" value="valider">
-                                        {{ form_end(form) }}
+                                        <select class="form-control" id="subject">
+                                            {% for i in subjectNotInfo %}
+                                                <option value="5">{{ i.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <div class="col-2 text-center">
                                         Note :

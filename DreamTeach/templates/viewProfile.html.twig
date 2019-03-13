@@ -14,7 +14,7 @@
                             {% if user.avatar %}
                                 <img class="profile-avatar" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
                             {% else %}
-                                <img class="profile-avatar" src={{ asset('uploads/avatars/' ~ user.avatar) }}>
+                                <img class="profile-avatar" src={{ asset('img/imageBaseProfil.png' ~ user.avatar) }}>
                             {% endif %}
                         </div>
                         <div class="col-6">

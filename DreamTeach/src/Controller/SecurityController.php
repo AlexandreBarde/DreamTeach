@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Student;
+use App\Service\BadgeService;
+use App\Service\EmailService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +16,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/", name="app_login")
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
@@ -46,34 +49,44 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("sendMailForgotPassword", name="SendMailForgotPassword")
+     * @param Request $request
+     * @param \Swift_Mailer $mailer
+     * @return string
+     */
+    public function sendMailForgotPassword(Request $request, \Swift_Mailer $mailer)
+    {
+        $email = $request->get('email');
+        /** @var Student $student */
+        $student = $this->getDoctrine()->getRepository(Student::class)->findBy(['emailaddress' => $email]);
+        dump($student);
+        //TODO : Changer le mot de passe de l'utilisateur et faire un formulaire pour lui en demander un nouveau
+        if($student != null)
+        {
+            EmailService::sendMail($email, "Réinitialisez le mot de passe de votre compte", $this->renderView("mail.forgotpassword.html.twig"), $mailer);
+            $this->addFlash("success", "Un email de confirmation a été envoyé à " . $email);
+            return $this->render("forgotPassword.html.twig");
+        }
+        else
+        {
+            $this->addFlash("info", "L'adresse " . $email . " ne correspond à aucun compte.");
+            return $this->render("forgotPassword.html.twig");
+        }
+    }
+
+    /**
      * @Route("sendMail", name="sendMail")
+     * @param \Swift_Mailer $mailer
+     * @return Response
      */
     public function index(\Swift_Mailer $mailer)
     {
-        $message = (new \Swift_Message('Hello Email'))
-            ->setFrom('ptutdreamteach@gmail.com')
-            ->setTo('ptutdreamteach@gmail.com')
-            ->setBody(
-                $this->renderView(
-                // templates/emails/registration.html.twig
-                    'base.html.twig'
-                ),
-                'text/html'
-            )
-            /*
-             * If you also want to include a plaintext version of the message
-            ->addPart(
-                $this->renderView(
-                    'emails/registration.txt.twig',
-                    ['name' => $name]
-                ),
-                'text/plain'
-            )
-            */
-        ;
-
-        $mailer->send($message);
-
+        EmailService::sendMail(
+            "ptutdreamteach@gmail.com",
+            "Salut " . $this->getUser()->getLastname() .  " " . $this->getUser()->getFirstname() . " !",
+            $this->renderView("base.mail.html.twig"),
+            $mailer
+        );
         return $this->render("base.html.twig");
     }
 

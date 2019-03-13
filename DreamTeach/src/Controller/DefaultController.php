@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="HomeController")
+     * @Route("/register", name="HomeController")
      */
     public function register(Request $request, UserPasswordEncoderInterface $encode)
     {

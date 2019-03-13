@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modification de QCM
+{% endblock %}
+
+{% block body %}
+
+    <h1>Modification de QCM</h1>
+
+    {{ form_start(editQcm) }}
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <label for="inputEmail24">Titre</label>
+                    {{ form_widget(editQcm.title) }}
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Date</label>
+                        {{ form_widget(editQcm.deadline) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Visible</label>
+                        {{ form_widget(editQcm.visible) }}
+                    </div>
+                </div>
+                <input name="editer" type="submit" value="Enregistrer">
+            </div>
+        </div>
+    </div>
+    {{ form_end(editQcm) }}
+
+{% endblock %}

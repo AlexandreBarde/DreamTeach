@@ -9,7 +9,7 @@ use App\Entity\Training;
 use App\Form\UploadPicture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,13 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use App\Entity\Badge;
 
 /**
  * Class StudentController
  * @package App\Controller
  * @IsGranted("ROLE_USER")
  */
-class ProfileController extends AbstractController
+class ProfileController extends Controller
 {
     /**
      * @Route("/deleteProfile", name="deleteProfile")
@@ -93,6 +94,9 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
+            /* Ajout du badge  */
+            $badge = $this->getDoctrine()->getRepository(Badge::class)->find(2);
+            $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
             return $this->redirectToRoute("showSessions");
         }
     }

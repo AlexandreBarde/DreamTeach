@@ -163,7 +163,7 @@ class Student implements UserInterface
     private $relations;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $resetPassword;
 

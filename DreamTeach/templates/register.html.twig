@@ -2,42 +2,62 @@
 
 {% block title %}Inscription{% endblock %}
 
-{% block body %}
-    <div class="row"style="margin-top:10%">
-        <div class="col-5 mx-auto">
-            <div class="card">
-                <div class="card-header">
-                    <h1>Inscription</h1>
-                </div>
-                <div class="card-body">
-                    {{ form_start(form) }}
-                    <div class="row">
-                        <div class="col-12 form-group">
-                            <h1 class="h3 mb-3 font-weight-normal ">Inscrivez-vous </h1>
-                            {{ form_widget(form.lastname, {"attr" : {"class" : "form-control", "placeholder" : "Nom de famille...", "required" : ""}}) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 form-group">
-                            {{ form_widget(form.firstname, {"attr" : {"class" : "form-control", "placeholder" : "Prénom...", "required" : ""}}) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 form-group">
-                            {{ form_widget(form.emailaddress, {"attr" : {"class" : "form-control", "placeholder" : "Votre email...", "required" : ""}}) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 form-group">
-                            {{ form_widget(form.password, {"attr" : {"class" : "form-control", "placeholder" : "Mot de passe...", "required" : ""}}) }}
-                            <span class="text-danger">{{ form_errors(form.password)}}</span>
-                        </div>
-                    </div>
-                    <span>Deja un compte ?&nbsp;<a href="{{ path('app_login') }}">Connectez-vous</a></span>
-                    <input type="submit" value="S'inscrire" class="btn btn-primary btn-block mt-2">
-                    {{ form_end(form) }}
-                </div>
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">{% endblock %}
 
+{% block body %}
+
+    <div class="container">
+        <div class="row justify-content-center" style="padding-top: 10%;">
+            <div class="col-12 col-md-8 col-lg-6 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h1>Inscription</h1>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <h1 class="h3 mb-4 font-weight-normal ">Inscrivez-vous </h1>
+                        <div class="row">
+                            <div class="input-group col-12 mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-address-card"></i></div>
+                                </div>
+                                {{ form_widget(form.lastname, {"attr" : {"class" : "form-control", "placeholder" : "Nom de famille...", "required" : ""}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-12 mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-address-card"></i></div>
+                                </div>
+                                {{ form_widget(form.firstname, {"attr" : {"class" : "form-control", "placeholder" : "Prénom...", "required" : ""}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-12 mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-at"></i></div>
+                                </div>
+                                {{ form_widget(form.emailaddress, {"attr" : {"class" : "form-control", "placeholder" : "Votre email...", "required" : ""}}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-12 mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-key"></i></div>
+                                </div>
+                                {{ form_widget(form.password, {"attr" : {"class" : "form-control", "placeholder" : "Mot de passe...", "required" : ""}}) }}
+                                <span class="text-danger">{{ form_errors(form.password)}}</span>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            Deja un compte ?&nbsp;<a href="{{ path('app_login') }}">Connectez-vous</a>
+                        </div>
+                        <input type="submit" value="S'inscrire" class="btn btn-primary btn-block mt-2">
+                        {{ form_end(form) }}
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>

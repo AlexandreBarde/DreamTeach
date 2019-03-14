@@ -3,13 +3,13 @@
 {% block title %}Connexion{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">{% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">{% endblock %}
 
 {% block body %}
 
-    <div class="container" id="loginCard">
-        <div class="row justify-content-center">
-            <div class="col-12">
+    <div class="container">
+        <div class="row justify-content-center pt-10p" style="padding-top: 10%;">
+            <div class="col-12 col-md-8 col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <h1>Connexion</h1>
@@ -20,7 +20,7 @@
                             {% if error %}
                                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                             {% endif %}
-                            <h1 class="h3 mb-3 font-weight-normal ">Connectez-vous </h1>
+                            <h1 class="h3 mb-4 font-weight-normal ">Connectez-vous </h1>
                             <label for="inputEmailaddress" class="sr-only">Adresse mail</label>
                             <div class="input-group mb-2 mr-sm-2">
                                 <div class="input-group-prepend">
@@ -45,16 +45,16 @@
 
                             <div class="container">
                                 <div class="row justify-content-between">
-                                    <div class="col-6 my-1">
+                                    <div class="col-6 my-1"> <!-- ' style="padding-left: 2px;" ' ? -->
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                             <label class="form-check-label" for="exampleCheck1">Rester connecté</label>
                                         </div>
                                     </div>
-                                    <div class="col-6 my-1">
+                                    <div class="col-6 my-1 text-right">
                                         <a href="{{ path('forgotPassword') }}">Mot de passe oublié ?</a>
                                     </div>
-                                    <div class="my-2">
+                                    <div class="my-3">
                                         Pas encore de compte ? <a href="{{ path('HomeController') }}">S'inscrire</a>
                                     </div>
                                 </div>

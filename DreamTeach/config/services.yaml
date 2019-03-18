@@ -30,6 +30,7 @@ services:
         public: true
         arguments:
         - '@doctrine.orm.entity_manager'
+        - '@xp_won'
 
     ajout_grade:
         class: App\Service\GradeService

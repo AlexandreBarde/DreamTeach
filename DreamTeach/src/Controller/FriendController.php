@@ -5,16 +5,17 @@ namespace App\Controller;
 use App\Entity\FriendshipRelation;
 use App\Entity\Student;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Badge;
 
 /**
  * Class StudentController
  * @package App\Controller
  * @IsGranted("ROLE_USER")
  */
-class FriendController extends AbstractController
+class FriendController extends Controller
 {
     /**
      * @param Request $request
@@ -102,6 +103,8 @@ class FriendController extends AbstractController
         $em->flush();
 
         $this->addFlash('success', "La demande d'ami a été effectué avec succés");
+        $badge = $this->getDoctrine()->getRepository(Badge::class)->find(3);
+        $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
 
         return $this->redirectToRoute(
             'student_other_profile',

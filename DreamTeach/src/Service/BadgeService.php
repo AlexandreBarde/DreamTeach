@@ -17,14 +17,24 @@ class BadgeService
 {
     protected $em;
 
-    public function __construct(EntityManager $em)
+    protected $serviceXp;
+
+    public function __construct(EntityManager $em, XpWonService $serviceXp)
     {
         $this->em = $em;
+        $this->serviceXp = $serviceXp;
+
     }
 
     public function addBadge(Student $student,Badge $badge) {
+        $listeBadge = $student->getBadgeid();
+        if($listeBadge->contains($badge)) {
+            return false;
+        }
         $student->addBadgeid($badge);
         $this->em->flush();
+        $this->serviceXp->wonXp($student,100);
+
     }
 
 }

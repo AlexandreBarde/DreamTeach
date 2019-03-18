@@ -7,13 +7,13 @@
 {% block body %}
     <div class="row mt-4">
         <div class="col-8 mx-auto">
-            <form action="{{ path('search_xp_view') }}" method="get" id="search_xp_form">
+            <form action="{{ path('search_score_view') }}" method="get" id="search_score_form">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-8">
                             <input type="text" id="rechercherInput" class="form-control"
                                    placeholder="Recherchez un étudiant.."
-                                   name="search_xp">
+                                   name="search_score">
                         </div>
                         <div class="col-3">
                             <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
@@ -24,9 +24,11 @@
         </div>
     </div>
     <div class="row">
+    </div>
+    <div class="row">
         <div class="col-12">
 
-            <table data-toggle="table"  class="table">
+            <table class="table">
                 <thead>
                 <tr>
                     <th scope="col">
@@ -42,75 +44,52 @@
                     </th>
                     <th scope="col">
 
-                        Ecole
+                        QCM
                     </th>
                     <th scope="col">
-                        XP
+                        Score
                     </th>
                 </tr>
                 </thead>
                 <tbody>
+                {% if result is not null %}
+                    {% for j in result %}
+                            <tr>
+                                <td>{{ j.userid.lastName }}</td>
 
-                {% if classementxp is not null %}
-                {% for i in classementxp %}
-                    <tr>
+                                <td>{{ j.userid.firstName }}</td>
 
+                                <td>{{ j.userid.city }}</td>
 
-                        <td> {{ i.lastName }}</td>
+                                <td>{{ j.qcmid.title }}</td>
 
-                        <td>{{ i.firstName }}</td>
-
-                        <td>{{ i.city }}</td>
-
-                        <td>  {{ i.trainingID.schoolID.name }}</td>
-
-                        <td>  {{ i.xpWon }}</td>
-                    </tr>
-
-
-                {% endfor %}
-                {% elseif classementxpSearch is not null %}
-                {% for j in classementxpSearch %}
-                    <tr>
+                                <td>{{ j.result }}</td>
+                            </tr>
+                    {% endfor %}
+                {% elseif score is not null %}
+                    {% for t in score %}
+                        {% for y in resulta %}
+                            <tr>
 
 
-                        <td> {{ j.lastName }}</td>
+                                <td> {{ t.lastName }}</td>
 
-                        <td>{{ j.firstName }}</td>
+                                <td>{{ t.firstName }}</td>
 
-                        <td>{{ j.city }}</td>
+                                <td>{{ t.city }}</td>
 
-                        <td>  {{ j.trainingID.schoolID.name }}</td>
+                                <td>  {{ y.qcmid.title }}</td>
 
-                        <td>  {{ j.xpWon }}</td>
-                    </tr>
+                                <td>  {{ y.result }}</td>
+                            </tr>
 
-
-                {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
                 {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
-    </div>
-    {% block javascripts %}
-       <script>
-
-
-
-
-
-
-
-
-       </script>
-
-
-
-    {% endblock %}
-
-
 {% endblock %}
-
 
 

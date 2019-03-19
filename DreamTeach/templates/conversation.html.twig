@@ -17,7 +17,6 @@
     <div class="container mt-5">
         <h1 class="display-4 text-center">Conversation avec {{ sender.firstname }} {{ sender.lastname }}</h1>
     </div>
-    {% if messages %}
         <div class="container mt-5">
             <div class="row text-center">
                 <div class="col col-lg-2 pt-1"><h5>Utilisateur</h5></div>
@@ -47,13 +46,6 @@
                 </div>
             </div>
         </div>
-    {% else %}
-        <div class="container pt-4">
-            <div class="alert alert-danger" role="alert">
-                Aucun message disponible !
-            </div>
-        </div>
-    {% endif %}
 {% endblock %}
 {% block javascripts %}
     <script>

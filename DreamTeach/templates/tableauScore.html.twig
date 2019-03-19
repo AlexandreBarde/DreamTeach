@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+    {% if result %}
     <div class="row mt-4">
         <div class="col-8 mx-auto">
             <form action="{{ path('search_score_view') }}" method="get" id="search_score_form">
@@ -90,6 +91,13 @@
             </table>
         </div>
     </div>
+    {% else %}
+        <div class="container pt-4">
+            <div class="alert alert-danger" role="alert">
+                Aucune donnée disponible !
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 

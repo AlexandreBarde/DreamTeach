@@ -63,7 +63,7 @@ class QcmController extends AbstractController
 
     /**
      * Permet de créer un QCM
-     * @Route("createQcm", name="createQcm")
+     * @Route("/createQcm", name="createQcm")
      */
     public function createQcm(Request $request)
     {
@@ -71,6 +71,8 @@ class QcmController extends AbstractController
 
         $formQcm = $this->createForm(CreateQcmType::class, $qcm);
         $formQcm->handleRequest($request);
+
+        $questionsForm = $this->createForm($type);
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
             $em = $this->getDoctrine()->getManager();

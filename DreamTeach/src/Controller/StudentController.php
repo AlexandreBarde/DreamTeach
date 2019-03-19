@@ -156,6 +156,8 @@ class StudentController extends Controller
             $subjectlevel->setStudentid($this->getUser());
             $em->persist($subjectlevel);
             $em->flush();
+
+            return $this->redirectToRoute("student_profile");
         }
 
         $subjectLevelStudent = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy([

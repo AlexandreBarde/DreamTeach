@@ -56,6 +56,7 @@
                 <div class="card-header">
                     <h6>Vos demandes d'amis en cours</h6>
                 </div>
+
                 <div class="card-body">
                     {% if waitingAcceptations|length > 0 %}
                         {% for wa in waitingAcceptations %}
@@ -81,6 +82,23 @@
                     {% endif %}
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-8 mx-auto">
+            <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" id="rechercherInput" class="form-control" placeholder="Invitez des amis"
+                                   name="search_student">
+                        </div>
+                        <div class="col-3">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

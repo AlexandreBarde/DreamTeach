@@ -5,102 +5,105 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row mb-5">
-        {% for friend in friendsAccepted %}
-            <div class="col-4">
-                <div class="card">
-                    <span class="text-right"><a
-                                href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student2.id}) }}"
-                                class="btn btn-danger fas fa-trash fa-xs m-1 mr-4" title="Supprimer cet ami"></a></span>
-                    <div class="card-body">
-                        {% if friend.student2.avatar %}
-                            <img class="rounded-circle img-fluid" src="{{ asset('uploads/avatars/' ~ friend.student2.avatar) }}" width="60px" height="60px"/>
-                        {% else %}
-                            <img class="rounded-circle img-fluid" src="{{ asset('img/imageBaseProfil.png') }}" width="60px" height="60px"/>
-                        {% endif %}
-                       <a href="{{ path('student_other_profile', {'uuid_student':friend.student2.uuid}) }}" class="float-right text-primary">{{ friend.student2.firstName~" "~friend.student2.lastName }}</a>
-                        <div class="clearfix"></div>
-                        <a href="{{ path('ShowConversation', {'idStudent':friend.student2.uuid}) }}"><span class="btn btn-primary float-right fas fa-comment"></span></a>
+<div class="container mt-5">
+        <h1 class="display-4 text-center">Mes amis</h1>
+        <div class="container mt-5">
+            {% for friend in friendsAccepted %}
+                <div class="col-4">
+                    <div class="card">
+                        <span class="text-right"><a
+                                    href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student2.id}) }}"
+                                    class="btn btn-danger fas fa-trash fa-xs m-1 mr-4" title="Supprimer cet ami"></a></span>
+                        <div class="card-body">
+                            {% if friend.student2.avatar %}
+                                <img class="rounded-circle img-fluid" src="{{ asset('uploads/avatars/' ~ friend.student2.avatar) }}" width="60px" height="60px"/>
+                            {% else %}
+                                <img class="rounded-circle img-fluid" src="{{ asset('img/imageBaseProfil.png') }}" width="60px" height="60px"/>
+                            {% endif %}
+                           <a href="{{ path('student_other_profile', {'uuid_student':friend.student2.uuid}) }}" class="float-right text-primary">{{ friend.student2.firstName~" "~friend.student2.lastName }}</a>
+                            <div class="clearfix"></div>
+                            <a href="{{ path('ShowConversation', {'idStudent':friend.student2.uuid}) }}"><span class="btn btn-primary float-right fas fa-comment"></span></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-        {% for friend in friendsAccepted2 %}
-            <div class="col-4">
-                <div class="card">
-                    <span class="text-right"><a
-                                href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student1.id}) }}"
-                                class="btn btn-danger fas fa-trash fa-xs m-1 mr-4" title="Supprimer cet ami"></a></span>
-                    <div class="card-body">
-                        {% if friend.student1.avatar %}
-                            <img class="rounded-circle img-fluid"
-                                 src="{{ asset('uploads/avatars/' ~ friend.student1.avatar) }}" width="60px"
-                                 height="60px"/>
-                        {% else %}
-                            <img class="rounded-circle img-fluid" src="{{ asset('img/imageBaseProfil.png') }}"
-                                 width="60px" height="60px"/>
-                        {% endif %}
-                        <a href="{{ path('student_other_profile', {'uuid_student':friend.student1.uuid}) }}"
-                           class="float-right text-primary">{{ friend.student1.firstName~" "~friend.student1.lastName }}</a>
-                        <div class="clearfix"></div>
-                        <a href="{{ path('ShowConversation', {'idStudent':friend.student1.uuid}) }}"><span class="btn btn-primary float-right fas fa-comment"></span></a>
+            {% endfor %}
+            {% for friend in friendsAccepted2 %}
+                <div class="col-4">
+                    <div class="card">
+                        <span class="text-right"><a
+                                    href="{{ path('delete_friend', {'id_user': app.user.id, 'id_friend': friend.student1.id}) }}"
+                                    class="btn btn-danger fas fa-trash fa-xs m-1 mr-4" title="Supprimer cet ami"></a></span>
+                        <div class="card-body">
+                            {% if friend.student1.avatar %}
+                                <img class="rounded-circle img-fluid"
+                                     src="{{ asset('uploads/avatars/' ~ friend.student1.avatar) }}" width="60px"
+                                     height="60px"/>
+                            {% else %}
+                                <img class="rounded-circle img-fluid" src="{{ asset('img/imageBaseProfil.png') }}"
+                                     width="60px" height="60px"/>
+                            {% endif %}
+                            <a href="{{ path('student_other_profile', {'uuid_student':friend.student1.uuid}) }}"
+                               class="float-right text-primary">{{ friend.student1.firstName~" "~friend.student1.lastName }}</a>
+                            <div class="clearfix"></div>
+                            <a href="{{ path('ShowConversation', {'idStudent':friend.student1.uuid}) }}"><span class="btn btn-primary float-right fas fa-comment"></span></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="dropdown-divider"></div>
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h6>Vos demandes d'amis en cours</h6>
-                </div>
+            {% endfor %}
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6>Vos demandes d'amis en cours</h6>
+                    </div>
 
-                <div class="card-body">
-                    {% if waitingAcceptations|length > 0 %}
-                        {% for wa in waitingAcceptations %}
-                            <div class="row">
-                                <div class="col-6">
-                                    {% if wa.student1.avatar %}
-                                        <img class="rounded-circle img-fluid"
-                                             src="{{ asset('uploads/avatars/' ~ wa.student1.avatar) }}" width="60px"
-                                             height="60px"/>
-                                    {% else %}
-                                        <img class="rounded-circle img-fluid"
-                                             src="{{ asset('img/imageBaseProfil.png') }}" width="60px" height="60px"/>
-                                    {% endif %}
-                                    <a href="{{ path('student_other_profile', {'uuid_student':wa.student1.uuid}) }}"
-                                       class="float-right text-primary">{{ wa.student1.firstName~" "~wa.student1.lastName }}</a>
-                                    <div class="clearfix"></div>
-                                    <a href="{{ path('accept_friend', {'student1': wa.student1.id, 'student2': app.user.id, 'id': wa.id, 'uuid': app.user.uuid}) }}"><span class="btn btn-success float-right fas fa-check"></span></a>
+                    <div class="card-body">
+                        {% if waitingAcceptations|length > 0 %}
+                            {% for wa in waitingAcceptations %}
+                                <div class="row">
+                                    <div class="col-6">
+                                        {% if wa.student1.avatar %}
+                                            <img class="rounded-circle img-fluid"
+                                                 src="{{ asset('uploads/avatars/' ~ wa.student1.avatar) }}" width="60px"
+                                                 height="60px"/>
+                                        {% else %}
+                                            <img class="rounded-circle img-fluid"
+                                                 src="{{ asset('img/imageBaseProfil.png') }}" width="60px" height="60px"/>
+                                        {% endif %}
+                                        <a href="{{ path('student_other_profile', {'uuid_student':wa.student1.uuid}) }}"
+                                           class="float-right text-primary">{{ wa.student1.firstName~" "~wa.student1.lastName }}</a>
+                                        <div class="clearfix"></div>
+                                        <a href="{{ path('accept_friend', {'student1': wa.student1.id, 'student2': app.user.id, 'id': wa.id, 'uuid': app.user.uuid}) }}"><span class="btn btn-success float-right fas fa-check"></span></a>
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        Vous n'avez aucune demande en cours..
-                    {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Vous n'avez aucune demande en cours..
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-8 mx-auto">
-            <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-8">
-                            <input type="text" id="rechercherInput" class="form-control" placeholder="Invitez des amis"
-                                   name="search_student">
-                        </div>
-                        <div class="col-3">
-                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+        <div class="row mt-4">
+            <div class="col-8 mx-auto">
+                <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" id="rechercherInput" class="form-control" placeholder="Invitez des amis"
+                                       name="search_student">
+                            </div>
+                            <div class="col-3">
+                                <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
+</div>
 {% endblock %}
 
 

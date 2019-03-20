@@ -7,6 +7,7 @@ use App\Entity\School;
 use App\Entity\Student;
 use App\Form\RegisterSchoolType;
 use App\Form\RegisterType;
+use App\Service\EmailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,8 +17,13 @@ class DefaultController extends AbstractController
 {
     /**
      * @Route("/register", name="HomeController")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encode
+     * @param \Swift_Mailer $mailer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
-    public function register(Request $request, UserPasswordEncoderInterface $encode)
+    public function register(Request $request, UserPasswordEncoderInterface $encode,\Swift_Mailer $mailer)
     {
         if($request->get('selectedSchool')) {
             dump($request->get('selectedSchool'));
@@ -39,6 +45,15 @@ class DefaultController extends AbstractController
             $em->persist($student);
             $em->flush();
 
+            EmailService::sendMail(
+                $student->getEmailaddress(),
+                "Inscription à la plateforme DreamTeach",
+                $this->renderView(
+                    "mail.register.html.twig",
+                    ["user" => $student]
+                ),
+                $mailer);
+            
             return $this->redirectToRoute("app_login");
         }
 

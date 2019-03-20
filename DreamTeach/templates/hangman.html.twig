@@ -11,6 +11,10 @@
             margin-right: 5px;
             margin-top: 5px;
         }
+        #word
+        {
+            text-transform: uppercase;
+        }
     </style>
     <div class="container mt-5">
         <h1 class="display-4 text-center">Jeu du pendu</h1>
@@ -22,7 +26,7 @@
             </div>
             <div class="row text-center">
                 <div class="col col-lg-2 pt-1">
-                    <input class="form-control" type="text" placeholder="C _ _ _ _ A _ _ Z _ A" readonly>
+                    <input id="word" class="form-control" type="text" placeholder="{{ word.word }}" readonly>
                 </div>
                 <div class="col pt-1"><h5>Il reste x essai(s)</h5></div>
             </div>
@@ -37,7 +41,20 @@
 <script>
     function clicked()
     {
-        alert(this.firstChild.textContent);
+          $.ajax({
+            url: "{{ path('CheckWord') }}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                "personnage": "hé salut"
+            },
+            async: true,
+            success: function (data)
+            {
+                console.log(data);
+            }
+        });
+        //alert(this.firstChild.textContent);
     }
 </script>
 <script>

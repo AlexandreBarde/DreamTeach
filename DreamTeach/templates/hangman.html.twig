@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeu du pendu{% endblock %}
+
+{% block body %}
+    <style>
+        .letter
+        {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+    </style>
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Jeu du pendu</h1>
+    </div>
+        <div class="container mt-5">
+            <div class="row text-center">
+                <div class="col col-lg-2 pt-1"><h5>Le monsieur pendu</h5></div>
+                <div id="alphabet" class="col pt-1"><h5>Alphabet</h5></div>
+            </div>
+            <div class="row text-center">
+                <div class="col col-lg-2 pt-1">
+                    <input class="form-control" type="text" placeholder="C _ _ _ _ A _ _ Z _ A" readonly>
+                </div>
+                <div class="col pt-1"><h5>Il reste x essai(s)</h5></div>
+            </div>
+        </div>
+    <hr/>
+    <div class="container">
+        <h3>Hints : Définition du mot</h3>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function clicked()
+    {
+        alert(this.firstChild.textContent);
+    }
+</script>
+<script>
+    var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    for(i = 0;  i < alphabet.length; i++)
+    {
+        if(i % 6 === 0 )
+        {
+            var br = document.createElement("br");
+            document.getElementById("alphabet").appendChild(br);
+        }
+        var btn = document.createElement("BUTTON");
+        btn.setAttribute("class", "pr-2 pl-2 text-center letter");
+        var t = document.createTextNode(alphabet[i]);
+        btn.addEventListener("click", clicked);
+        btn.appendChild(t);
+        document.getElementById("alphabet").appendChild(btn);
+    }
+</script>
+
+{% endblock %}
+
+

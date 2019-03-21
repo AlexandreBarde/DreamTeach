@@ -43,6 +43,7 @@
 <script>
     function clicked()
     {
+        this.setAttribute('disabled', "");
           $.ajax({
             url: "{{ path('CheckWord') }}",
             type: "POST",
@@ -58,10 +59,16 @@
                 let definition = JSON.stringify(data['definition']);
                 let position = (data['position']);
                 let letter = (data['letter']);
+                let winner = data['winner'];
                 console.log("State : " + state);
                 console.log("Life : " + life);
                 console.log("Definition : " + definition);
                 console.log("Position : " + position);
+                if(winner)
+                {
+                    window.location.replace("{{ path('HangmanWinner') }}");
+                    alert("super mec !");
+                }
                 if(position.length !== 0)
                 {
                     let wordSecret = $("#word").html();

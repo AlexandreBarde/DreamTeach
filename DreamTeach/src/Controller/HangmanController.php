@@ -44,7 +44,7 @@ class HangmanController extends AbstractController
 
         $session = $request->getSession();
 
-        $session->set("word", $word);
+        $session->set("word", strtolower($word->getWord()));
         $session->set("life", 15);
 
         $wordRender = "";
@@ -52,7 +52,7 @@ class HangmanController extends AbstractController
         $sizeWord = strlen($word->getWord());
         for($i = 0; $i < $sizeWord; $i++)
         {
-            $wordRender .= "_ ";
+            $wordRender .= "_";
         }
 
         return $this->render("hangman.html.twig", ["word" => $wordRender]);
@@ -71,9 +71,19 @@ class HangmanController extends AbstractController
         $life = $session->get("life");
         $definition = null;
 
-        $char = $request->request->get("char");
+        $char = strtolower($request->request->get("char"));
 
-        if (strpos($word->getWord(), $char) !== false) $state = true;
+        $position = array();
+
+        if (strpos($word, $char) !== false)
+        {
+            $state = true;
+            $wordArray = str_split($word);
+            for($i = 0; $i < strlen($word); $i++)
+            {
+                if($wordArray[$i] == $char) array_push($position,$i);
+            }
+        }
         else
         {
             $state = false;
@@ -89,7 +99,9 @@ class HangmanController extends AbstractController
         $response = new Response(json_encode(array(
             'word' => $state,
             'life' => $life - 1,
-            'definition' => $definition
+            'definition' => $definition,
+            'position' => $position,
+            'letter' => $char
         )));
         $response->headers->set('Content-Type', 'application/json');
 

@@ -38,8 +38,6 @@ class HangmanController extends AbstractController
         /** @var Word $word */
         $word = $words->findOneBy(['id' => $random]);
 
-        dump($word);
-
         $session = $request->getSession();
 
         $session->set("word", strtolower($word->getWord()));

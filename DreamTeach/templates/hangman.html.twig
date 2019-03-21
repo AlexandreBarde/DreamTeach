@@ -60,10 +60,6 @@
                 let position = (data['position']);
                 let letter = (data['letter']);
                 let winner = data['winner'];
-                console.log("State : " + state);
-                console.log("Life : " + life);
-                console.log("Definition : " + definition);
-                console.log("Position : " + position);
                 if(winner)
                 {
                     window.location.replace("{{ path('HangmanWinner') }}");
@@ -72,14 +68,10 @@
                 if(position.length !== 0)
                 {
                     let wordSecret = $("#word").html();
-                    console.log("Word secret : " + wordSecret);
                     for(let i = 0; i < position.length; i++)
                     {
-                        console.log("##########");
-                        console.log("0 -> " + position[i] + " " + letter + " -> " + (position[i] + 1));
                         wordSecret = (wordSecret.substring(0, position[i]) +
                             letter + wordSecret.substring((position[i] + 1), wordSecret.length));
-                        console.log("##########");
                     }
                     $("#word").html(wordSecret);
                 }

@@ -27,7 +27,7 @@
             </div>
             <div class="row text-center">
                 <div class="col col-lg-2 pt-1">
-                    <input id="word" class="form-control" type="text" placeholder="{{ word.word }}" readonly>
+                    <input id="word" class="form-control" type="text" placeholder="{{ word }}" readonly>
                 </div>
                 <div class="col pt-1"><h5>Il reste <span id="nbrEssais">15</span> essai(s)</h5></div>
             </div>
@@ -53,14 +53,17 @@
             async: true,
             success: function (data)
             {
-                console.log("State : " + JSON.stringify(data['word']));
-                console.log("Life : " + JSON.stringify(data['life']));
-                console.log("Definition : " + JSON.stringify(data['definition']));
-                if(JSON.stringify(data['definition']) !== "null") $("#definition").html(JSON.stringify(data['definition']));
-                $("#nbrEssais").html(JSON.stringify(data['life']));
+                let state = JSON.stringify(data['word']);
+                let life = JSON.stringify(data['life']);
+                let definition = JSON.stringify(data['definition']);
+                console.log("State : " + state);
+                console.log("Life : " + life);
+                console.log("Definition : " + definition);
+                if(life === "0") alert("Vous avez perdu !");
+                if(definition !== "null") $("#definition").html(definition);
+                $("#nbrEssais").html(life);
             }
         });
-        //alert(this.firstChild.textContent);
     }
 </script>
 <script>

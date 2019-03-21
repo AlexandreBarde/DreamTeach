@@ -37,6 +37,7 @@ class HangmanController extends AbstractController
 
         $random = rand(1, sizeof($words->findAll()));
 
+        /** @var Word $word */
         $word = $words->findOneBy(['id' => $random]);
 
         dump($word);
@@ -46,7 +47,15 @@ class HangmanController extends AbstractController
         $session->set("word", $word);
         $session->set("life", 15);
 
-        return $this->render("hangman.html.twig", ["word" => $word]);
+        $wordRender = "";
+
+        $sizeWord = strlen($word->getWord());
+        for($i = 0; $i < $sizeWord; $i++)
+        {
+            $wordRender .= "_ ";
+        }
+
+        return $this->render("hangman.html.twig", ["word" => $wordRender]);
     }
 
     /**
@@ -68,17 +77,15 @@ class HangmanController extends AbstractController
         else
         {
             $state = false;
-            if($life == 10)
-            {
-                $definition = $word->getDefinition();
-            }
+            if($life == 10) $definition = $word->getDefinition();
             if($life >= 1) $session->set("life", $life - 1);
             else
             {
                 //c'est perdu
+                //TODO : Redirect view avec le mot qui devait être trouvé (perdu : le mot était xxx)
             }
         }
-        
+
         $response = new Response(json_encode(array(
             'word' => $state,
             'life' => $life - 1,

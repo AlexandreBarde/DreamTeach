@@ -107,7 +107,11 @@
         <div class="col align-self-baseline">
             {% for a in subjectlevel %}
 
-                <p class="font-weight-bolder">{{ a.subjectid.name }}</br>{{ a.mark }}</p>
+                <p class="font-weight-bolder">{{ a.subjectid.name }} <br/>
+                {% for i in 1..a.mark %}
+                    <span class="fa fa-star" style="color:orange"></span>
+                {% endfor %}
+                </p>
 
 
 
@@ -153,7 +157,8 @@
                                         {{ form_start(form) }}
                                         {{ form_widget((form.subjectid)) }}
                                         {{ form_widget(form.mark) }}
-                                        <input type="submit" class="btn btn-light" style="background-color:#6d7fcc;color:white;" value="valider">
+                                        <input type="submit" class="btn btn-light"
+                                               style="background-color:#6d7fcc;color:white;" value="valider">
                                         {{ form_end(form) }}
                                     </div>
                                     <div class="col-2 text-center">

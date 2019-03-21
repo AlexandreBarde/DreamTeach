@@ -38,7 +38,7 @@ class Qcm
     private $title;
 
     /**
-     * @ORM\ManytoOne(targetEntity="Question", mappedBy="qcm")
+     * @ORM\ManytoOne(targetEntity="Question")
      */
     private $questions;
 

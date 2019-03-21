@@ -32,4 +32,8 @@ Modifier le fichier .env (à la racine du projet), et configurer la ligne `DATAB
 
 https://symfony.com/doc/current/index.html#gsc.tab=0 
 
+## Merci de mettre des gitmoji sur vos messages de commit
+
+https://gitmoji.carloscuesta.me/
+
 Courage :kissing_heart:

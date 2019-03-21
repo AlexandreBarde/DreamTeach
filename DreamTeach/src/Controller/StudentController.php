@@ -166,7 +166,7 @@ class StudentController extends Controller
 
         $avatar = $this->getUser()->getavatar();
 
-
+        $oldFileName = $this->getUser()->getAvatar();
         if ($request->getMethod() == 'POST') {
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
@@ -179,13 +179,10 @@ class StudentController extends Controller
         $form = $this->createForm(ProfileFormType::class, $user);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $file = $studentId->getAvatar();
             if ($file != null) {
-
+                unlink($this->getParameter('avatar_directory') . '/' . $oldFileName);
                 $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
                 try {
@@ -197,6 +194,7 @@ class StudentController extends Controller
                     // TODO Gérer les erreurs
                 }
                 $user->setAvatar($fileName);
+
 
             } else {
 

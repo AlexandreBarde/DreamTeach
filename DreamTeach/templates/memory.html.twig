@@ -7,6 +7,8 @@
         <h1 class="display-4 text-center">Memory</h1>
     </div>
     {% for word in words %}
-        {{ word.getWord }}
+        <button id="{{ word.getId }}">Card </button>
+        <button id="{{ word.getId }}">Card</button>
     {% endfor %}
+    <script src="{{ asset('js/memory.js') }}"></script>
 {% endblock %}

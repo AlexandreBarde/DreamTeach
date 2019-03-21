@@ -72,8 +72,6 @@ class QcmController extends AbstractController
         $formQcm = $this->createForm(CreateQcmType::class, $qcm);
         $formQcm->handleRequest($request);
 
-        $questionsForm = $this->createForm($type);
-
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $qcm->setAuthorId($this->getUser());

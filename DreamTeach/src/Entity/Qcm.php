@@ -37,6 +37,11 @@ class Qcm
      */
     private $title;
 
+    /**
+     * @ORM\ManytoOne(targetEntity="Question", mappedBy="qcm")
+     */
+    private $questions;
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -89,4 +94,22 @@ class Qcm
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param mixed $questions
+     */
+    public function setQuestions($questions): void
+    {
+        $this->questions = $questions;
+    }
+
+
 }

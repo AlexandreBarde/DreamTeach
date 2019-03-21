@@ -26,6 +26,12 @@ class Question
     private $id;
 
     /**
+     * @ORM\Column(type="integer"), nullable=false)
+     * @ORM\OneToMany(targetEntity="Qcm", mappedBy="questions")
+     */
+    private $qcm;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="content", type="string", length=1000, nullable=false)
@@ -131,6 +137,23 @@ class Question
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getQcm()
+    {
+        return $this->qcm;
+    }
+
+    /**
+     * @param mixed $qcm
+     */
+    public function setQcm($qcm): void
+    {
+        $this->qcm = $qcm;
+    }
+
 
 
 }

@@ -36,6 +36,29 @@ class Word
    private $word;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="definition", type="string", length=255, nullable=false)
+     */
+    private $definition;
+
+    /**
+     * @return string
+     */
+    public function getDefinition(): string
+    {
+        return $this->definition;
+    }
+
+    /**
+     * @param string $definition
+     */
+    public function setDefinition(string $definition): void
+    {
+        $this->definition = $definition;
+    }
+
+    /**
      * @var Theme
      *
      * @ORM\ManyToOne(targetEntity="Theme", cascade={"persist"})

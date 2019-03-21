@@ -60,6 +60,7 @@ class HangmanController extends AbstractController
 
         $word = $session->get("word");
         $life = $session->get("life");
+        $definition = null;
 
         $char = $request->request->get("char");
 
@@ -67,17 +68,21 @@ class HangmanController extends AbstractController
         else
         {
             $state = false;
+            if($life == 10)
+            {
+                $definition = $word->getDefinition();
+            }
             if($life >= 1) $session->set("life", $life - 1);
             else
             {
                 //c'est perdu
             }
         }
-
-
+        
         $response = new Response(json_encode(array(
             'word' => $state,
-            'life' => $life - 1
+            'life' => $life - 1,
+            'definition' => $definition
         )));
         $response->headers->set('Content-Type', 'application/json');
 

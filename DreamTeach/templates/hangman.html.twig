@@ -10,6 +10,7 @@
             height: 40px;
             margin-right: 5px;
             margin-top: 5px;
+            text-transform: uppercase;
         }
         #word
         {
@@ -34,6 +35,7 @@
     <hr/>
     <div class="container">
         <h3>Hints : Définition du mot</h3>
+        <h3><span id="definition"></span></h3>
     </div>
 {% endblock %}
 
@@ -53,6 +55,8 @@
             {
                 console.log("State : " + JSON.stringify(data['word']));
                 console.log("Life : " + JSON.stringify(data['life']));
+                console.log("Definition : " + JSON.stringify(data['definition']));
+                if(JSON.stringify(data['definition']) !== "null") $("#definition").html(JSON.stringify(data['definition']));
                 $("#nbrEssais").html(JSON.stringify(data['life']));
             }
         });

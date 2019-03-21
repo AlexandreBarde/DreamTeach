@@ -27,7 +27,7 @@ class Question
 
     /**
      * @ORM\Column(type="integer"), nullable=false)
-     * @ORM\OneToMany(targetEntity="Qcm", mappedBy="questions")
+     * @ORM\ManyToOne(targetEntity="Qcm")
      */
     private $qcm;
 
@@ -49,7 +49,7 @@ class Question
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Response", mappedBy="question_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Response", mappedBy="question_id", orphanRemoval=true)
      **/
     private $responses;
 

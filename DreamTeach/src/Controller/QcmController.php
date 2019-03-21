@@ -73,6 +73,7 @@ class QcmController extends AbstractController
         $formQcm->handleRequest($request);
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
+            dump($formQcm->getData());exit;
             $em = $this->getDoctrine()->getManager();
             $qcm->setAuthorId($this->getUser());
             $em->persist($qcm);

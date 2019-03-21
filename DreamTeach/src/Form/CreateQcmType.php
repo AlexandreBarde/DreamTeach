@@ -10,11 +10,15 @@ namespace App\Form;
 
 
 use App\Entity\Qcm;
+use App\Entity\Question;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateQcmType extends AbstractType
@@ -25,12 +29,22 @@ class CreateQcmType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('deadline', DateType::class)
-            ->add('visible', CheckboxType::class);
+            ->add('visible', CheckboxType::class)
+            ->add('questions', QuestionType::class);
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+
+
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'data_class' => Qcm::class
         ]);
     }

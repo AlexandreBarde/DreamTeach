@@ -31,8 +31,6 @@ class HangmanController extends AbstractController
      */
     public function showHangmanGame(Request $request)
     {
-        //$this->getUser()->setAttribute("word", "toto");
-
         $words = $this->getDoctrine()->getRepository(Word::class);
 
         $random = rand(1, sizeof($words->findAll()));
@@ -45,7 +43,9 @@ class HangmanController extends AbstractController
         $session = $request->getSession();
 
         $session->set("word", strtolower($word->getWord()));
+        $session->set("definition", $word->getDefinition());
         $session->set("life", 15);
+        $session->set("compteur", strlen($word->getWord()));
 
         $wordRender = "";
 
@@ -68,8 +68,11 @@ class HangmanController extends AbstractController
         $session = $request->getSession();
 
         $word = $session->get("word");
+        $definitionWord = $session->get("definition");
+        $compteur = $session->get("compteur");
         $life = $session->get("life");
         $definition = null;
+        $winner = false;
 
         $char = strtolower($request->request->get("char"));
 
@@ -81,13 +84,17 @@ class HangmanController extends AbstractController
             $wordArray = str_split($word);
             for($i = 0; $i < strlen($word); $i++)
             {
-                if($wordArray[$i] == $char) array_push($position,$i);
+                if($wordArray[$i] == $char)
+                {
+                    array_push($position,$i);
+                    $compteur--;
+                }
             }
         }
         else
         {
             $state = false;
-            if($life == 10) $definition = $word->getDefinition();
+            if($life == 10) $definition = $definitionWord;
             if($life >= 1) $session->set("life", $life - 1);
             else
             {
@@ -96,16 +103,44 @@ class HangmanController extends AbstractController
             }
         }
 
+        $session->set("compteur", $compteur);
+
+        if($compteur == 0)
+        {
+            $session->set("winner", true);
+            $winner = true;
+        }
+
         $response = new Response(json_encode(array(
             'word' => $state,
             'life' => $life - 1,
             'definition' => $definition,
             'position' => $position,
-            'letter' => $char
+            'letter' => $char,
+            'winner' => $winner
         )));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+
+    /**
+     * @Route("hangmanWinner", name="HangmanWinner")
+     * @param Request $request
+     * @return Response
+     */
+    public function winner(Request $request)
+    {
+        $session = $request->getSession();
+        if($session->get('winner'))
+        {
+            $session->set("winner", false);
+            return $this->render("hangman.winner.html.twig", ["word" => $session->get("word")]);
+        }
+        else
+        {
+            return $this->render("hangman.cheater.html.twig");
+        }
     }
 
 }

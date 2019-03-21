@@ -28,7 +28,7 @@
                 <div class="col col-lg-2 pt-1">
                     <input id="word" class="form-control" type="text" placeholder="{{ word.word }}" readonly>
                 </div>
-                <div class="col pt-1"><h5>Il reste x essai(s)</h5></div>
+                <div class="col pt-1"><h5>Il reste <span id="nbrEssais">15</span> essai(s)</h5></div>
             </div>
         </div>
     <hr/>
@@ -46,12 +46,14 @@
             type: "POST",
             dataType: "json",
             data: {
-                "personnage": "hé salut"
+                "char": this.firstChild.textContent
             },
             async: true,
             success: function (data)
             {
-                console.log(data);
+                console.log("State : " + JSON.stringify(data['word']));
+                console.log("Life : " + JSON.stringify(data['life']));
+                $("#nbrEssais").html(JSON.stringify(data['life']));
             }
         });
         //alert(this.firstChild.textContent);

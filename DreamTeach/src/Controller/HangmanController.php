@@ -44,19 +44,40 @@ class HangmanController extends AbstractController
         $session = $request->getSession();
 
         $session->set("word", $word);
+        $session->set("life", 15);
 
         return $this->render("hangman.html.twig", ["word" => $word]);
     }
 
     /**
      * @Route("checkWord", name="CheckWord")
+     * @param Request $request
+     * @return Response
      */
     public function checkWord(Request $request)
     {
         $session = $request->getSession();
+
         $word = $session->get("word");
+        $life = $session->get("life");
+
+        $char = $request->request->get("char");
+
+        if (strpos($word->getWord(), $char) !== false) $state = true;
+        else
+        {
+            $state = false;
+            if($life >= 1) $session->set("life", $life - 1);
+            else
+            {
+                //c'est perdu
+            }
+        }
+
+
         $response = new Response(json_encode(array(
-            'word' => $word
+            'word' => $state,
+            'life' => $life - 1
         )));
         $response->headers->set('Content-Type', 'application/json');
 

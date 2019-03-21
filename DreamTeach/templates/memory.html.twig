@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}DreamTeach{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Memory</h1>
+    </div>
+    {% for word in words %}
+        {{ word.getWord }}
+    {% endfor %}
+{% endblock %}

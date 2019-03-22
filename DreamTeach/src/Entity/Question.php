@@ -2,11 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Student;
-use App\Entity\Theme;
 
 /**
  * Question
@@ -50,13 +47,8 @@ class Question
 
     /**
      * @ORM\OneToMany(targetEntity="Response", mappedBy="question_id", orphanRemoval=true)
-     **/
+     */
     private $responses;
-
-    public function __construct()
-    {
-        $this->responses = new ArrayCollection();
-    }
 
     /**
      * @var Theme
@@ -100,21 +92,28 @@ class Question
     /**
      * @return Collection|Response[]
      */
-    public function getResponses(): Collection
+    public function getResponses()
     {
         return $this->responses;
     }
 
-    public function addResponse(Response $response): self
+    public function addResponses(Response $response): self
     {
-        if (!$this->responses->contains($response)) {
-            $this->responses[] = $response;
-            $response->setQuestionId($this);
-        }
+        $this->responses[] = $response;
+        $response->setQuestionId($this);
+
         return $this;
     }
 
-    public function removeResponse(Response $response): self
+    public function setResponses(Response $response)
+    {
+        $this->responses[] = $response;
+        $response->setQuestionId($this);
+
+        return $this;
+    }
+
+    public function removeResponses(Response $response): self
     {
         if ($this->responses->contains($response)) {
             $this->responses->removeElement($response);

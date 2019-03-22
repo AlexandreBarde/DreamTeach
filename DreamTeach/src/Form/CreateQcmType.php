@@ -29,7 +29,9 @@ class CreateQcmType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('deadline', DateType::class)
-            ->add('visible', CheckboxType::class)
+            ->add('visible', CheckboxType::class, [
+                'required' => false
+            ])
             ->add('questions', QuestionType::class);
 
         $builder->addEventListener(

@@ -18,7 +18,9 @@ class ResponseType extends AbstractType
     {
         $builder
             ->add("content", TextType::class)
-            ->add('rightanswer', CheckboxType::class);
+            ->add('rightanswer', CheckboxType::class, [
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

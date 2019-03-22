@@ -244,10 +244,7 @@ class Student implements UserInterface
         $this->subjectid = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xpwon = 0;
         $this->uuid = Uuid::uuid4()->toString();
-        $this->relations = new ArrayCollection();
-        $this->questions = new ArrayCollection();
-        $this->qcms = new ArrayCollection();
-        $this->responses = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -613,7 +610,7 @@ class Student implements UserInterface
     /**
      * @return Collection|Question[]
      */
-    public function getQuestions(): Collection
+    public function getQuestions()
     {
         return $this->questions;
     }
@@ -644,7 +641,7 @@ class Student implements UserInterface
     /**
      * @return Collection|Qcm[]
      */
-    public function getQcms(): Collection
+    public function getQcms()
     {
         return $this->qcms;
     }
@@ -675,7 +672,7 @@ class Student implements UserInterface
     /**
      * @return Collection|UserResponse[]
      */
-    public function getResponses(): Collection
+    public function getResponses()
     {
         return $this->responses;
     }

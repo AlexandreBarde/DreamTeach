@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Qcm;
+use App\Entity\Response;
 use App\Form\CreateQcmType;
 use App\Form\EditQcm;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -73,13 +74,13 @@ class QcmController extends AbstractController
         $formQcm->handleRequest($request);
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
-            dump($formQcm->getData());exit;
             $em = $this->getDoctrine()->getManager();
             $qcm->setAuthorId($this->getUser());
             $em->persist($qcm);
+            $em->persist($qcm->getQuestions());
             $em->flush();
-            return $this->redirectToRoute('showQcms');
 
+            return $this->redirectToRoute('showQcms');
         }
 
         return $this->render('qcm.create.html.twig', ["formCreateQcm" => $formQcm->createView()]);

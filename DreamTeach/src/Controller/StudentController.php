@@ -325,16 +325,16 @@ class StudentController extends Controller
     /**
      * @Route("/xpRanking", name="xpRanking")
      */
-    public function classementXp(){
-        $classement = $this->getDoctrine()->getEntityManager();
-        $tags = $classement->getRepository(Student::class)->findBy(
+    public function xpRanking(){
+        $ranking = $this->getDoctrine()->getEntityManager();
+        $tags = $ranking->getRepository(Student::class)->findBy(
             array(), array('xpwon' => 'DESC')
         );
 
         return $this->render(
             'xpRanking.html.twig',
             [
-                'classementxp' => $tags
+                'xpRanking' => $tags
             ]
         );
 
@@ -344,7 +344,7 @@ class StudentController extends Controller
     /**
      * @Route("/scoreboard", name="scoreboard")
      */
-    public function voirTableauScore(){
+    public function SeeScoreboard(){
         $result = $this->getDoctrine()->getRepository(Result::class)->findAll();
 
         //dump($result);exit();
@@ -387,7 +387,7 @@ class StudentController extends Controller
     /**
      * @Route("/searchClassement", name="search_xp_view")
      */
-    public function searchStudentInClassementXp(Request $request)
+    public function searchStudentInXpRanking(Request $request)
     {
         if ($request->get('search_xp')) {
             $result_xp = $this->getDoctrine()->getRepository(Student::class)->searchStudent(
@@ -396,8 +396,8 @@ class StudentController extends Controller
             return $this->render(
                 'xpRanking.html.twig',
                 [
-                    'classementxpSearch' => $result_xp,
-                    'classementxp' => null,
+                    'xpRankingSearch' => $result_xp,
+                    'xpRanking' => null,
                 ]
             );
         } else {

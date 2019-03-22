@@ -27,7 +27,7 @@ class SessionController extends Controller
 {
 
     /**
-     * @Route("/nouvellesession", name="sessionCreation")
+     * @Route("/newSession", name="sessionCreation")
      * @Route("/accueil/updateSession/{idSession}", name="updateSession")
      * @param $idSession
      */

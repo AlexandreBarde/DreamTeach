@@ -137,9 +137,8 @@ class StudentController extends Controller
     }
 
     /**
-     * @Route("/mon-profil/", name="student_profile")
+     * @Route("/my-profil/", name="student_profile")
      */
-
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
@@ -324,7 +323,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @Route("/classementxp", name="classementXp")
+     * @Route("/xpRanking", name="xpRanking")
      */
     public function classementXp(){
         $classement = $this->getDoctrine()->getEntityManager();
@@ -333,7 +332,7 @@ class StudentController extends Controller
         );
 
         return $this->render(
-            'classementxp.html.twig',
+            'xpRanking.html.twig',
             [
                 'classementxp' => $tags
             ]
@@ -343,14 +342,14 @@ class StudentController extends Controller
 
 
     /**
-     * @Route("/tableauScore", name="tableauscore")
+     * @Route("/scoreboard", name="scoreboard")
      */
     public function voirTableauScore(){
         $result = $this->getDoctrine()->getRepository(Result::class)->findAll();
 
         //dump($result);exit();
         return $this->render(
-            'tableauScore.html.twig',
+            'scoreboard.html.twig',
             [
                 'result' => $result,
                 'resulta' => null
@@ -395,7 +394,7 @@ class StudentController extends Controller
                 $request->get('search_xp')
             );
             return $this->render(
-                'classementxp.html.twig',
+                'xpRanking.html.twig',
                 [
                     'classementxpSearch' => $result_xp,
                     'classementxp' => null,
@@ -424,7 +423,7 @@ class StudentController extends Controller
                 );
             }
             return $this->render(
-                'tableauScore.html.twig',
+                'scoreboard.html.twig',
                 [
                     'score' => $result_score,
                     'result' => null,

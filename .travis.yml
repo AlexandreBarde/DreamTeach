@@ -36,15 +36,14 @@ before-install:
 # Create database, schema and fixtures
 install:
   - cd DreamTeach && composer install
-  - cd DreamTeach &&  php bin/console doctrine:database:create --env=test
-  - cd DreamTeach &&  php bin/console doctrine:schema:create --env=test
-  - cd DreamTeach &&  php bin/console doctrine:fixtures:load -n --env=test
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
+  - php bin/console doctrine:fixtures:load -n --env=test
 
 # Run script
 script:
-  - phpunit
   - ./vendor/bin/simple-phpunit
 
 # After a build, send email notification with the build results
-notifications:
+#notifications:
         #email: your_email

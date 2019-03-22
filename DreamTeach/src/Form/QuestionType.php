@@ -15,8 +15,7 @@ class QuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('content', TextType::class)
-            ->add('responses', ResponseType::class);
+            ->add('content', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -23,7 +23,7 @@ class Question
     private $id;
 
     /**
-     * @ORM\Column(type="integer"), nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      * @ORM\ManyToOne(targetEntity="Qcm")
      */
     private $qcm;
@@ -46,7 +46,7 @@ class Question
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="Response", mappedBy="question_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Response", mappedBy="question_id", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $responses;
 
@@ -112,6 +112,8 @@ class Question
 
         return $this;
     }
+
+
 
     public function removeResponses(Response $response): self
     {

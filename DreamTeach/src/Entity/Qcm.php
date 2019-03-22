@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +42,11 @@ class Qcm
      * @ORM\OneToMany(targetEntity="Question", mappedBy="qcm")
      */
     private $questions;
+
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
 
     public function getTitle(): ?string
     {

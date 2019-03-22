@@ -4,14 +4,15 @@ namespace App\Controller;
 
 
 use App\Entity\Qcm;
-use App\Entity\Response;
+use App\Entity\Question;
 use App\Form\CreateQcmType;
 use App\Form\EditQcm;
+use App\Form\QuestionType;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class MessageController
@@ -69,15 +70,19 @@ class QcmController extends AbstractController
     public function createQcm(Request $request)
     {
         $qcm = new Qcm();
+        $question = new Question();
+        $question->setQcm($qcm);
+        $user = $this->getUser();
 
         $formQcm = $this->createForm(CreateQcmType::class, $qcm);
         $formQcm->handleRequest($request);
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
+            $data = $formQcm->getData();
+            dump($data);exit;
             $em = $this->getDoctrine()->getManager();
             $qcm->setAuthorId($this->getUser());
             $em->persist($qcm);
-            $em->persist($qcm->getQuestions());
             $em->flush();
 
             return $this->redirectToRoute('showQcms');

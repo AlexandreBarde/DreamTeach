@@ -36,7 +36,6 @@ before-install:
 # Create database, schema and fixtures
 install:
   - cd DreamTeach && composer install
-  - cd DreamTeach &&  cp app/config/parameters.yml.dist app/config/parameters.yml
   - cd DreamTeach &&  php bin/console doctrine:database:create --env=test
   - cd DreamTeach &&  php bin/console doctrine:schema:create --env=test
   - cd DreamTeach &&  php bin/console doctrine:fixtures:load -n --env=test

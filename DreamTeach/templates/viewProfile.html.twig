@@ -157,9 +157,6 @@
                                         {{ form_start(form) }}
                                         {{ form_widget((form.subjectid)) }}
                                         {{ form_widget(form.mark) }}
-                                        <input type="submit" class="btn btn-light"
-                                               style="background-color:#6d7fcc;color:white;" value="valider">
-                                        {{ form_end(form) }}
                                     </div>
                                     <div class="col-2 text-center">
 
@@ -171,7 +168,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Confirmer</button>
+                    <input type="submit" class="btn btn-light"
+                           style="background-color:#6d7fcc;color:white;" value="valider">
+                    {{ form_end(form) }}
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
                 </div>
             </div>

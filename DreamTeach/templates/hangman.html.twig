@@ -22,14 +22,16 @@
     </div>
         <div class="container mt-5">
             <div class="row text-center">
-                <div class="col col-lg-2 pt-1"><h5>Le monsieur pendu</h5></div>
+                <div class="col col-lg-2 pt-1">
+                    <img id="hangman" src="{{ asset('img/hangman/11.jpg') }}" alt="..." class="img-thumbnail">
+                </div>
                 <div id="alphabet" class="col pt-1"><h5>Alphabet</h5></div>
             </div>
             <div class="row text-center">
                 <div class="col col-lg-2 pt-1">
                     <p id="word" class="form-control" type="text" readonly>{{ word }}</p>
                 </div>
-                <div class="col pt-1"><h5>Il reste <span id="nbrEssais">15</span> essai(s)</h5></div>
+                <div class="col pt-1"><h5>Il reste <span id="nbrEssais">11</span> essai(s)</h5></div>
             </div>
         </div>
     <hr/>
@@ -65,6 +67,7 @@
                     window.location.replace("{{ path('HangmanWinner') }}");
                     alert("super mec !");
                 }
+                document.getElementById("hangman").setAttribute("src", "/img/hangman/" + life + ".png");
                 if(position.length !== 0)
                 {
                     let wordSecret = $("#word").html();

@@ -46,7 +46,7 @@ class Qcm
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="qcm", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="qcm", cascade={"all"})
      */
     private $questions;
 
@@ -123,6 +123,19 @@ class Qcm
     public function setQuestions($questions): void
     {
         $this->questions = $questions;
+    }
+
+    public function addQuestion(Question $question)
+    {
+        $this->questions[] = $question;
+        $question->setQcm($this);
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question)
+    {
+        //TODO
     }
 
     /**

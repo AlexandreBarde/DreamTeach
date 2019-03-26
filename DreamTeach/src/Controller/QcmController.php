@@ -68,10 +68,9 @@ class QcmController extends AbstractController
      */
     public function createQcm(Request $request)
     {
-        $qcm = new Qcm();
         $user = $this->getUser();
 
-        $formQcm = $this->createForm(CreateQcmType::class, $qcm);
+        $formQcm = $this->createForm(CreateQcmType::class, $qcm = new Qcm());
         $formQcm->handleRequest($request);
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
@@ -82,18 +81,6 @@ class QcmController extends AbstractController
             $qcm->setAuthorId($user);
             $em->persist($qcm);
             $em->flush();
-
-            foreach ($questions as $question) {
-                $em2 = $this->getDoctrine()->getManager();
-                $q = new Question();
-                $q->setContent($question->getContent());
-                $q->setQcm($qcm);
-                $q->setAuthor($user);
-                $q->setQcm($qcm);
-                $em2->persist($q);
-                $em2->flush();
-            }
-
 
             return $this->redirectToRoute('showQcms');
         }

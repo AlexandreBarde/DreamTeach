@@ -23,8 +23,8 @@ class Question
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     * @ORM\ManyToOne(targetEntity="Qcm")
+     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Qcm", inversedBy="questions")
      */
     private $qcm;
 

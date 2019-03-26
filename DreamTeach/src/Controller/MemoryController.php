@@ -33,6 +33,7 @@ class MemoryController extends AbstractController
     public function sessionAction(Request $request)
     {
         $words = $this->getDoctrine()->getRepository(Word::class)->findAll();
+        $wordsDefinition = $words;
         if($request->get('clickedCard1')) {
             if($request->get('clickedCard1') == $request->get('clickedCard2')) {
                 $response = new Response(json_encode(array(
@@ -42,17 +43,13 @@ class MemoryController extends AbstractController
                 return $response;
             }
         }
-        $shuffled_array = array();
-        $shuffled_keys = array_keys($words);
-        shuffle($shuffled_keys);
-
-        foreach($shuffled_keys as $shuffled_key) {
-            $shuffled_array[$shuffled_key] = $words[$shuffled_key];
-        }
+        shuffle($words);
+        shuffle($wordsDefinition);
         return $this->render(
             "memory.html.twig",
             [
-                "words" => $shuffled_array,
+                "words" => $words,
+                "wordsDefinition" => $wordsDefinition
             ]
         );
     }

@@ -39,7 +39,7 @@ class Qcm
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="qcm")
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="qcm", cascade={"persist"})
      */
     private $questions;
 

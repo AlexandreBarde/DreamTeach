@@ -39,6 +39,7 @@ class CreateQcmType extends AbstractType
                 'entry_options' => ['label' => true],
                 'allow_add' => true,
                 'prototype' => true,
+                'by_reference' => false,
                 'attr' => [
                     'class' => ''
                 ]

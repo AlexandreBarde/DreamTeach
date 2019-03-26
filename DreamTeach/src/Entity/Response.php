@@ -27,7 +27,7 @@ class Response
     private $rightanswer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Question")
+     * @ORM\ManyToOne(targetEntity="Question", cascade={"persist"})
      */
     private $question_id;
 

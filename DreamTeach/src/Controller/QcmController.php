@@ -77,17 +77,23 @@ class QcmController extends AbstractController
         $formQcm->handleRequest($request);
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $data = $formQcm->getData();
             $questions = $data->getQuestions();
-            foreach ($questions as $question){
-                $q = new Question();
-                $q->setQcm($qcm);
-            }
 
-            $em = $this->getDoctrine()->getManager();
-            $qcm->setAuthorId($this->getUser());
+            $qcm->setAuthorId($user);
             $em->persist($qcm);
             $em->flush();
+
+            foreach ($questions as $question){
+                $q = new Question();
+                $q->setContent($question->getContent());
+                $q->setQcm($qcm);
+                $q->setAuthor($user);
+                $q->setQcm($qcm);
+                $em->persist($q);
+                $em->flush();
+            }
 
             return $this->redirectToRoute('showQcms');
         }

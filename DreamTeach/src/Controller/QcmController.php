@@ -7,7 +7,6 @@ use App\Entity\Qcm;
 use App\Entity\Question;
 use App\Form\CreateQcmType;
 use App\Form\EditQcm;
-use App\Form\QuestionType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -79,7 +78,12 @@ class QcmController extends AbstractController
 
         if($formQcm->isSubmitted() && $formQcm->isValid()) {
             $data = $formQcm->getData();
-            dump($data);exit;
+            $questions = $data->getQuestions();
+            foreach ($questions as $question){
+                $q = new Question();
+                $q->setQcm($qcm);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $qcm->setAuthorId($this->getUser());
             $em->persist($qcm);

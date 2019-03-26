@@ -33,6 +33,9 @@ class MemoryController extends AbstractController
     public function sessionAction(Request $request)
     {
         $words = $this->getDoctrine()->getRepository(Word::class)->findAll();
+        if(sizeof($words) > 5) {
+            $words = array_slice($words, 0, 5);
+        }
         $wordsDefinition = $words;
         if($request->get('clickedCard1')) {
             if($request->get('clickedCard1') == $request->get('clickedCard2')) {

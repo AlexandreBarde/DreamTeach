@@ -7,13 +7,17 @@
         <h1 class="display-4 text-center">Memory</h1>
     </div>
     {% set compteur = 0 %}
-    <div id="memory">
-        {% for word in words %}
-            {% set compteur = compteur + 1%}
-            <button value="{{ word.getWord }}"id="{{ word.getId }}">Card </button>
+    <div id="container">
+        <div id="memory">
+            {% for word in words %}
+                {% set compteur = compteur + 1%}
+                <div class="row justify-content-around">
+                    <button class="col-5" value="{{ word.getWord }}"id="{{ word.getId }}">Card </button>
 
-            <button value="{{ wordsDefinition[compteur - 1].getDefinition }}" id="{{ wordsDefinition[compteur - 1].getId }}">Card</button>
-        {% endfor %}
+                    <button class="col-5" value="{{ wordsDefinition[compteur - 1].getDefinition }}" id="{{ wordsDefinition[compteur - 1].getId }}">Card</button>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
 

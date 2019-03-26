@@ -202,7 +202,10 @@ class SessionController extends Controller
     public function transferSessionRights($idSession){
 
         $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
-        $form = $this->createForm(TransferSessionRightsFormType::class, $session);
+        $participants = $session->getStudentid();
+        $form = $this->createForm(TransferSessionRightsFormType::class, $session, [
+            'participants' => $participants,
+        ]);
         return $this->render("transferSessionRights.html.twig", ['session'=>$session,'form' => $form->createView() ]);
 
     }

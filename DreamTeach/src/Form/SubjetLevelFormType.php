@@ -26,20 +26,24 @@ class SubjetLevelFormType extends AbstractType
                     return $er->createQueryBuilder('s');
                 },
                 'choice_label' => 'name',
+                'attr' => [
+                    'class'=>'custom-select'
+                ]
             ]
         )
             ->add(
                 'mark',
                 ChoiceType::class,
                 [
-                'choices' => [
-                    1 => 1,
-                    2 => 2,
-                    3 => 3,
-                    4 => 4,
-                    5 => 5
-                ]
-                ]
+                    'choices' => [
+                        1 => 1,
+                        2 => 2,
+                        3 => 3,
+                        4 => 4,
+                        5 => 5
+                    ], 'attr' => [
+                        'class'=>'custom-select'
+                ]]
             );
     }
 

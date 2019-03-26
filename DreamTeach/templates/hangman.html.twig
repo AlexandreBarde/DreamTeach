@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeu du pendu{% endblock %}
+
+{% block body %}
+    <style>
+        .letter
+        {
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+        #word
+        {
+            text-transform: uppercase;
+        }
+    </style>
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Jeu du pendu</h1>
+    </div>
+        <div class="container mt-5">
+            <div class="row text-center">
+                <div class="col col-lg-2 pt-1">
+                    <img id="hangman" src="{{ asset('img/hangman/11.jpg') }}" alt="..." class="img-thumbnail">
+                </div>
+                <div id="alphabet" class="col pt-1"><h5>Alphabet</h5></div>
+            </div>
+            <div class="row text-center">
+                <div class="col col-lg-2 pt-1">
+                    <p id="word" class="form-control" type="text" readonly>{{ word }}</p>
+                </div>
+                <div class="col pt-1"><h5>Il reste <span id="nbrEssais">11</span> essai(s)</h5></div>
+            </div>
+        </div>
+    <hr/>
+    <div class="container">
+        <h3>Hints : Définition du mot</h3>
+        <h3><span id="definition"></span></h3>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function clicked()
+    {
+        this.setAttribute('disabled', "");
+          $.ajax({
+            url: "{{ path('CheckWord') }}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                "char": this.firstChild.textContent
+            },
+            async: true,
+            success: function (data)
+            {
+                let state = JSON.stringify(data['word']);
+                let life = JSON.stringify(data['life']);
+                let definition = JSON.stringify(data['definition']);
+                let position = (data['position']);
+                let letter = (data['letter']);
+                let winner = data['winner'];
+                if(winner)
+                {
+                    window.location.replace("{{ path('HangmanWinner') }}");
+                    alert("super mec !");
+                }
+                document.getElementById("hangman").setAttribute("src", "/img/hangman/" + life + ".png");
+                if(position.length !== 0)
+                {
+                    let wordSecret = $("#word").html();
+                    for(let i = 0; i < position.length; i++)
+                    {
+                        wordSecret = (wordSecret.substring(0, position[i]) +
+                            letter + wordSecret.substring((position[i] + 1), wordSecret.length));
+                    }
+                    $("#word").html(wordSecret);
+                }
+                if(life === "0") alert("Vous avez perdu !");
+                if(definition !== "null") $("#definition").html(definition);
+                $("#nbrEssais").html(life);
+            }
+        });
+    }
+</script>
+<script>
+    var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    for(i = 0;  i < alphabet.length; i++)
+    {
+        if(i % 6 === 0 )
+        {
+            var br = document.createElement("br");
+            document.getElementById("alphabet").appendChild(br);
+        }
+        var btn = document.createElement("BUTTON");
+        btn.setAttribute("class", "pr-2 pl-2 text-center letter");
+        var t = document.createTextNode(alphabet[i]);
+        btn.addEventListener("click", clicked);
+        btn.appendChild(t);
+        document.getElementById("alphabet").appendChild(btn);
+    }
+</script>
+
+{% endblock %}
+
+

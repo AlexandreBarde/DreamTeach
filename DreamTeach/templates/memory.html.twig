@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}DreamTeach{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Memory</h1>
+    </div>
+    {% for word in words %}
+        <button id="{{ word.getId }}">Card </button>
+        <button id="{{ word.getId }}">Card</button>
+    {% endfor %}
+    <script src="{{ asset('js/memory.js') }}"></script>
+{% endblock %}

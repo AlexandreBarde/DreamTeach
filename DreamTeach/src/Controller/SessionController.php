@@ -10,6 +10,7 @@ use App\Entity\Badge;
 use App\Entity\Sessioncomment;
 use App\Form\AddCommentSessionFormType;
 use App\Form\SubjectType;
+use App\Form\TransferSessionRightsFormType;
 use DateTime;
 use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -192,6 +193,18 @@ class SessionController extends Controller
             else if($path === "agenda") return $this->redirectToRoute("student_agenda");
         }
         return $this->redirectToRoute("student_agenda");
+    }
+
+    /**
+     * @Route("/accueil/transferRights/{idSession}", name="transferRights")
+     * @param $idSession
+     */
+    public function transferSessionRights($idSession){
+
+        $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+        $form = $this->createForm(TransferSessionRightsFormType::class, $session);
+        return $this->render("transferSessionRights.html.twig", ['session'=>$session,'form' => $form->createView() ]);
+
     }
 
 

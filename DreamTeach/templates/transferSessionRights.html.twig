@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transférer les droits d'administration{% endblock %}
+
+
+{% block body %}
+
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Transférer les droits</h1>
+        <div class="row">
+        </div>
+
+
+        {{ form_start(form) }}
+        {{ form_widget(form.studentid) }}
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

@@ -11,10 +11,12 @@ namespace App\Tests;
 use App\Controller\DefaultController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class DefaultControllerTest extends PHPUnit_Framework_TestCase
 {
 
-
+    /**
+     * @test
+     */
     public function testShowRegister(){
 
         $client = static::createClient();

@@ -69,8 +69,6 @@ class QcmController extends AbstractController
     public function createQcm(Request $request)
     {
         $qcm = new Qcm();
-        $question = new Question();
-        $question->setQcm($qcm);
         $user = $this->getUser();
 
         $formQcm = $this->createForm(CreateQcmType::class, $qcm);
@@ -85,21 +83,21 @@ class QcmController extends AbstractController
             $em->persist($qcm);
             $em->flush();
 
-            foreach ($questions as $question){
+            foreach ($questions as $question) {
+                $em2 = $this->getDoctrine()->getManager();
                 $q = new Question();
                 $q->setContent($question->getContent());
                 $q->setQcm($qcm);
                 $q->setAuthor($user);
                 $q->setQcm($qcm);
-                $em->persist($q);
-                $em->flush();
+                $em2->persist($q);
+                $em2->flush();
             }
+
 
             return $this->redirectToRoute('showQcms');
         }
 
         return $this->render('qcm.create.html.twig', ["formCreateQcm" => $formQcm->createView()]);
-
     }
-
 }

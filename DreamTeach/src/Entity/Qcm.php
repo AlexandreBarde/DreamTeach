@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QcmRepository")
@@ -16,6 +17,12 @@ class Qcm
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $uuid;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Student", inversedBy="qcms")
@@ -46,6 +53,7 @@ class Qcm
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->uuid = Uuid::uuid4()->toString();
     }
 
     public function getTitle(): ?string
@@ -117,5 +125,20 @@ class Qcm
         $this->questions = $questions;
     }
 
+    /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     */
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
 
 }

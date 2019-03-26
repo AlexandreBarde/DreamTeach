@@ -31,7 +31,7 @@
                             </td>
                         {% else %}
                             <td class="text-center">
-                                <a class="btn btn-primary" href="answerQcm/{{ qcm.id }}">Répondre au QCM</a>
+                                <a class="btn btn-primary" href="{{ path('createQcm') }}">Répondre au QCM</a>
                             </td>
                         {% endif %}
                     </tr>

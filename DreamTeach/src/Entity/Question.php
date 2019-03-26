@@ -23,8 +23,11 @@ class Question
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @ORM\ManyToOne(targetEntity="Qcm", inversedBy="questions")
+     *
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="qcm", referencedColumnName="id")
+     * })
+     * @ORM\ManyToOne(targetEntity="Qcm")
      */
     private $qcm;
 

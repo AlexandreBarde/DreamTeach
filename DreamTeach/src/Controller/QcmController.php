@@ -4,7 +4,6 @@ namespace App\Controller;
 
 
 use App\Entity\Qcm;
-use App\Entity\Question;
 use App\Form\CreateQcmType;
 use App\Form\EditQcm;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -64,20 +63,43 @@ class QcmController extends AbstractController
 
     /**
      * Permet de créer un QCM
-     * @Route("/createQcm", name="createQcm")
+     * @Route("/initQcm", name="createQcm")
      */
-    public function createQcm(Request $request)
+    public function initQcm(Request $request)
     {
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
 
-        $formQcm = $this->createForm(CreateQcmType::class, $qcm = new Qcm());
+        $qcm = new Qcm();
+        $qcm->setAuthorId($user);
+        $em->persist($qcm);
+        $em->flush();
+
+        return $this->redirectToRoute(
+            'createQcm2',
+            [
+                'id' => $qcm->getId(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/createQcm/{id}", name="createQcm2")
+     */
+    public function createQcm(Request $request, Qcm $qcm)
+    {
+        $user = $this->getUser();
+        $formQcm = $this->createForm(CreateQcmType::class, $qcm);
         $formQcm->handleRequest($request);
 
-        if($formQcm->isSubmitted() && $formQcm->isValid()) {
+        if ($formQcm->isSubmitted() && $formQcm->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $data = $formQcm->getData();
             $questions = $data->getQuestions();
-
+            foreach ($questions as $q) {
+                $q->setAuthor($user);
+                $q->setQcm($qcm);
+            }
             $qcm->setAuthorId($user);
             $em->persist($qcm);
             $em->flush();
@@ -85,6 +107,11 @@ class QcmController extends AbstractController
             return $this->redirectToRoute('showQcms');
         }
 
-        return $this->render('qcm.create.html.twig', ["formCreateQcm" => $formQcm->createView()]);
+        return $this->render(
+            'qcm.create.html.twig',
+            [
+                'formCreateQcm' => $formQcm->createView(),
+            ]
+        );
     }
 }

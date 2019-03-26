@@ -38,6 +38,7 @@ class CreateQcmType extends AbstractType
                 'entry_type' => QuestionType::class,
                 'entry_options' => ['label' => true],
                 'allow_add' => true,
+                'prototype' => true,
             ]);
     }
 

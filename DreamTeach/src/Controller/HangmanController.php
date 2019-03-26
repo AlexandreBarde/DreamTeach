@@ -42,7 +42,7 @@ class HangmanController extends AbstractController
 
         $session->set("word", strtolower($word->getWord()));
         $session->set("definition", $word->getDefinition());
-        $session->set("life", 15);
+        $session->set("life", 11);
         $session->set("compteur", strlen($word->getWord()));
 
         $wordRender = "";

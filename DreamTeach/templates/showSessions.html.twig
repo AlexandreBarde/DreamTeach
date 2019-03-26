@@ -113,11 +113,16 @@
 
                                     <td><a href="#" class="btn btn-danger disabled"><i
                                                     class="fas fa-door-closed"></i>
-                                            Clôturer</td>
+                                            Clôturé</td>
+                                    <td><a href="#" class="btn btn-danger disabled"><i
+                                                    class="fas fa-door-closed"></i>
+                                            Transfert admin</td>
 
                                 {% else %}
                                     <td><a href="{{ path('CloseSession', {"idSession" : i.id()}) }}"
                                            class="btn btn-danger"><i class="fas fa-door-closed"></i> Clôturer</td>
+                                    <td><a href="{{ path('CloseSession', {"idSession" : i.id()}) }}"
+                                           class="btn btn-danger"><i class="fas fa-door-closed"></i> Transfert admin</td>
 
 
                                 {% endif %}

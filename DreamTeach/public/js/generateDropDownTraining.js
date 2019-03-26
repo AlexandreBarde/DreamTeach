@@ -24,17 +24,14 @@ function regenerateTraining(selectedSchool) {
     console.log(selectedSchool);
 
     $.ajax({
-        //On utilise le type GET
         type: 'POST',
 
         url: "/",
 
-        //On passe en paramètre le message et l'auteur du message
         data: {
             selectedSchool: selectedSchool
         },
 
-        // code_html contient le HTML renvoyé
         success : function(code_html, statut){
             $("#register_trainingid option[class=" + selectedSchool + "]").show();
             $("#register_trainingid").val($("#register_trainingid option[class="+selectedSchool+"]").val());

@@ -5,11 +5,8 @@
  * Date: 20/03/2019
  * Time: 17:51
  */
-
 namespace App\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Word
  *
@@ -18,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Word
 {
-
     /**
      * @var int
      *
@@ -26,22 +22,19 @@ class Word
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-   private $id;
-
+    private $id;
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="string", length=255, nullable=false)
      */
-   private $word;
-
+    private $word;
     /**
      * @var string
      *
      * @ORM\Column(name="definition", type="string", length=255, nullable=false)
      */
     private $definition;
-
     /**
      * @return string
      */
@@ -49,7 +42,6 @@ class Word
     {
         return $this->definition;
     }
-
     /**
      * @param string $definition
      */
@@ -57,7 +49,6 @@ class Word
     {
         $this->definition = $definition;
     }
-
     /**
      * @var Theme
      *
@@ -66,8 +57,7 @@ class Word
      *   @ORM\JoinColumn(name="theme", referencedColumnName="id")
      * })
      */
-   private $theme;
-
+    private $theme;
     /**
      * @return int
      */
@@ -75,7 +65,6 @@ class Word
     {
         return $this->id;
     }
-
     /**
      * @param int $id
      */
@@ -83,7 +72,6 @@ class Word
     {
         $this->id = $id;
     }
-
     /**
      * @return string
      */
@@ -91,7 +79,6 @@ class Word
     {
         return $this->word;
     }
-
     /**
      * @param string $word
      */
@@ -99,7 +86,6 @@ class Word
     {
         $this->word = $word;
     }
-
     /**
      * @return Theme
      */
@@ -107,7 +93,6 @@ class Word
     {
         return $this->theme;
     }
-
     /**
      * @param Theme $theme
      */
@@ -115,5 +100,4 @@ class Word
     {
         $this->theme = $theme;
     }
-
 }

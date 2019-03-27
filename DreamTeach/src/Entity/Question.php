@@ -50,7 +50,7 @@ class Question
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="Response", mappedBy="question_id", orphanRemoval=true, cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Response", mappedBy="question", orphanRemoval=true, cascade={"all"})
      */
     private $responses;
 

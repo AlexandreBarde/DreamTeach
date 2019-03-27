@@ -63,7 +63,7 @@ class QcmController extends AbstractController
     }
 
     /**
-     * Permet de créer un QCM
+     * Permet de générer un QCM
      * @Route("/initQcm", name="createQcm")
      */
     public function initQcm(Request $request, QcmService $qcmService)

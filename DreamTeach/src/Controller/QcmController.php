@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Qcm;
 use App\Form\CreateQcmType;
 use App\Form\EditQcm;
+use App\Service\QcmService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,20 +66,14 @@ class QcmController extends AbstractController
      * Permet de créer un QCM
      * @Route("/initQcm", name="createQcm")
      */
-    public function initQcm(Request $request)
+    public function initQcm(Request $request, QcmService $qcmService)
     {
-        $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-
-        $qcm = new Qcm();
-        $qcm->setAuthorId($user);
-        $em->persist($qcm);
-        $em->flush();
+        $qcm = $qcmService->initQcm($this->getUser());
 
         return $this->redirectToRoute(
             'createQcm2',
             [
-                'id' => $qcm->getId(),
+                'id' => $qcm,
             ]
         );
     }

@@ -22,14 +22,14 @@ class Response
     private $content;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $rightanswer;
+    private $rightAnswer;
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", cascade={"persist"})
      */
-    private $question_id;
+    private $question;
 
     public function getId(): ?int
     {
@@ -48,27 +48,37 @@ class Response
         return $this;
     }
 
-    public function getRightanswer(): ?bool
+    /**
+     * @return mixed
+     */
+    public function getRightAnswer()
     {
-        return $this->rightanswer;
+        return $this->rightAnswer;
     }
 
-    public function setRightanswer(bool $rightanswer): self
+    /**
+     * @param mixed $rightAnswer
+     */
+    public function setRightAnswer($rightAnswer): void
     {
-        $this->rightanswer = $rightanswer;
-
-        return $this;
+        $this->rightAnswer = $rightAnswer;
     }
 
-    public function getQuestionId(): ?question
+    /**
+     * @return mixed
+     */
+    public function getQuestion()
     {
-        return $this->question_id;
+        return $this->question;
     }
 
-    public function setQuestionId(?question $question_id): self
+    /**
+     * @param mixed $question
+     */
+    public function setQuestion($question): void
     {
-        $this->question_id = $question_id;
-
-        return $this;
+        $this->question = $question;
     }
+
+
 }

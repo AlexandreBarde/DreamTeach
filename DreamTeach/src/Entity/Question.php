@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -63,6 +64,11 @@ class Question
      */
     private $theme;
 
+    public function __construct()
+    {
+        $this->responses = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,43 +97,33 @@ class Question
 
         return $this;
     }
-
     /**
-     * @return Collection|Response[]
+     * @return mixed
      */
     public function getResponses()
     {
         return $this->responses;
     }
 
-    public function addResponses(Response $response): self
+    /**
+     * @param mixed $questions
+     */
+    public function setResponses($questions): void
+    {
+        $this->responses = $questions;
+    }
+
+    public function addResponse(Response $response)
     {
         $this->responses[] = $response;
-        $response->setQuestionId($this);
+        $response->setQuestion($this);
 
         return $this;
     }
 
-    public function setResponses(Response $response)
+    public function removeQuestion(Question $question)
     {
-        $this->responses[] = $response;
-        $response->setQuestionId($this);
-
-        return $this;
-    }
-
-
-
-    public function removeResponses(Response $response): self
-    {
-        if ($this->responses->contains($response)) {
-            $this->responses->removeElement($response);
-            // set the owning side to null (unless already changed)
-            if ($response->getQuestionId() === $this) {
-                $response->setQuestionId(null);
-            }
-        }
-        return $this;
+        //TODO
     }
 
     public function getTheme(): ?Theme

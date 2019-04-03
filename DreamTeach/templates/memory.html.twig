@@ -8,15 +8,19 @@
     </div>
     {% set compteur = 0 %}
     <div id="container">
-        <div id="memory">
-            {% for word in words %}
-                {% set compteur = compteur + 1%}
-                <div class="row justify-content-around">
-                    <button class="col-5" value="{{ word.getWord }}"id="{{ word.getId }}">Card </button>
-
-                    <button class="col-5" value="{{ wordsDefinition[compteur - 1].getDefinition }}" id="{{ wordsDefinition[compteur - 1].getId }}">Card</button>
-                </div>
-            {% endfor %}
+            <div id="memory">
+                {% for word in words %}
+                    <div class="row mb-2">
+                        {% set compteur = compteur + 1%}
+                            <div class="col-6">
+                                <button class="btn btn-block " value="{{ word.getWord }}"id="{{ word.getId }}" style="background-color:#6d7fcc; color:white;">Card </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block" value="{{ wordsDefinition[compteur - 1].getDefinition }}" id="{{ wordsDefinition[compteur - 1].getId }}" style="background-color:#6d7fcc; color:white;">Card</button>
+                            </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

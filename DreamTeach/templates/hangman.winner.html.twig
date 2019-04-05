@@ -18,6 +18,9 @@
                 <h4>Le mot était : {{ word }}</h4>
             </div>
         </div>
+        <form action="{{ path('PlayHangman') }}" method="POST">
+            <button class="btn btn-block mt-5" style="background-color: #6d7fcc;color: white;" type="submit">Rejouer</button>
+        </form>
     </div>
 
 

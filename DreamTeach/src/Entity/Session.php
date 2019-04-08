@@ -210,7 +210,7 @@ class Session
         return $this;
     }
 
-    public function getOrganizerid(): ?Student
+    public function getOrganizerid(): \Student
     {
         return $this->organizerid;
     }

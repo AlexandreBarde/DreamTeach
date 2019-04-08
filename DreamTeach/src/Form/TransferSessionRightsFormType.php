@@ -14,6 +14,8 @@ use App\Entity\Student;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,9 +30,10 @@ class TransferSessionRightsFormType extends AbstractType
             ->add('studentid', EntityType::class,[
                 'class' => Student::class,
                 'query_builder' => function (EntityRepository $er) use ($participants) {
-                    return $er->createQueryBuilder('s');
-                },
-                'attr' => ['class' => 'form-control'],
+                    return $er->createQueryBuilder('s')
+            ->where('s IN (:participants)')->setParameter('participants', $participants);
+    },'attr' => ['class' => 'form-control'],
+
             ]);
     }
 

@@ -14,9 +14,9 @@ use App\Form\TransferSessionRightsFormType;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
-use PhpParser\Node\Expr\Array_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\SessionFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints\Collection;
  * @package App\Controller
  * @IsGranted("ROLE_USER")
  */
-class SessionController extends Controller
+class SessionController extends AbstractController
 {
 
     /**
@@ -35,11 +35,11 @@ class SessionController extends Controller
      * @Route("/accueil/updateSession/{idSession}", name="updateSession")
      * @param $idSession
      */
-    public function sessionCreationAndUpdate(Request $request, $idSession=null)
+    public function sessionCreationAndUpdate(Request $request, $idSession = null)
     {
         $session = new Session();
         $subject = new Subject();
-        if ($idSession!=null) {
+        if ($idSession != null) {
             $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         }
 
@@ -48,7 +48,7 @@ class SessionController extends Controller
         $form->handleRequest($request);
         $formSubject->handleRequest($request);
 
-        if($formSubject->isSubmitted() && $formSubject->isValid()) {
+        if ($formSubject->isSubmitted() && $formSubject->isValid()) {
             $this->addFlash("success", "La matière a été créée avec succès");
             $em = $this->getDoctrine()->getManager();
             $em->persist($subject);
@@ -65,13 +65,13 @@ class SessionController extends Controller
                 $session->setClosed(false);
                 $em->persist($session);
                 $em->flush();
-                $id=$session->getId();
+                $id = $session->getId();
                 /* Ajout du badge  */
                 $badge = $this->getDoctrine()->getRepository(Badge::class)->find(1);
-                $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
+                $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
                 /* Ajout de l'xp  */
-                $this->get('xp_won')->wonXp($this->getUser(),50);
-                return $this->redirectToRoute('AddSession', ["idSession"=>$id]);
+                $this->get('xp_won')->wonXp($this->getUser(), 50);
+                return $this->redirectToRoute('AddSession', ["idSession" => $id]);
 
                 return $this->redirectToRoute('student_agenda');
             } else {
@@ -107,7 +107,7 @@ class SessionController extends Controller
         $listeSessionEtudiant = array();
 
         // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
-        foreach($listeSession as $sessionTMP) {
+        foreach ($listeSession as $sessionTMP) {
             // On ajoute les séances
             array_push($tmp, $sessionTMP->getId());
         }
@@ -127,15 +127,16 @@ class SessionController extends Controller
      * @Route("/accueil/displaySession/{idSession}", name="displaySession")
      * @param $idSession
      */
-    public function displaySession($idSession, Request $request){
+    public function displaySession($idSession, Request $request)
+    {
         $comment = new Sessioncomment();
         $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         $sessionComment = $this->createForm(AddCommentSessionFormType::class, $comment);
 
         $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession));
         $sessionComment->handleRequest($request);
-        if($sessionComment->isSubmitted() && $sessionComment->isValid()) {
-            if($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession, 'idStudent' => $this->getUser()->getId()))) {
+        if ($sessionComment->isSubmitted() && $sessionComment->isValid()) {
+            if ($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession, 'idStudent' => $this->getUser()->getId()))) {
                 $this->addFlash('success', "Commentaire non envoyé car vous avez déjà envoyé un commentaire pour cette session");
                 return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
             } else {
@@ -149,7 +150,7 @@ class SessionController extends Controller
                 return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
             }
         }
-        return $this->render("displaySession.html.twig",[
+        return $this->render("displaySession.html.twig", [
             'allSessionComments' => $allSessionComments,
             'session' => $session,
             'formComment' => $sessionComment->createView()
@@ -163,8 +164,7 @@ class SessionController extends Controller
     public function deleteSession($idSession)
     {
         // TODO : Vérifier que l'utilisateur est bien le créateur
-        if ($idSession!=null)
-        {
+        if ($idSession != null) {
             $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
             $em = $this->getDoctrine()->getManager();
             $em->remove($session);
@@ -181,8 +181,7 @@ class SessionController extends Controller
      */
     public function closeSession($idSession, Request $r)
     {
-        if($idSession != null)
-        {
+        if ($idSession != null) {
             $referer = $r->headers->get('referer');
             $refererSplitted = explode("/", $referer);
             $path = $refererSplitted[sizeof($refererSplitted) - 1];
@@ -192,24 +191,25 @@ class SessionController extends Controller
             $session->setClosed(true);
             $em->persist($session);
             $em->flush();
-            if($path === "showSessions") return $this->redirectToRoute("showSessions");
-            else if($path === "agenda") return $this->redirectToRoute("student_agenda");
+            if ($path === "showSessions") return $this->redirectToRoute("showSessions");
+            else if ($path === "agenda") return $this->redirectToRoute("student_agenda");
         }
         return $this->redirectToRoute("student_agenda");
     }
 
     /**
-     * @Route("/accueil/transferRights/{idSession}", name="transferRights")
-     * @param $idSession
+     * @Route("/accueil/transferRights/{session}", name="transferRights")
+     * @param Request $request
+     * @param Session $session
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function transferSessionRights(Request $request,$idSession){
-
-        $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+    public function transferSessionRights(Request $request, Session $session)
+    {
         $participants = $session->getStudentid();
-        $participantsWithoutAdmin=new ArrayCollection();
-        foreach ($participants as $participant){
-            if($participant!=$this->getUser()){
-               $participantsWithoutAdmin->add($participant);
+        $participantsWithoutAdmin = new ArrayCollection();
+        foreach ($participants as $participant) {
+            if ($participant != $this->getUser()) {
+                $participantsWithoutAdmin->add($participant);
             }
         }
 
@@ -218,10 +218,21 @@ class SessionController extends Controller
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-           
+
+            $newOrganizer=$form->get("studentid")->getData();
+            $em = $this->getDoctrine()->getManager();
+            $session->setOrganizerid($newOrganizer);
+
+            $this->addFlash('success', "Droits d'administrateur transmis");
+
+            $em->persist($session);
+
+            $em->flush();
+            return $this->redirectToRoute("showSessions");
+
         }
 
-        return $this->render("transferSessionRights.html.twig", ['session'=>$session,'form' => $form->createView() ]);
+        return $this->render("transferSessionRights.html.twig", ['session' => $session, 'form' => $form->createView()]);
 
 
     }

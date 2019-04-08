@@ -1,0 +1,3 @@
+<p>Vous avez reçu une invitation à rejoindre une séance.</p>
+<p>"{{ session.name }}" le {{ session.date.format('Y-m-d') }} de {{ session.startingtime|date('H:i') }} à {{ session.endingtime|date('H:i') }}</p>
+<a href="{{ path("AddSession", {"idSession" : session.id})  }}">Cliquez ici pour vous inscrire !</a>

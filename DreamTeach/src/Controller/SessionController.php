@@ -219,17 +219,13 @@ class SessionController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $newOrganizer=$form->get("studentid")->getData();
+            $newOrganizer=$form->get("organizerid")->getData();
             $em = $this->getDoctrine()->getManager();
             $session->setOrganizerid($newOrganizer);
-
             $this->addFlash('success', "Droits d'administrateur transmis");
-
-            $em->persist($session);
-
             $em->flush();
-            return $this->redirectToRoute("showSessions");
 
+            return $this->redirectToRoute("showSessions");
         }
 
         return $this->render("transferSessionRights.html.twig", ['session' => $session, 'form' => $form->createView()]);

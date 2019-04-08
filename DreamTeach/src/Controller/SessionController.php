@@ -10,6 +10,7 @@ use App\Entity\Badge;
 use App\Entity\Sessioncomment;
 use App\Form\AddCommentSessionFormType;
 use App\Form\SubjectType;
+use App\Repository\SearchStudentRepository;
 use DateTime;
 use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -17,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\SessionFormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class StudentController
@@ -122,8 +124,10 @@ class SessionController extends Controller
     /**
      * @Route("/accueil/displaySession/{idSession}", name="displaySession")
      * @param $idSession
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function displaySession($idSession, Request $request){
+    public function displaySession($idSession, Request $request)
+    {
         $comment = new Sessioncomment();
         $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         $sessionComment = $this->createForm(AddCommentSessionFormType::class, $comment);
@@ -193,6 +197,8 @@ class SessionController extends Controller
         }
         return $this->redirectToRoute("student_agenda");
     }
+
+
 
 
 }

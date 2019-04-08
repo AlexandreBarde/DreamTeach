@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Games
+{% endblock %}
+
+{% block body %}
+    <div class="container m-2">
+        <div class="text-center">
+            <h1 class="display-4">Jeux disponibles</h1>
+            <p class="mt-3">Les jeux permentent de gagner de l'xp vous puvez consulter le tableau des
+                scores</p>
+            <form action="{{ path('tableauscore') }}" method="POST">
+                <button class="btn" style="background-color: #6d7fcc;color: white;" type="submit">Consulter le tableau
+                    des scores 🏆
+                </button>
+            </form>
+            <hr style="background-color: #6d7fcc;"/>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <img src={{ asset("img/memory.jpg") }} height="50px"> &nbsp;
+            </div>
+            <div class="col-8">
+                lol
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

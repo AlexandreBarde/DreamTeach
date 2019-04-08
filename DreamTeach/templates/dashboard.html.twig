@@ -7,68 +7,91 @@
 {% block body %}
     <div class="row">
         <div class="col-8">
-            {% if "now"|date("H") >= 18 %}
+            {% if "now"|date("H") >= 15 %}
                 <h5>Bonsoir {{ app.user.firstname }} ! <i style="color: dimgrey" class="fas fa-moon"></i></h5>
             {% else %}
                 <h5>Bonjour {{ app.user.firstname }} ! <i style="color: yellow" class="fas fa-sun"></i></h5>
             {% endif %}
             Bienvenue sur votre espace personnel
         </div>
-        <div class="col-4 alert alert-success">
-        </div>
-    </div>
-<div class="row mt-4">
-    <div class="col-8 mx-auto">
-        <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
-            <div class="form-group">
+        <div class="col-4 alert alert-success align-bottom">
                 <div class="row">
-                    <div class="col-8">
-                        <input type="text" id="rechercherInput" class="form-control" placeholder="Recherchez un étudiant.."
-                               name="search_student">
+                    <h1 class="col-12 mb-0 justify-content-center d-flex">
+                        <span class="level_text d-none d-lg-flex">Niveau &nbsp;</span><span>15</span>
+                    </h1>
+                </div>
+
+                {#<div class="col-2 d-xl-inline d-none">#}
+                {#<i class="far fa-smile fa-3x"></i>#}
+                {#</div>#}
+                <div class="col-12 text-center mt-2">
+                    <div class="progress" style="height: 5px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 75%" aria-valuenow="75"
+                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="col-3">
-                        <input type="submit" id="rechercherBtn" value="Rechercher" class="btn" style="background-color: #6d7fcc; color: white;">
+                    <div class="row mt-2">
+                        <div class="col-12 text-center">375/500</div>
                     </div>
                 </div>
             </div>
-        </form>
     </div>
-</div>
-<div class="row justify-content-between mt-3">
-        <div class="col-6 col-sm-2 alert alert-danger text-center"><h6>Séances dirigées</h6>{{ nbSessionOrganized }}</div>
-        <div class="col-6 col-sm-2 alert alert-warning text-center"><h6>Séances assistées</h6>{{ nbSessionAttended }}</div>
-        <div class="col-6 col-sm-2 alert alert-primary"></div>
-        <div class="col-6 col-sm-2 alert alert-secondary"></div>
+    <div class="row mt-4">
+        <div class="col-8 mx-auto">
+            <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" id="rechercherInput" class="form-control"
+                                   placeholder="Recherchez un étudiant.."
+                                   name="search_student">
+                        </div>
+                        <div class="col-3">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-between mt-3">
+        <div class="col-12 col-sm-2 mx-1 alert alert-danger text-center"><h6>Séances
+                dirigées</h6>{{ nbSessionOrganized }}</div>
+        <div class="col-12 col-sm-2 mx-1 alert alert-warning text-center"><h6>Séances
+                assistées</h6>{{ nbSessionAttended }}</div>
+        <div class="col-12 col-sm-2 mx-1 alert alert-primary text-center"><h6>Test</h6>0</div>
+        <div class="col-12 col-sm-2 mx-1 alert alert-secondary text-center"><h6>Test</h6>0</div>
     </div>
     <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-lg-8 col-xl-6 mx-auto my-2">
         <div class="card">
             <div class="card-header">
                 <h6><i class="fa fa-graduation-cap fa-lg"></i>&nbsp;Prochaines séances</h6>
             </div>
             <div class="card-body pb-0">
                 {% for i in session %}
-                    <div class="row border ml-1 mr-1" onclick="location.href =`{{ path('displaySession', {'idSession' : i.id()}) }}`" style="cursor: pointer">
-                        <div class="col-8 pt-4">
-                            <u>{{ i.name()|slice(0, 41)}}{% if i.name()|length > 41 %} ...{% endif %}</u>
+                    <div class="row border ml-1 mr-1"
+                         onclick="location.href =`{{ path('displaySession', {'idSession' : i.id()}) }}`"
+                         style="cursor: pointer">
+                        <div class="col-6 pt-2">
+                            <u>{{ i.name()|slice(0, 41) }}{% if i.name()|length > 41 %} ...{% endif %}</u>
                         </div>
 
-                        <div class="col-4">
-                            <div class="col-12 text-right pr-0 pt-2">
-                                {{ i.date.format('d-m-Y') }}
+                        <div class="col-6">
+                            <div class="col-12 text-right pr-0 pt-2 ">
+                                <p class="mb-0">{{ i.date.format('d-m-Y') }}</p>
                             </div>
                             <div class="col-12 text-right pr-0">
-                                {{ i.startingTime.format('H:i') }} - {{ i.endingTime.format('H:i') }}
+                                <p class="mb-0">{{ i.startingTime.format('H:i') }} - {{ i.endingTime.format('H:i') }}</p>
                             </div>
                             </br>
                         </div>
-                        <div class="col-7 pb-4">
+                        <div class="col-6 pb-2">
                             {% if i.subjectID is not null %}
                                 {{ i.subjectID.getName() }}
                             {% endif %}
                         </div>
-                        <div class="col-5 text-right pt-3">
-                          {{ (i.getStudentid)|length}} participant(s)
+                        <div class="col-6 text-right pB-2">
+                            {{ (i.getStudentid)|length }} participant(s)
                         </div>
                         </br>
                     </div>
@@ -77,7 +100,7 @@
             </div>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-12 col-lg-8 col-xl-6 mx-auto my-2">
         <div class="card">
             <div class="card-header">
                 <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Messages récents</h6>
@@ -85,71 +108,72 @@
             <div class="card-body pb-0">
                 {% for m in messages %}
 
-                    <div class="row border ml-1 mr-1" onclick="location.href =`{{ path('ShowConversation', {'idStudent' : m.idSender.uuid}) }}`" style="cursor: pointer">
-                        <div class="col-8 pt-4">
-                            <u>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</u>
+                    <div class="row border ml-1 mr-1"
+                         onclick="location.href =`{{ path('ShowConversation', {'idStudent' : m.idSender.uuid}) }}`"
+                         style="cursor: pointer">
+                        <div class="col-8 pt-1">
+                            <p class="mb-0">De : {{ m.idSender.firstName }} {{ m.idSender.lastName }}</p>
+                            <p>Le : {{ m.date.format('d-m-Y') }}</p>
                         </div>
-                        <div class="col-4">
-                            <div class="col-12 text-right pr-0">
-                                {{ m.date.format('d-m-Y') }}
-                            </div>
-                            </br>
-                        </div>
-                        <div class="col-3 pb-4">
+
+                        <div class="col-4 py-3 px-auto text-right">
                             {% if m.idSender.avatar %}
-                                <img class="img-thumbnail img-fluid" height="100px" width="100px" src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
+                                <img class="img-thumbnail img-fluid" height="75px" width="75px"
+                                     src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
                             {% else %}
-                                <img class="img-thumbnail img-fluid" height="100px" width="100px" src="{{ asset('img/tom_bg.jpg') }}"
+                                <img class="img-thumbnail img-fluid" height="75px" width="75px"
+                                     src="{{ asset('img/imageBaseProfil.png') }}"
                                 >
                             {% endif %}
                         </div>
-                        <div class="col-9 text-right pt-3">
-                            {{ m.content|slice(0, 100)}}{% if m.content|length > 100 %} ...{% endif %}
+
+                        <div class="col-12 text-justify pb-3">
+                            {{ m.content|slice(0, 100) }}{% if m.content|length > 100 %} ...{% endif %}
                         </div>
                     </div>
-                    <br />
+                    <br/>
                 {% endfor %}
             </div>
         </div>
     </div>
-        {% block javascripts %}
-            <script>
-                $(document).ready(function () {
-                    if($("#rechercherInput").val().length <= 0) {
+    {% block javascripts %}
+        <script>
+            $(document).ready(function () {
+                if ($("#rechercherInput").val().length <= 0) {
+                    $("#rechercherBtn").attr('disabled', true);
+                } else {
+                    $("#rechercherBtn").attr('disabled', false);
+                }
+
+                $('#search_student_form').submit(function (e) {
+                    if ($("input[name=search_student]").val() === '') {
+                        e.preventDefault();
+                    }
+                })
+
+                $("#rechercherInput").keyup(function () {
+                    if ($("#rechercherInput").val().length <= 0) {
                         $("#rechercherBtn").attr('disabled', true);
                     } else {
                         $("#rechercherBtn").attr('disabled', false);
                     }
+                })
 
-                    $('#search_student_form').submit(function (e) {
-                        if ($("input[name=search_student]").val() === '') {
-                            e.preventDefault();
-                        }
-                    })
-
-                    $("#rechercherInput").keyup(function () {
-                        if($("#rechercherInput").val().length <= 0) {
-                            $("#rechercherBtn").attr('disabled', true);
-                        } else {
-                            $("#rechercherBtn").attr('disabled', false);
-                        }
-                    })
-
-                    $("#adresseEmail").keypress(function () {
-                        if($("#adresseEmail").val().indexOf("@")  > 0 && ($("#adresseEmail").val().indexOf(".")  > 2 && $("#adresseEmail").val().indexOf(".")  < ($("#adresseEmail").val().length)-1)) {
-                            $("#submitEmail").attr('disabled', false);
-                        } else {
-                            $("#submitEmail").attr('disabled', true);
-                        }
-                    })
-                    $("#adresseEmail").keyup(function(e) {
-                        if($("#adresseEmail").val().indexOf("@")  > 0 && ($("#adresseEmail").val().indexOf(".")  > 2 && $("#adresseEmail").val().indexOf(".")  < ($("#adresseEmail").val().length)-1)) {
-                            $("#submitEmail").attr('disabled', false);
-                        } else {
-                            $("#submitEmail").attr('disabled', true);
-                        }
-                    })
-                });
-            </script>
-        {% endblock %}
+                $("#adresseEmail").keypress(function () {
+                    if ($("#adresseEmail").val().indexOf("@") > 0 && ($("#adresseEmail").val().indexOf(".") > 2 && $("#adresseEmail").val().indexOf(".") < ($("#adresseEmail").val().length) - 1)) {
+                        $("#submitEmail").attr('disabled', false);
+                    } else {
+                        $("#submitEmail").attr('disabled', true);
+                    }
+                })
+                $("#adresseEmail").keyup(function (e) {
+                    if ($("#adresseEmail").val().indexOf("@") > 0 && ($("#adresseEmail").val().indexOf(".") > 2 && $("#adresseEmail").val().indexOf(".") < ($("#adresseEmail").val().length) - 1)) {
+                        $("#submitEmail").attr('disabled', false);
+                    } else {
+                        $("#submitEmail").attr('disabled', true);
+                    }
+                })
+            });
+        </script>
+    {% endblock %}
 {% endblock %}

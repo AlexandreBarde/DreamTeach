@@ -680,6 +680,14 @@ class Student implements UserInterface
         return $this->responses;
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->firstname.' '.$this->lastname;
+    }
+
     public function addResponse(UserResponse $response): self
     {
         if (!$this->responses->contains($response)) {

@@ -13,11 +13,14 @@ use App\Form\SubjectType;
 use App\Form\TransferSessionRightsFormType;
 use DateTime;
 use DateTimeZone;
+use Doctrine\Common\Collections\ArrayCollection;
+use PhpParser\Node\Expr\Array_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\SessionFormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Collection;
 
 /**
  * Class StudentController
@@ -199,14 +202,27 @@ class SessionController extends Controller
      * @Route("/accueil/transferRights/{idSession}", name="transferRights")
      * @param $idSession
      */
-    public function transferSessionRights($idSession){
+    public function transferSessionRights(Request $request,$idSession){
 
         $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         $participants = $session->getStudentid();
+        $participantsWithoutAdmin=new ArrayCollection();
+        foreach ($participants as $participant){
+            if($participant!=$this->getUser()){
+               $participantsWithoutAdmin->add($participant);
+            }
+        }
+
         $form = $this->createForm(TransferSessionRightsFormType::class, $session, [
-            'participants' => $participants,
+            'participants' => $participantsWithoutAdmin
         ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+           die('fdf');
+        }
+
         return $this->render("transferSessionRights.html.twig", ['session'=>$session,'form' => $form->createView() ]);
+
 
     }
 

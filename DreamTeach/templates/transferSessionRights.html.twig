@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transférer les droits d'administration{% endblock %}
+
+
+{% block body %}
+
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Transférer les droits</h1>
+        <div class="row">
+        </div>
+        <div class="form-group">
+
+            {{ form_start(form) }}
+
+            <label for="transfer_session_rights_form_studentid">Participant </label>
+            {{ form_widget(form.organizerid) }}
+        </div>
+        <input type="submit" value="Transférer" class="btn btn-lg btn-block"
+               style="background-color:#6d7fcc; color:white;">
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

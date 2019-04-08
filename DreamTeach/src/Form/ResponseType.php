@@ -22,7 +22,10 @@ class ResponseType extends AbstractType
                 ]
             ])
             ->add('rightanswer', CheckboxType::class, [
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control'
+                ]
             ]);
     }
 

@@ -101,15 +101,12 @@
             $collectionHolder.data('index', index + 1);
 
             // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<div></div>').append(newForm);
-            var $ai = $('<div></div>').append($newFormLi.data('prototype'));
-            console.log($newFormLi);
+            var $newFormLi = $('<li></li>').append(newForm);
 
             // also add a remove button, just for this example
             $newFormLi.append('<a href="#" class="remove-tag">x</a>');
 
             $newLinkLi.before($newFormLi);
-            $newLinkLi.before($ai);
 
             // handle the removal, just for this example
             $('.remove-tag').click(function (e) {

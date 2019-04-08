@@ -213,19 +213,27 @@ class SessionController extends AbstractController
             }
         }
 
+
+        if($participantsWithoutAdmin->isEmpty()){
+            $this->addFlash('danger', "Pas encore de participants pour cette séance...");
+            return $this->redirectToRoute("showSessions");
+        }
+
         $form = $this->createForm(TransferSessionRightsFormType::class, $session, [
             'participants' => $participantsWithoutAdmin
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $newOrganizer=$form->get("organizerid")->getData();
+            $newOrganizer = $form->get("organizerid")->getData();
+
             $em = $this->getDoctrine()->getManager();
             $session->setOrganizerid($newOrganizer);
             $this->addFlash('success', "Droits d'administrateur transmis");
             $em->flush();
 
             return $this->redirectToRoute("showSessions");
+
         }
 
         return $this->render("transferSessionRights.html.twig", ['session' => $session, 'form' => $form->createView()]);

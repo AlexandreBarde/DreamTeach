@@ -30,7 +30,8 @@ class TransferSessionRightsFormType extends AbstractType
             ->add('organizerid', EntityType::class,[
                 'class' => Student::class,
                 'query_builder' => function (EntityRepository $er) use ($participants) {
-                    return $er->createQueryBuilder('s');
+                    return $er->createQueryBuilder('s')
+            ->where('s IN (:participants)')->setParameter('participants', $participants);
     },'attr' => ['class' => 'form-control'],
 
             ]);

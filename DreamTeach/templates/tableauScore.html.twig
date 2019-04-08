@@ -5,21 +5,19 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1 class="display-4 text-center">Tableau des scores</h1>
-    {% if result %}
     <div class="row mt-4">
         <div class="col-8 mx-auto">
-            <form action="{{ path('search_score_view') }}" method="get" id="search_score_form">
+            <form action="{{ path('search_xp_view') }}" method="get" id="search_xp_form">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-8">
                             <input type="text" id="rechercherInput" class="form-control"
                                    placeholder="Recherchez un étudiant.."
-                                   name="search_score">
+                                   name="search_xp">
                         </div>
                         <div class="col-3">
-                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn"
+                                   style="background-color: #6d7fcc; color: white;">
                         </div>
                     </div>
                 </div>
@@ -27,80 +25,63 @@
         </div>
     </div>
     <div class="row">
-    </div>
-    <div class="row">
         <div class="col-12">
-
-            <table class="table">
+            <table data-toggle="table" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">
+                    <th class="text-center" scope="col">
+                        Classement
+                    </th>
+                    <th class="text-center" scope="col">
                         Nom
                     </th>
-                    <th scope="col">
-
+                    <th class="text-center" scope="col">
                         Prénom
                     </th>
-                    <th scope="col">
-
+                    <th class="text-center" scope="col">
                         Ville
                     </th>
-                    <th scope="col">
-
-                        QCM
+                    <th class="text-center" scope="col">
+                        Ecole
                     </th>
-                    <th scope="col">
-                        Score
+                    <th class="text-center" scope="col">
+                        Temps
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                {% if result is not null %}
-                    {% for j in result %}
-                            <tr>
-                                <td>{{ j.userid.lastName }}</td>
+                {% if classementMemory is not null %}
+                    {% for classement, i in classementMemory %}
+                        {% set medaille = "" %}
+                        {% if classement == 0 %}
+                            {% set medaille = "&#x1F947;" %}
+                        {% elseif classement == 1 %}
+                            {% set medaille = "&#x1F948;" %}
+                        {% elseif classement == 2 %}
+                            {% set medaille = "&#x1F949;" %}
+                        {% else %}
+                            {% set medaille = classement + 1 %}
+                        {% endif %}
+                        <tr>
 
-                                <td>{{ j.userid.firstName }}</td>
+                            <td class="text-center"> {{ medaille | raw }} </td>
 
-                                <td>{{ j.userid.city }}</td>
+                            <td class="text-center"> {{ i.studentId.lastName }}</td>
 
-                                <td>{{ j.qcmid.title }}</td>
+                            <td class="text-center"> {{ i.studentId.firstName }}</td>
 
-                                <td>{{ j.result }}</td>
-                            </tr>
-                    {% endfor %}
-                {% elseif score is not null %}
-                    {% for t in score %}
-                        {% for y in resulta %}
-                            <tr>
+                            <td class="text-center">{{ i.studentId.city }}</td>
 
+                            <td class="text-center">  {{ i.studentId.trainingID.schoolID.name }}</td>
 
-                                <td> {{ t.lastName }}</td>
-
-                                <td>{{ t.firstName }}</td>
-
-                                <td>{{ t.city }}</td>
-
-                                <td>  {{ y.qcmid.title }}</td>
-
-                                <td>  {{ y.result }}</td>
-                            </tr>
-
-                        {% endfor %}
+                            <td class="text-center">  {{ i.time }} s</td>
+                        </tr>
                     {% endfor %}
                 {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
-    {% else %}
-        <div class="container pt-4">
-            <div class="alert alert-danger" role="alert">
-                Aucune donnée disponible !
-            </div>
-        </div>
-    {% endif %}
-</div>
+    {% block javascripts %}
+    {% endblock %}
 {% endblock %}
-
-

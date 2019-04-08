@@ -11,6 +11,7 @@ use App\Entity\Sessioncomment;
 use App\Form\AddCommentSessionFormType;
 use App\Form\SubjectType;
 use App\Form\TransferSessionRightsFormType;
+use App\Repository\SearchStudentRepository;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Form\SessionFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class StudentController
@@ -126,6 +128,7 @@ class SessionController extends AbstractController
     /**
      * @Route("/accueil/displaySession/{idSession}", name="displaySession")
      * @param $idSession
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function displaySession($idSession, Request $request)
     {
@@ -240,6 +243,8 @@ class SessionController extends AbstractController
 
 
     }
+
+
 
 
 }

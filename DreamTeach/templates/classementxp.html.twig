@@ -16,7 +16,8 @@
                                    name="search_xp">
                         </div>
                         <div class="col-3">
-                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn" style="background-color: #6d7fcc; color: white;">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn"
+                                   style="background-color: #6d7fcc; color: white;">
                         </div>
                     </div>
                 </div>
@@ -25,68 +26,75 @@
     </div>
     <div class="row">
         <div class="col-12">
-
-            <table data-toggle="table"  class="table">
+            <table data-toggle="table" class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">
+                    <th class="text-center" scope="col">
+                        Classement
+                    </th>
+                    <th class="text-center" scope="col">
                         Nom
                     </th>
-                    <th scope="col">
-
+                    <th class="text-center" scope="col">
                         Prénom
                     </th>
-                    <th scope="col">
-
+                    <th class="text-center" scope="col">
                         Ville
                     </th>
-                    <th scope="col">
-
+                    <th class="text-center" scope="col">
                         Ecole
                     </th>
-                    <th scope="col">
-                        XP
+                    <th class="text-center" scope="col">
+                        Temps
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-
                 {% if classementxp is not null %}
-                {% for i in classementxp %}
-                    <tr>
+                    {% for classement, i in classementxp %}
+                        {% set medaille = "" %}
+                        {% if classement == 0 %}
+                            {% set medaille = "&#x1F947;" %}
+                        {% elseif classement == 1 %}
+                            {% set medaille = "&#x1F948;" %}
+                        {% elseif classement == 2 %}
+                            {% set medaille = "&#x1F949;" %}
+                        {% else %}
+                            {% set medaille = classement + 1 %}
+                        {% endif %}
+                        <tr>
 
+                            <td class="text-center"> {{ medaille | raw }} </td>
 
-                        <td> {{ i.lastName }}</td>
+                            <td class="text-center"> {{ i.lastName }}</td>
 
-                        <td>{{ i.firstName }}</td>
+                            <td class="text-center"> {{ i.firstName }}</td>
 
-                        <td>{{ i.city }}</td>
+                            <td class="text-center">{{ i.city }}</td>
 
-                        <td>  {{ i.trainingID.schoolID.name }}</td>
+                            <td class="text-center">  {{ i.trainingID.schoolID.name }}</td>
 
-                        <td>  {{ i.xpWon }}</td>
-                    </tr>
-
-
-                {% endfor %}
+                            <td class="text-center">  {{ i.xpWon }}</td>
+                        </tr>
+                    {% endfor %}
                 {% elseif classementxpSearch is not null %}
-                {% for j in classementxpSearch %}
-                    <tr>
+                    {% for j in classementxpSearch %}
+                        <tr>
 
 
-                        <td> {{ j.lastName }}</td>
+                            <td> {{ j.lastName }}</td>
 
-                        <td>{{ j.firstName }}</td>
+                            <td>{{ j.firstName }}</td>
 
-                        <td>{{ j.city }}</td>
+                            <td>{{ j.city }}</td>
 
-                        <td>  {{ j.trainingID.schoolID.name }}</td>
+                            <td>  {{ j.trainingID.schoolID.name }}</td>
 
-                        <td>  {{ j.xpWon }}</td>
-                    </tr>
+                            <td>  {{ j.xpWon }}</td>
+                        </tr>
 
 
-                {% endfor %}
+                    {% endfor %}
                 {% endif %}
                 </tbody>
             </table>
@@ -94,16 +102,10 @@
     </div>
     </div>
     {% block javascripts %}
-       <script>
+        <script>
 
 
-
-
-
-
-
-
-       </script>
+        </script>
 
 
 

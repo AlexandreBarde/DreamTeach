@@ -6,9 +6,27 @@
     <div class="container mt-5">
         <h1 class="display-4 text-center">Memory</h1>
     </div>
-    {% for word in words %}
-        <button id="{{ word.getId }}">Card </button>
-        <button id="{{ word.getId }}">Card</button>
-    {% endfor %}
+    <div id="bip" class="display"></div>
+    {% set compteur = 0 %}
+    <div id="container">
+            <div id="memory">
+                {% for word in words %}
+                    <div class="row mb-2">
+                        {% set compteur = compteur + 1%}
+                            <div class="col-6">
+                                <button class="btn btn-block " value="{{ word.getWord }}"id="{{ word.getId }}" style="background-color:#6d7fcc; color:white;">Card </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block" value="{{ wordsDefinition[compteur - 1].getDefinition }}" id="{{ wordsDefinition[compteur - 1].getId }}" style="background-color:#6d7fcc; color:white;">Card</button>
+                            </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <a href="{{ path('memory')}}">Relancer une partie</a>
+
+    </div>
+
+
     <script src="{{ asset('js/memory.js') }}"></script>
 {% endblock %}

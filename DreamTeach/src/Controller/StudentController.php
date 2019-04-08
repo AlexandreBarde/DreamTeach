@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Badge;
 use App\Entity\FriendshipRelation;
 use App\Entity\Grade;
+use App\Entity\Memory;
 use App\Entity\Message;
 use App\Entity\Result;
 use App\Entity\Session;
@@ -346,15 +347,16 @@ class StudentController extends Controller
      * @Route("/tableauScore", name="tableauscore")
      */
     public function voirTableauScore(){
-        $result = $this->getDoctrine()->getRepository(Result::class)->findAll();
+        $memoryRepo = $this->getDoctrine()->getRepository(Memory::class);
 
+        $tags = $memoryRepo->findBy(
+            array(), array('time' => 'ASC')
+        );
         //dump($result);exit();
         return $this->render(
             'tableauScore.html.twig',
             [
-                'result' => $result,
-                'resulta' => null
-
+                'classementMemory' => $tags
             ]
         );
 

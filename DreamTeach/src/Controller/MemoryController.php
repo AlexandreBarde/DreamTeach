@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Memory;
 use App\Entity\Sessionparticipants;
 use App\Entity\Student;
 use App\Entity\Training;
@@ -29,30 +30,50 @@ class MemoryController extends AbstractController
     /**
      * @Route("/games/memory", name="memory")
      */
-
-    public function sessionAction(Request $request)
+    public function memoryAction(Request $request)
     {
+        $session = $request->getSession();
+        if(!($session->get('nbGoodAnswer'))) {
+            $session->set('nbGoodAnswer', 0);
+        }
+        $session = $request->getSession();
         $words = $this->getDoctrine()->getRepository(Word::class)->findAll();
+        if(sizeof($words) > 5) {
+            $words = array_slice($words, 0, 5);
+        }
+        $wordsDefinition = $words;
         if($request->get('clickedCard1')) {
             if($request->get('clickedCard1') == $request->get('clickedCard2')) {
+                $session->set('nbGoodAnswer', $session->get('nbGoodAnswer') + 1);
                 $response = new Response(json_encode(array(
-                    'goodAnswer' => true
+                    'goodAnswer' => true,
+                    'nbGoodAnswer' => $session->get('nbGoodAnswer')
                 )));
                 $response->headers->set('Content-Type', 'application/json');
                 return $response;
             }
         }
-        $shuffled_array = array();
-        $shuffled_keys = array_keys($words);
-        shuffle($shuffled_keys);
+        if($request->get('counter')) {
+            $scoreMemory = new Memory();
+            $scoreMemory->setStudentId($this->getUser());
+            $scoreMemory->setTime($request->get('counter'));
 
-        foreach($shuffled_keys as $shuffled_key) {
-            $shuffled_array[$shuffled_key] = $words[$shuffled_key];
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($scoreMemory);
+            $em->flush();
+            $response = new Response(json_encode(array(
+                'message' => 'Votre score a été enregistré ! Temps: ' . $request->get('counter') . ' secondes.'
+            )));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
         }
+        shuffle($words);
+        shuffle($wordsDefinition);
         return $this->render(
             "memory.html.twig",
             [
-                "words" => $shuffled_array,
+                "words" => $words,
+                "wordsDefinition" => $wordsDefinition
             ]
         );
     }

@@ -5,8 +5,25 @@
 {% endblock %}
 
 {% block body %}
-    <h3>Bien joué !</h3>
-    <h4>Le mot était : {{ word }}</h4>
+    <div class="container  mt-5">
+        <h1 class="text-center">Bravo !</h1>
+        <hr style="background-color: #6d7fcc;"/>
+        <div class="row mt-5">
+            <div class="col-5">
+                <img style="height: 100%; width: 100%;"
+                     src="http://www.yalletonesolutionmart.com/assets/images/trophy.gif">
+            </div>
+            <div class="col-1"></div>
+            <div class="col-6 align-self-center">
+                <h4>Le mot était : {{ word }}</h4>
+            </div>
+        </div>
+        <form action="{{ path('PlayHangman') }}" method="POST">
+            <button class="btn btn-block mt-5" style="background-color: #6d7fcc;color: white;" type="submit">Rejouer</button>
+        </form>
+    </div>
+
+
 {% endblock %}
 
 

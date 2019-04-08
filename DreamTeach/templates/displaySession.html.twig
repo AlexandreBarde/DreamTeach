@@ -160,6 +160,34 @@
             </div>
         </div>
     </div>
+
+     <br />
+
+    <div class="card">
+        <div class="card-header" style="background-color: rgba(0,0,0,.00);">
+            <h2>Partager la séance</h2>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control" placeholder="Nom de la personne" onkeyup="showResult(this.value)">
+                        <div id="livesearch"></div>
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-primary">Partager</button>
+                    </div>
+                    <br/>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+
+
     {% block javascripts %}
         <script>
             $(document).ready(function () {
@@ -179,6 +207,40 @@
                 }
 
             });
+        </script>
+        <script>
+            function myFunction(str)
+            {
+                alert(str);
+            }
+            function showResult(str)
+            {
+                $.ajax({
+                    url: "{{ path('SearchStudent') }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: {"char" : str},
+                    async: true,
+                    success: function(data)
+                    {
+                        console.log(data['student']);
+                        let val = "";
+                        for(let i = 0; i < data['student'].length; i++)
+                        {
+                            val += "<a href=\"javascript:myFunction('You clicked!')\">" + data['student'][i] + "</a><br/>";
+                        }
+                        if(val.length === 0) val = "Aucun résultat";
+                        document.getElementById("livesearch").innerHTML = val;
+                        document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+                    }
+                });
+                if (str.length==0)
+                {
+                    document.getElementById("livesearch").innerHTML="";
+                    document.getElementById("livesearch").style.border="0px";
+                    return;
+                }
+            }
         </script>
     {% endblock %}
 {% endblock %}

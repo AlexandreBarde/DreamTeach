@@ -37,7 +37,16 @@
                 <li><a href="{{ path('friend_list') }}"><i class="fas fa-user-friends"></i>&nbsp;Mes amis</a></li>
                 <li><a href="{{ path('ShowGames') }}"><i class="fas fa-gamepad"></i> Jeux</a></li>
                 <li><a href="{{ path('classementXp') }}"><i class="fas fa-trophy"></i> Classement</a></li>
-                <li><a href="{{ path('tableauscore') }}"><i class="fas fa-trophy"></i> Tableau des scores</a></li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                                                 href="{{ path('tableauscore') }}"
+                                                 role="button" aria-haspopup="true" aria-expanded="false"><i
+                                class="fas fa-trophy"></i>Tableau des scores</a>
+                    <div class="dropdown-menu"><a class="dropdown-item" href="{{ path('tableauscore') }}"><i
+                                    class="fas fa-trophy"></i> Pendu</a>
+                        <a class="dropdown-item" href="{{ path('tableauscore') }}"><i
+                                    class="fas fa-trophy"></i> Memory</a>
+                    </div>
+                </li>
             </ul>
         <ul class="list-unstyled components ml-2">
             <li><a href="{{ path('default_student_connected') }}"><i class="fa fa-chalkboard fa-lg"></i>&nbsp; Dashboard</a>
@@ -54,7 +63,7 @@
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
                                              href="{{ path('tableauscore') }}"
                                              role="button" aria-haspopup="true" aria-expanded="false"><i
-                            class="fas fa-trophy"></i>Tableau des scores</a>
+                            class="fas fa-trophy"></i> Tableau des scores</a>
                 <div class="dropdown-menu"><a class="dropdown-item" href="{{ path('tableauscore') }}"><i
                                 class="fas fa-trophy"></i> Pendu</a>
                     <a class="dropdown-item" href="{{ path('tableauscore') }}"><i

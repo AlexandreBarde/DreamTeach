@@ -218,7 +218,7 @@ class SessionController extends Controller
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-           die('fdf');
+           
         }
 
         return $this->render("transferSessionRights.html.twig", ['session'=>$session,'form' => $form->createView() ]);

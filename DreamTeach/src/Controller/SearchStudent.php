@@ -9,9 +9,11 @@
 namespace App\Controller;
 
 
+use App\Entity\Session;
 use App\Entity\Student;
 use App\Repository\SearchStudentRepository;
 use App\Repository\StudentRepository;
+use App\Service\EmailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,18 +35,41 @@ class SearchStudent extends AbstractController
         $students = $this->getDoctrine()->getRepository(Student::class)->findStudentWithChar($char);
 
         $nom = array();
+        $id = array();
 
         foreach($students as $key => $value)
         {
             array_push($nom, $value->getFirstName() . " " . $value->getLastName());
+            array_push($id, $value->getUuid());
         }
 
         $response = new Response(json_encode(array(
             'student' => $nom,
+            'id' => $id
         )));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+
+    /**
+     * @Route("/accueil/shareSession/{idSession}/{uuidUser}", name="ShareSession")
+     * @param $idSession
+     * @param $uuidUser
+     * @param \Swift_Mailer $mailer
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function shareSession($idSession, $uuidUser, \Swift_Mailer $mailer)
+    {
+        $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
+        /** @var Student $user */
+        $user = $this->getDoctrine()->getRepository(Student::class)->findOneByUuid($uuidUser);
+
+
+        EmailService::sendMail($user->getEmailaddress(), "Invitation à rejoindre une séance", $this->renderView("mail.sharesession.html.twig", ["session" => $session, "user" => $user]), $mailer);
+
+        return $this->render("mail.sharesession.html.twig", ["session" => $session, "user" => $user]);
     }
 
 }

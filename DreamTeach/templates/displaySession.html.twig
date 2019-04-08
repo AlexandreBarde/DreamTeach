@@ -8,6 +8,7 @@
     {% for flash in app.flashes %}
         {{ flash }}
     {% endfor %}
+    <p id="sessionID" class="hidden">{{ session.id }}</p>
     <div class="card">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
             <h2>Description séance</h2>
@@ -15,10 +16,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-sm">
-
                     <div class="form-row">
-
-
                         <div class="form-group col" id="matiereEtudiee">
                             <p class="font-weight-bold"> Matière étudiée</p>
                             {{ session.subjectid.name }}
@@ -28,7 +26,6 @@
                             {{ session.name }}
                         </div>
                     </div>
-
                     <p class="font-weight-bold">Description séance</p>
                     {{ session.description }}
                 </div>
@@ -54,15 +51,12 @@
                     <p class="font-weight-bold">Heure de fin</p>
                     {{ session.endingtime|date('H:i') }}
                 </div>
-
             </div>
-
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <p class="font-weight-bold">Nombre max de participants</p>
                     {{ session.maxnbparticipant }}
                 </div>
-
                 {% if session.isvirtual %}
                 <div class="form-group col-md-8">
                     <p class="font-weight-bold">Logiciel vocal</p>
@@ -70,27 +64,19 @@
                 </div>
                 {% endif %}
             </div>
-
             {% if session.isvirtual==false %}
             <div class="form-row">
-
                 <div class="form-group col-md-6">
                     <p class="font-weight-bold">Ville </p>
                     {{ session.city }}
-
                 </div>
                 <div class="form-group col-md-6">
                     <p class="font-weight-bold">Etablissement</p>
                     {{ session.place }}
-
                 </div>
-
             </div>
             {% endif %}
-
-
         </div>
-
     </div>
     <br/>
     <div class="card">
@@ -173,12 +159,9 @@
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         <input type="text" class="form-control" placeholder="Nom de la personne" onkeyup="showResult(this.value)">
                         <div id="livesearch"></div>
-                    </div>
-                    <div class="col-lg-2">
-                        <button type="button" class="btn btn-primary">Partager</button>
                     </div>
                     <br/>
                 </div>
@@ -187,6 +170,25 @@
         </div>
     </div>
 
+    <div id="modalid" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Partager la séance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Voulez-vous vraiment partager la séance avec <span id="nomprenom"></span> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <a id="linkpartage" href="#" class="button btn btn-primary">Oui</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% block javascripts %}
         <script>
@@ -209,9 +211,12 @@
             });
         </script>
         <script>
-            function myFunction(str)
+            function myFunction(str, id)
             {
-                alert(str);
+                let idSession = $('#sessionID').html();
+                $("#linkpartage").attr("href", "/accueil/shareSession/" + idSession + "/" + id);
+                $('#nomprenom').html(str);
+                $('#modalid').modal('toggle');
             }
             function showResult(str)
             {
@@ -227,7 +232,7 @@
                         let val = "";
                         for(let i = 0; i < data['student'].length; i++)
                         {
-                            val += "<a href=\"javascript:myFunction('You clicked!')\">" + data['student'][i] + "</a><br/>";
+                            val += "<a href=\"javascript:myFunction('" + data['student'][i] + "', '" + data['id'][i] + "')\">" + data['student'][i] + "</a><br/>";
                         }
                         if(val.length === 0) val = "Aucun résultat";
                         document.getElementById("livesearch").innerHTML = val;

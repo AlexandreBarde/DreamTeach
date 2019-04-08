@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partage de session{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <div class="card shadow bg-light">
+                    <div class="card-body">
+                        <h5>Session : {{ session.name }}</h5>
+                        <h5>Utilisateur : {{ user.lastname }} {{ user.firstname }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

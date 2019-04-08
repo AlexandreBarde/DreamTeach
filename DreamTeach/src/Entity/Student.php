@@ -215,7 +215,6 @@ class Student implements UserInterface
     private $gradeid;
 
 
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="author", orphanRemoval=true)
      */
@@ -230,7 +229,6 @@ class Student implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\UserResponse", mappedBy="user_id", orphanRemoval=true)
      */
     private $responses;
-
 
 
     /**
@@ -404,6 +402,11 @@ class Student implements UserInterface
         return $this;
     }
 
+    public function setSessionid(Session $session)
+    {
+        $this->sessionid = $session;
+    }
+
     /**
      * @return Collection|Subject[]
      */
@@ -512,10 +515,10 @@ class Student implements UserInterface
     {
         return array
         (
-            'id'         => $this->getId(),
-            'email'        => $this->getEmailaddress(),
-            'lastname'    => $this->getLastname(),
-            'firstname'      => $this->getFirstname(),
+            'id' => $this->getId(),
+            'email' => $this->getEmailaddress(),
+            'lastname' => $this->getLastname(),
+            'firstname' => $this->getFirstname(),
         );
     }
 
@@ -678,6 +681,14 @@ class Student implements UserInterface
     public function getResponses(): Collection
     {
         return $this->responses;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->firstname . ' ' . $this->lastname;
     }
 
     public function addResponse(UserResponse $response): self

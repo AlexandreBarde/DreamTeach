@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    start();
     var clickedButtonCounter = 0;
     var clickedCard2;
     $("button").click(function (e) {
@@ -16,6 +17,9 @@ $(document).ready(function() {
         }
     });
 });
+
+var counter = 0;
+var intervalId = null;
 
 function selectCard(clickedCard1, clickedCard2) {
     $(clickedCard1).attr("disabled", false);
@@ -39,6 +43,20 @@ function selectCard(clickedCard1, clickedCard2) {
                     $("#memory").append("<div class=\"alert alert-success\" id=\"founded_word\" role=\"alert\">\n" +
                         "  Félicitations vous avez gagné la partie!\n" +
                         "</div>")
+                    $.ajax({
+                        type: 'POST',
+
+                        url: "/games/memory",
+
+                        data: {
+                            counter: counter
+                        },
+
+                        success : function(response) {
+                            alert(response['message']);
+                            finish();
+                        }
+                    });
                 } else {
                     if($("#founded_word")) {
                         $("#founded_word").remove();
@@ -58,4 +76,16 @@ function selectCard(clickedCard1, clickedCard2) {
             $(clickedCard2).attr("disabled", false);
         }
     });
+
+}
+function finish() {
+    clearInterval(intervalId);
+    document.getElementById("bip").innerHTML = "TERMINE!";
+}
+function bip() {
+    counter++;
+    document.getElementById("bip").innerHTML = "Timer: " + counter;
+}
+function start(){
+    intervalId = setInterval(bip, 1000);
 }

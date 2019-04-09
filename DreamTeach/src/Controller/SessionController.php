@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package App\Controller
  * @IsGranted("ROLE_USER")
  */
-class SessionController extends AbstractController
+class SessionController extends Controller
 {
 
     /**
@@ -68,14 +68,12 @@ class SessionController extends AbstractController
                 $em->persist($session);
                 $em->flush();
                 $id = $session->getId();
-                /* Ajout du badge  */
                 $badge = $this->getDoctrine()->getRepository(Badge::class)->find(1);
                 $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
                 /* Ajout de l'xp  */
                 $this->get('xp_won')->wonXp($this->getUser(), 50);
                 return $this->redirectToRoute('AddSession', ["idSession" => $id]);
 
-                return $this->redirectToRoute('student_agenda');
             } else {
 
                 $this->addFlash("error", "L'heure de fin ne peut pas être infériere à l'heure de début.");

@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        {% if app.user is defined %}
-            <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
-            <link rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-        {% endif %}
-        <script src="{{ asset('js/jQuery.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.js') }}"></script>
-        {% block stylesheets %}
-        {% endblock %}
-    </head>
-    <body>
-    <div class="wrapper">
-        <nav id="sidebar">
-            <div class="sidebar-header ">
-                <span class="text-left"><a class="navbar-brand mx-auto" href="."><img src="{{ asset('img/logo-sm.png') }}" alt="Logo"></a></span>
-                <a href="{{ path('sessionCreation') }}" class="btn btn-light btn-sm btn-block"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;Créer une séance</a>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    {% if app.user is defined %}
+        <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    {% endif %}
+    <script src="{{ asset('js/jQuery.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header ">
+            <span class="text-left"><a class="navbar-brand mx-auto" href="."><img src="{{ asset('img/logo-sm.png') }}"
+                                                                                  alt="Logo"></a></span>
+            <a href="{{ path('sessionCreation') }}" class="btn btn-light btn-sm btn-block"><i
+                        class="fa fa-plus-circle fa-lg"></i>&nbsp;Créer une séance</a>
+        </div>
 
             <ul class="list-unstyled components ml-2">
                 <li><a href="{{ path('default_student_connected') }}"><i class="fa fa-chalkboard fa-lg"></i>&nbsp;  Dashboard</a></li>
@@ -34,8 +37,41 @@
                 <li><a href="{{ path('friend_list') }}"><i class="fas fa-user-friends"></i>&nbsp;Mes amis</a></li>
                 <li><a href="{{ path('ShowGames') }}"><i class="fas fa-gamepad"></i> Jeux</a></li>
                 <li><a href="{{ path('classementXp') }}"><i class="fas fa-trophy"></i> Classement</a></li>
-                <li><a href="{{ path('tableauscore') }}"><i class="fas fa-trophy"></i> Tableau des scores</a></li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                                                 href="{{ path('tableauscore') }}"
+                                                 role="button" aria-haspopup="true" aria-expanded="false"><i
+                                class="fas fa-trophy"></i>Tableau des scores</a>
+                    <div class="dropdown-menu"><a class="dropdown-item" href="{{ path('tableauscore') }}"><i
+                                    class="fas fa-trophy"></i> Pendu</a>
+                        <a class="dropdown-item" href="{{ path('tableauscore') }}"><i
+                                    class="fas fa-trophy"></i> Memory</a>
+                    </div>
+                </li>
             </ul>
+        <ul class="list-unstyled components ml-2">
+            <li><a href="{{ path('default_student_connected') }}"><i class="fa fa-chalkboard fa-lg"></i>&nbsp; Dashboard</a>
+            </li>
+            <li><a href="{{ path('student_profile') }}"><i class="fa fa-user-circle fa-lg"></i>&nbsp; Mon profil</a>
+            </li>
+            <li><a href="{{ path('ShowMessages') }}"><i class="fa fa-envelope fa-lg"></i>&nbsp; Messagerie&nbsp;<i
+                            class="badge badge-success"></i></a></li>
+            <li><a href="{{ path('showSessions') }}"><i class="fas fa-book-open"></i>&nbsp; Séances</a></li>
+            <li><a href="{{ path('student_agenda') }}"><i class="fa fa-calendar-alt fa-lg"></i>&nbsp; Agenda</a></li>
+            <li><a href="{{ path('friend_list') }}"><i class="fas fa-user-friends"></i>&nbsp;Mes amis</a></li>
+            <li><a href="{{ path('ShowGames') }}"><i class="fas fa-gamepad"></i> Jeux</a></li>
+            <li><a href="{{ path('classementXp') }}"><i class="fas fa-trophy"></i> Classement</a></li>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown"
+                                             href="{{ path('tableauscore') }}"
+                                             role="button" aria-haspopup="true" aria-expanded="false"><i
+                            class="fas fa-trophy"></i> Tableau des scores</a>
+                <div class="dropdown-menu"><a class="dropdown-item" href="{{ path('tableauscore') }}"><i
+                                class="fas fa-trophy"></i> Pendu</a>
+                    <a class="dropdown-item" href="{{ path('tableauscore') }}"><i
+                                class="fas fa-trophy"></i> Memory</a>
+                </div>
+            </li>
+            <li><a href="{{ path('showQcms') }}"><i class="far fa-question-circle"></i> QCM</a></li>
+        </ul>
 
         <ul class="list-unstyled ml-2">
             <li><a href="{{ path('parametres') }}"><i class="fas fa-cog"></i>&nbsp; Paramètres</a></li>
@@ -55,24 +91,24 @@
     {% endfor %}
     {% block body %}
     {% endblock %}
-    </div>
-    {% block javascripts %}
-        {% if app.user is defined %}
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $("#sidebar").mCustomScrollbar({
-                        theme: "minimal"
-                    });
+</div>
+{% block javascripts %}
+{% if app.user is defined %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
 
-                    $('#sidebarCollapse').on('click', function () {
-                        $('#sidebar, #content').toggleClass('active');
-                        $('.collapse.in').toggleClass('in');
-                        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                    });
-                });
-            </script>
-        {% endif %}
-    </body>
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+{% endif %}
+</body>
 </html>
 {% endblock %}

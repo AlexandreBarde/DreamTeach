@@ -34,6 +34,11 @@ https://symfony.com/doc/current/index.html#gsc.tab=0
 
 ### Merci de mettre des gitmoji sur vos messages de commit
 
+:art: Pour des changement de front 
+:ambulance: pour les bugs critique
+:zap: Ajout d'une petite fonctionnalité 
+:construction: WIP
+
 https://gitmoji.carloscuesta.me/
 
 Courage :kissing_heart:

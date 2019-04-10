@@ -6,6 +6,14 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
 {% endblock %}
+{%  block javascripts %}
+    <script>
+
+           var element = document.getElementById("messageScroll");
+           element.scrollTop = element.scrollHeight;
+
+    </script>
+{% endblock %}
 
 {% block body %}
     <style>
@@ -87,54 +95,52 @@
         }
     </style>
 
-    <div class="container mt-3">
+    <div class="container mt-1 mb-2">
         <h1 class="display-4 text-center">{{ sender.firstname }} {{ sender.lastname }}</h1>
         <hr style="background-color: #6d7fcc;"/>
     </div>
+    <div style="overflow-y: auto; height:400px;" id="messageScroll">
 
-    {% for m in messages %}
-        {% if m.idSender == app.user %}
-            <div class="row">
-                <div class="espace"></div>
-                <div class="col-4 text-right align-self-center">Vous : le {{ m.date|date("d/m/Y")  }} a {{ m.date|date("H:i") }}</div>
-                <div class="talk-bubble2 tri-right right-top">
-                    <div class="talktext2">
-                        <p>{{ m.content }} </p>
+        {% for m in messages %}
+            {% if m.idSender == app.user %}
+                <div class="row">
+                    <div class="espace"></div>
+                    <div class="col-4 text-right align-self-center">Vous : le {{ m.date|date("d/m/Y") }}
+                        a {{ m.date|date("H:i") }}</div>
+                    <div class="talk-bubble2 tri-right right-top">
+                        <div class="talktext2">
+                            <p>{{ m.content }} </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        {% else %}
-            <div class="row">
-                <div class="talk-bubble tri-right left-top">
-                    <div class="talktext">
-                        <p> {{ m.content }}</p>
+            {% else %}
+                <div class="row">
+                    <div class="talk-bubble tri-right left-top">
+                        <div class="talktext">
+                            <p> {{ m.content }}</p>
+                        </div>
                     </div>
+                    <div class=" align-self-center"> {{ sender.firstname }} {{ sender.lastname }} :
+                        le {{ m.date|date("d/m/Y") }} a {{ m.date|date("H:i") }} </div>
                 </div>
-                <div class=" align-self-center"> {{ sender.firstname }} {{ sender.lastname }} : le {{ m.date|date("d/m/Y")  }} a {{ m.date|date("H:i") }} </div>
-            </div>
-        {% endif %}
-    {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <hr style="background-color: #6d7fcc;"/>
     <div class="row">
         <div class="col pt-3 pb-3">
             {{ form_start(form) }}
             {{ form_widget(form.content, {"attr" : {"class" : "form-control", "placeholder" : "Votre message...", "required" : ""}}) }}
             <br>
-            <input type="submit" value="Envoyer" style="background-color: #6d7fcc; color: white;" class="btn btn-lg btn-block pt-2 pb-2">
+            <input type="submit" value="Envoyer" style="background-color: #6d7fcc; color: white;"
+                   class="btn btn-lg btn-block pt-2 pb-2">
             {{ form_end(form) }}
             <!--<textarea class="form-control" id="description" name="description" rows="3"></textarea><br />-->
         </div>
     </div>
-    </div>
 {% endblock %}
-{% block javascripts %}
-    <script>
-        $('#description').summernote({
-            placeholder: '...',
-            tabsize: 2,
-            height: 100
-        });
-    </script>
-{% endblock %}
+
+
 
 

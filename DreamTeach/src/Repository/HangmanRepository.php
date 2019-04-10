@@ -27,6 +27,7 @@ class HangmanRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('h')
             ->select('h, min(h.time)')
             ->groupBy('h.student')
+            ->orderBy('h.time')
             ->getQuery()
             ->getResult()
             ;
@@ -34,6 +35,7 @@ class HangmanRepository extends ServiceEntityRepository
          SELECT student_id_id, id, min(time)
          from memory
          group by student_id_id;
+
          */
     }
 

@@ -28,6 +28,7 @@ class MemoryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->select('m, min(m.time)')
             ->groupBy('m.Student')
+            ->orderBy('m.time')
             ->getQuery()
             ->getResult()
             ;

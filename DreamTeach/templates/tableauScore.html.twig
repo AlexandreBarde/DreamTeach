@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block body %}
+    <select name="" id="">
+        <option value="hangman">Hangman</option>
+        <option value="memory">Memory</option>
+    </select>
     <div class="row mt-4">
         <div class="col-8 mx-auto">
             <form action="{{ path('search_xp_view') }}" method="get" id="search_xp_form">

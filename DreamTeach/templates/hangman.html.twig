@@ -11,12 +11,11 @@
             margin-top: 5px;
             text-transform: uppercase;
         }
-
         #word {
             text-transform: uppercase;
-
         }
     </style>
+    <div id="bip" class="display">Temps : </div>
     <div class="container mt-1">
         <h1 class="display-4 text-center">Jeu du pendu</h1>
         <div class="container mt-5 text-center">
@@ -49,6 +48,24 @@
 
 {% block javascripts %}
     <script>
+        $(document).ready(function() {
+            start();
+        });
+        var counter = 0;
+        var intervalId = null;
+
+        function finish() {
+            clearInterval(intervalId);
+            document.getElementById("bip").innerHTML = "TERMINE!";
+        }
+        function bip() {
+            counter++;
+            document.getElementById("bip").innerHTML = "Temps : " + counter;
+        }
+        function start(){
+            intervalId = setInterval(bip, 1000);
+        }
+
         function clicked() {
             this.setAttribute('disabled', "");
             $.ajax({
@@ -67,7 +84,20 @@
                     let letter = (data['letter']);
                     let winner = data['winner'];
                     if (winner) {
-                        window.location.replace("{{ path('HangmanWinner') }}");
+                        $.ajax({
+                            type: 'POST',
+
+                            url: "/hangman",
+
+                            data: {
+                                counter: counter
+                            },
+
+                            success : function(response) {
+                                finish();
+                                window.location.replace("{{ path('HangmanWinner') }}");
+                            }
+                        });
                     }
                     document.getElementById("hangman").setAttribute("src", "/img/hangman/" + life + ".png");
                     if (position.length !== 0) {

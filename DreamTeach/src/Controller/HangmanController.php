@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Hangman;
 use App\Entity\Word;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,14 +24,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class HangmanController extends AbstractController
 {
-
     /**
-     * @Route("hangman", name="PlayHangman")
+     * @Route("/hangman", name="PlayHangman")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showHangmanGame(Request $request)
     {
+        if($request->get('counter')) {
+            $scoreHangman = new Hangman();
+            $scoreHangman->setStudent($this->getUser());
+            $scoreHangman->setTime($request->get('counter'));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($scoreHangman);
+            $em->flush();
+            $response = new Response(json_encode(array(
+                'message' => 'Votre score a été enregistré ! Temps: ' . $request->get('counter') . ' secondes.'
+            )));
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
         $words = $this->getDoctrine()->getRepository(Word::class);
 
         $random = rand(1, sizeof($words->findAll()));

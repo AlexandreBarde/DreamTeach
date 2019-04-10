@@ -6,11 +6,11 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
 {% endblock %}
-{%  block javascripts %}
+{% block javascripts %}
     <script>
 
-           var element = document.getElementById("messageScroll");
-           element.scrollTop = element.scrollHeight;
+        var element = document.getElementById("messageScroll");
+        element.scrollTop = element.scrollHeight;
 
     </script>
 {% endblock %}
@@ -93,37 +93,53 @@
         .espace {
             width: 6%;
         }
+
+        .info {
+            margin-left: 35px;
+            color: grey;
+
+        }
+
+        .info2 {
+            margin-right: 45px;
+            color: grey;
+
+        }
     </style>
 
-    <div class="container mt-1 mb-2">
+    <div class="container mt-0">
         <h1 class="display-4 text-center">{{ sender.firstname }} {{ sender.lastname }}</h1>
         <hr style="background-color: #6d7fcc;"/>
+
     </div>
     <div style="overflow-y: auto; height:400px;" id="messageScroll">
 
         {% for m in messages %}
             {% if m.idSender == app.user %}
+                <div class="info2 text-right">{{ m.date|date("d/m/Y") }}</div>
+
                 <div class="row">
                     <div class="espace"></div>
-                    <div class="col-4 text-right align-self-center">Vous : le {{ m.date|date("d/m/Y") }}
-                        a {{ m.date|date("H:i") }}</div>
-                    <div class="talk-bubble2 tri-right right-top">
+                    <div class="col-4"></div>
+                    <div class="talk-bubble2 tri-right right-top  mb-0 mt-0">
                         <div class="talktext2">
                             <p>{{ m.content }} </p>
                         </div>
                     </div>
                 </div>
+                <div class="info2 text-right">  {{ m.date|date("H:i") }}</div>
+
 
             {% else %}
+                <div class="info">{{ m.date|date("d/m/Y") }}  </div>
                 <div class="row">
-                    <div class="talk-bubble tri-right left-top">
+                    <div class="talk-bubble tri-right left-top mb-0 mt-0">
                         <div class="talktext">
                             <p> {{ m.content }}</p>
                         </div>
                     </div>
-                    <div class=" align-self-center"> {{ sender.firstname }} {{ sender.lastname }} :
-                        le {{ m.date|date("d/m/Y") }} a {{ m.date|date("H:i") }} </div>
                 </div>
+                <div class="info">{{ m.date|date("H:i") }} </div>
             {% endif %}
         {% endfor %}
     </div>

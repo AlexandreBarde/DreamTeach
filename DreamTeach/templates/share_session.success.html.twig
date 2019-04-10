@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invitation à une séance{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="display-4 text-center">Invitation à une séance</h1>
+            <div class="container pt-4">
+                <div class="alert alert-success" role="alert">
+                    Vous avez invité {{ user.lastname }} {{ user.firstname }} !
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+

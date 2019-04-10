@@ -69,7 +69,7 @@ class SearchStudent extends AbstractController
 
         EmailService::sendMail($user->getEmailaddress(), "Invitation à rejoindre une séance", $this->renderView("mail.sharesession.html.twig", ["session" => $session, "user" => $user]), $mailer);
 
-        return $this->render("mail.sharesession.html.twig", ["session" => $session, "user" => $user]);
+        return $this->render("share_session.success.html.twig", ["session" => $session, "user" => $user]);
     }
 
 }

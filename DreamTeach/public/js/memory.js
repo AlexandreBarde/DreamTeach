@@ -22,8 +22,6 @@ var counter = 0;
 var intervalId = null;
 
 function selectCard(clickedCard1, clickedCard2) {
-    $(clickedCard1).attr("disabled", false);
-    $(clickedCard2).attr("disabled", false);
     $.ajax({
         type: 'POST',
 
@@ -35,6 +33,9 @@ function selectCard(clickedCard1, clickedCard2) {
         },
 
         success : function(response){
+            $(clickedCard1).attr("disabled", false);
+            $(clickedCard2).attr("disabled", false);
+
             if(response['goodAnswer']) {
                 $("#" + clickedCard1.id + "").remove();
                 $("#" + clickedCard2.id + "").remove();
@@ -69,8 +70,6 @@ function selectCard(clickedCard1, clickedCard2) {
                     }
                 }
             }
-            $(clickedCard1).text("Card");
-            $(clickedCard2).text("Card");
             $(clickedCard1).attr("disabled", false);
             $(clickedCard2).attr("disabled", false);
         }

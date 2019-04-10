@@ -21,7 +21,7 @@ security:
 
             logout:
                     path: app_logout
-                    target: HomeController
+                    target: app_login
 
             form_login:
                 default_target_path: default_student_connected

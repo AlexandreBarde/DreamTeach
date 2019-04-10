@@ -9,7 +9,10 @@
         {{ form_widget(formCreateQcm.visible) }}
     <ul class="tags" data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.content)|e('html_attr') }}">
     </ul>
-    <ul class="responses" data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.responses)|e('html_attr') }}">
+    <ul class="responses"
+        data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.responses.vars.prototype.content)|e('html_attr') }}"
+        data-prototype2="{{ form_widget(formCreateQcm.questions.vars.prototype.responses.vars.prototype.rightanswer)|e('html_attr') }}"
+    >
     </ul>
         <input type="submit" value="Enregistrer" class="btn btn-primary btn-lg btn-block">
     {{ form_end(formCreateQcm) }}
@@ -21,8 +24,6 @@
             var btn = $('<a href="#" class="btn btn-success">Ajout Question</a>');
             var btnResponse = $('<a href="#" class="btn btn-primary">Ajouter une réponse</a>');
             var $newLinkLi = $('<li></li>').append(btn);
-            var $newBtnR = $('<li></li>').append(btnResponse);
-
             // Get the ul that holds the collection of tags
             var $collectionHolder = $('ul.tags');
             var $collectionHolder2 = $('ul.responses');

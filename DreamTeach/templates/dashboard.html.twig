@@ -7,7 +7,7 @@
 {% block body %}
     <div class="row">
         <div class="col-8">
-            {% if "now"|date("H") >= 15 %}
+            {% if "now"|date("H") >= 18 %}
                 <h5>Bonsoir {{ app.user.firstname }} ! <i style="color: dimgrey" class="fas fa-moon"></i></h5>
             {% else %}
                 <h5>Bonjour {{ app.user.firstname }} ! <i style="color: yellow" class="fas fa-sun"></i></h5>
@@ -17,7 +17,7 @@
         <div class="col-4 alert alert-success align-bottom">
                 <div class="row">
                     <h1 class="col-12 mb-0 justify-content-center d-flex">
-                        <span class="level_text d-none d-lg-flex">Niveau &nbsp;</span><span>15</span>
+                        <span class="level_text d-none d-lg-flex">Niveau &nbsp;</span><span>{{ (app.user.xpWon / 50)|slice(0,1) }}</span>
                     </h1>
                 </div>
 
@@ -26,11 +26,11 @@
                 {#</div>#}
                 <div class="col-12 text-center mt-2">
                     <div class="progress" style="height: 5px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 75%" aria-valuenow="75"
+                        <div class="progress-bar bg-info  progress-bar-striped progress-bar-animated " role="progressbar" style="width:{{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4) }}%;" aria-valuenow="75"
                              aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-12 text-center">375/500</div>
+                        <div class="col-12 text-center"> {{ ((app.user.xpWon)/50)|number_format(2, '.', ',')|slice(2,4)/2 }} /50</div>
                     </div>
                 </div>
             </div>
@@ -54,12 +54,13 @@
         </div>
     </div>
     <div class="row justify-content-between mt-3">
-        <div class="col-12 col-sm-2 mx-1 alert alert-danger text-center"><h6>Séances
+        <div class="col-6 alert alert-danger text-center"><h6>Séances
                 dirigées</h6>{{ nbSessionOrganized }}</div>
-        <div class="col-12 col-sm-2 mx-1 alert alert-warning text-center"><h6>Séances
+        <div class="col-6  mx-auto alert alert-warning text-center"><h6>Séances
                 assistées</h6>{{ nbSessionAttended }}</div>
-        <div class="col-12 col-sm-2 mx-1 alert alert-primary text-center"><h6>Test</h6>0</div>
-        <div class="col-12 col-sm-2 mx-1 alert alert-secondary text-center"><h6>Test</h6>0</div>
+        <!--<div class="col-12 col-sm-2 mx-1 alert alert-primary text-center"><h6>Test</h6>0</div>
+        <div class="col-12 col-sm-2 mx-1 alert alert-secondary text-center"><h6>Test</h6>0</div>-->
+
     </div>
     <div class="row">
     <div class="col-12 col-lg-8 col-xl-6 mx-auto my-2">

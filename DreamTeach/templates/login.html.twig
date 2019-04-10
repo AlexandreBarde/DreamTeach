@@ -3,7 +3,8 @@
 {% block title %}Connexion{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">{% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">{% endblock %}
 
 {% block body %}
 
@@ -27,7 +28,7 @@
                                     <div class="input-group-text"><i class="fas fa-at"></i></div>
                                 </div>
                                 <input type="email" value="{{ last_username }}" class="form-control" name="emailaddress"
-                                       id="inlineFormInputGroupUsername2" placeholder="Adresse mail">
+                                       id="emailaddress" placeholder="Adresse mail">
                             </div>
 
                             <label class="sr-only" for="inlineFormInputGroupUsername2">Mot de passe</label>
@@ -35,7 +36,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fas fa-key"></i></div>
                                 </div>
-                                <input type="password" class="form-control" name="password" id="inputPassword"
+                                <input type="password" class="form-control" name="password" id="password"
                                        placeholder="Mot de passe">
                             </div>
 
@@ -62,7 +63,7 @@
 
                             <div class="container">
                                 <div class="row justify-content-between">
-                                    <button type="submit" class="btn btn-primary  btn-block">Connexion</button>
+                                    <button type="submit" class="btn btn-block" style="background-color:#6d7fcc; color:white;">Connexion</button>
                                 </div>
                             </div>
 

@@ -2,10 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use PhpParser\Node\Scalar\String_;
 
 /**
  * Session
@@ -135,14 +133,6 @@ class Session
      */
     private $comment;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->studentid = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -220,7 +210,7 @@ class Session
         return $this;
     }
 
-    public function getOrganizerid(): ?Student
+    public function getOrganizerid()
     {
         return $this->organizerid;
     }
@@ -268,6 +258,11 @@ class Session
         }
 
         return $this;
+    }
+
+    public function setStudentid(Student $studentid)
+    {
+        $this->studentid = $studentid;
     }
 
     /**

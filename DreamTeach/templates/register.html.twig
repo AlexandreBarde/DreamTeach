@@ -1,7 +1,8 @@
 {% extends 'base.disconnect.html.twig' %}
 
 {% block title %}Inscription{% endblock %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">{% endblock %}
 {% block body %}
     <div class="row"style="margin-top:10%">
         <div class="col-5 mx-auto">
@@ -47,7 +48,7 @@
                     </div>
 
                     <span>Deja un compte ?&nbsp;<a href="{{ path('app_login') }}">Connectez-vous</a></span>
-                    <input type="submit" value="S'inscrire" class="btn btn-primary btn-block mt-2">
+                    <input type="submit" value="S'inscrire" class="btn btn-block mt-2" style="background-color:#6d7fcc; color:white;">
                     {{ form_end(form) }}
 
                 </div>

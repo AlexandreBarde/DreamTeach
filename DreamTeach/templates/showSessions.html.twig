@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Dashboard - DreamTeach
+    Séances - DreamTeach
 {% endblock %}
 
 {% block body %}
@@ -9,11 +9,8 @@
         <h1 class="display-4 text-center">Séances</h1>
         <div class="row">
         </div>
-        <div class="card">
-            <div class="card-header">
-                <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Séances</h6>
-            </div>
-            <div class="card-body">
+
+        <h5><i class="fas fa-book-reader"></i>&nbsp; Disponibles sur le site</h5>
                 <div class="row">
                     <table class="table table-hover">
                         <thead>
@@ -23,11 +20,13 @@
                             <th scope="col">Heure</th>
                             <th scope="col">Description</th>
                             <th scope="col">Organisateur</th>
-                            <th scope="col"></th>
+                            <th></th>
+                            <th></th>
+
                         </tr>
                         </thead>
 
-                        <div class="col-12">
+
 
                             <tbody>
                             {% for i in session if i.organizerId.id!=app.user.id %}
@@ -71,15 +70,15 @@
                             {% endfor %}
                             </tbody>
                     </table>
-                </div>
+
             </div>
-        </div>
+
         </br>
-        <div class="card">
-            <div class="card-header">
-                <h6><i class="far fa-envelope fa-lg"></i>&nbsp; Séances dont je suis administrateur</h6>
-            </div>
-            <div class="card-body">
+
+
+                <h5><i class="fas fa-crown"></i> Je suis le créateur</h5>
+
+
                 <div class="row">
                     <table class="table table-hover">
                         <thead>
@@ -89,12 +88,12 @@
                             <th scope="col">Heure</th>
                             <th scope="col">Description</th>
                             <th scope="col">Organisateur</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
 
-                        <div class="col-12">
+
 
                             <tbody>
                             {% for i in session if i.organizerId.id==app.user.id %}
@@ -111,18 +110,18 @@
                                 <td>{{ i.organizerid.lastname()~" "~i.organizerid.firstname() }}</td>
                                 {% if i.closed %}
 
-                                    <td><a href="#" class="btn btn-danger disabled"><i
+                                    <td><a href="#" class="btn btn-sm btn-danger disabled"><i
                                                     class="fas fa-door-closed"></i>
                                             Clôturé</td>
-                                    <td><a href="#" class="btn btn-danger disabled"><i
+                                    <td><a href="#" class="btn btn-sm btn-danger disabled"><i
                                                     class="fas fa-door-closed"></i>
                                             Transfert admin</td>
 
                                 {% else %}
                                     <td><a href="{{ path('CloseSession', {"idSession" : i.id()}) }}"
-                                           class="btn btn-danger"><i class="fas fa-door-closed"></i> Clôturer</td>
-                                    <td><a href="{{ path('CloseSession', {"idSession" : i.id()}) }}"
-                                           class="btn btn-danger"><i class="fas fa-door-closed"></i> Transfert admin</td>
+                                           class="btn btn-sm btn-danger"> <i class="fas fa-door-closed"></i> Clôturer</td>
+                                    <td><a href="{{ path('transferRights', {"session" : i.id()}) }}"
+                                           class="btn btn-sm btn-danger"><i class="fas fa-door-closed"></i> Transfert admin</td>
 
 
                                 {% endif %}
@@ -130,7 +129,7 @@
                             {% endfor %}
                             </tbody>
                     </table>
-                </div>
+
             </div>
         </div>
         </div>

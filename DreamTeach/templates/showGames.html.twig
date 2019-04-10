@@ -5,46 +5,61 @@
 {% endblock %}
 
 {% block body %}
-<style>
-    .game:hover {
-        background-color: lightgrey;
-    }
-</style>
-<div class="container m-2">
-    <div class="text-center">
-        <h1 class="display-4">Jeux disponibles</h1>
-        <p class="mt-3">Les jeux permentent de gagner de l'xp vous pouvez consulter le tableau des
-            scores</p>
-        <form action="{{ path('tableauscore') }}" method="POST">
-            <button class="btn" style="background-color: #6d7fcc;color: white;" type="submit">Consulter le tableau
-                des scores 🏆
-            </button>
-        </form>
-        <hr style="background-color: #6d7fcc;" class="mt-4"/>
-    </div>
-    <div class="game row" style="cursor: pointer" onclick=" document.location.href='{{ path('PlayHangman') }}'">
-        <div class="col-4">
-            <img src={{ asset("img/hangman/0.png") }} height=200px;>
+    <style>
+        .game:hover {
+            background-color: lightgrey;
+        }
+    </style>
+    <div class="container m-2">
+        <div class="text-center">
+            <h1 class="display-4">Jeux disponibles</h1>
+            <p class="mt-3">Les jeux permentent de gagner de l'xp vous pouvez consulter le tableau des
+                scores</p>
+            <form action="{{ path('tableauscore') }}" method="POST">
+                <button class="btn" style="background-color: #6d7fcc;color: white;" type="submit">Consulter le tableau
+                    des scores 🏆
+                </button>
+            </form>
+            <hr style="background-color: #6d7fcc;" class="mt-4"/>
         </div>
-        <div class="col-8 align-self-center">
-            <h3>Hangman</h3>
-            Hangman est un jeu consistant à trouver un mot en devinant quelles sont les lettres qui le composent.
-            <br> <br>
-            Xp gagnée par victoire : 10xp.
+        <div class="game row" style="cursor: pointer" onclick=" document.location.href='{{ path('PlayHangman') }}'">
+            <div class="col-4">
+                <img src={{ asset("img/hangman/0.png") }} height=200px;>
+            </div>
+            <div class="col-8 align-self-center">
+                <h3>Hangman</h3>
+                Hangman est un jeu consistant à trouver un mot en devinant quelles sont les lettres qui le composent.
+                <br> <br>
+                Xp gagnée par victoire : 10xp.
+            </div>
         </div>
-    </div>
-    <hr style="background-color: #6d7fcc;"/>
-    <div class="game row" style="cursor: pointer" onclick=" document.location.href='{{ path('memory') }}'">
-        <div class="col-4">
-            <img src={{ asset("img/memory-game-icon.png") }} height=185px width=200px;>
+        <hr style="background-color: #6d7fcc;"/>
+        <div class="game row" style="cursor: pointer" onclick=" document.location.href='{{ path('memory') }}'">
+            <div class="col-4">
+                <img src={{ asset("img/memory-game-icon.png") }} height=185px width=200px;>
+            </div>
+            <div class="col-8 align-self-center">
+                <h3>Memory</h3>
+                Description a faire.
+                <br> <br>
+                Xp gagnée par victoire : 10xp.
+            </div>
         </div>
-        <div class="col-8 align-self-center">
-            <h3>Memory</h3>
-           Description a faire.
-            <br> <br>
-            Xp gagnée par victoire : 10xp.
+        <hr style="background-color: #6d7fcc;"/>
+        <div class="game row" style="cursor: pointer" onclick=" document.location.href='{{ path('showQcms') }}'">
+            <div class="col-4">
+                <img src={{ asset("img/qcmIcon.jpg") }} height=185px width=200px;>
+            </div>
+            <div class="col-8 align-self-center">
+                <h3>Questionnaire a Choix Multiple</h3>
+                Testez vos connaissance grace a des QCMs.
+                <br>
+                Vous pouvez aussi en creer.
+                <br> <br>
+                Xp gagnée par victoire : 10xp.
+            </div>
         </div>
     </div>
 
 
-    {% endblock %}
+{% endblock %}

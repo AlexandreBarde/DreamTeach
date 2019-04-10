@@ -15,31 +15,30 @@ class Memory
      * @ORM\Column(type="integer")
      */
     private $id;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $time;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Student")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $StudentId;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $time;
+    private $Student;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStudentId(): ?Student
+    public function getStudent(): ?Student
     {
-        return $this->StudentId;
+        return $this->Student;
     }
 
-    public function setStudentId(?Student $StudentId): self
+    public function setStudent(?Student $Student): self
     {
-        $this->StudentId = $StudentId;
+        $this->Student = $Student;
 
         return $this;
     }

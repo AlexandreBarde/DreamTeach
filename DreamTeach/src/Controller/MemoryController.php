@@ -55,14 +55,14 @@ class MemoryController extends AbstractController
         }
         if($request->get('counter')) {
             $scoreMemory = new Memory();
-            $scoreMemory->setStudentId($this->getUser());
+            $scoreMemory->setStudent($this->getUser());
             $scoreMemory->setTime($request->get('counter'));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($scoreMemory);
             $em->flush();
             $response = new Response(json_encode(array(
-                'message' => 'Votre score a été enregistré ! Temps: ' . $request->get('counter') . ' secondes.'
+                'message' => "Temps total : " . $request->get('counter') . ' secondes.'
             )));
             $response->headers->set('Content-Type', 'application/json');
             return $response;

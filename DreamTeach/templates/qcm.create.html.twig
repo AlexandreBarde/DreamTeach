@@ -7,13 +7,13 @@
         {{ form_widget(formCreateQcm.title) }}
         {{ form_widget(formCreateQcm.deadline) }}
         {{ form_widget(formCreateQcm.visible) }}
-    <ul class="tags" data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.content)|e('html_attr') }}">
-    </ul>
-    <ul class="responses"
-        data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.responses.vars.prototype.content)|e('html_attr') }}"
-        data-prototype2="{{ form_widget(formCreateQcm.questions.vars.prototype.responses.vars.prototype.rightanswer)|e('html_attr') }}"
-    >
-    </ul>
+        <div id="questions" data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.content)|e('html_attr') }}">
+        </div>
+        <div id="responses" style="max-width: 200px"
+             data-prototype="{{ form_widget(formCreateQcm.questions.vars.prototype.responses.vars.prototype.content)|e('html_attr') }}"
+             data-prototype2="{{ form_widget(formCreateQcm.questions.vars.prototype.responses.vars.prototype.rightanswer)|e('html_attr') }}">
+        </div>
+
         <input type="submit" value="Enregistrer" class="btn btn-primary btn-lg btn-block">
     {{ form_end(formCreateQcm) }}
 {% endblock %}
@@ -21,39 +21,35 @@
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            var btn = $('<a href="#" class="btn btn-success">Ajout Question</a>');
-            var btnResponse = $('<a href="#" class="btn btn-primary">Ajouter une réponse</a>');
-            var $newLinkLi = $('<li></li>').append(btn);
+            var btnAddQuestion = $('<a href="#" class="btn btn-success">Ajout Question</a>');
+            var $newLinkLi = $('<li></li>').append(btnAddQuestion);
+
             // Get the ul that holds the collection of tags
-            var $collectionHolder = $('ul.tags');
-            var $collectionHolder2 = $('ul.responses');
+            var $collectionHolder = $('div#questions');
 
             // add the "add a tag" anchor and li to the tags ul
             $collectionHolder.append($newLinkLi);
-            $collectionHolder2.append($newBtnR);
 
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder2.find(':input').length);
-            $collectionHolder2.data('index', $collectionHolder2.find('div').length);
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            // $collectionHolder2.data('index', $collectionHolder2.find('div').length);
 
-            btn.on('click', function (e) {
+            btnAddQuestion.on('click', function (e) {
                 // prevent the link from creating a "#" on the URL
                 e.preventDefault();
 
                 // add a new tag form (see code block below)
-                addTagForm($collectionHolder, $newLinkLi);
+                addQuestionForm($collectionHolder, $newLinkLi);
             });
-
-            btnResponse.on('click', function(e){
-                e.preventDefault();
-                addResponseForm($collectionHolder2, $newBtnR);
-            });
-
         });
 
 
-        function addTagForm($collectionHolder, $newLinkLi) {
+        function addQuestionForm($collectionHolder, $newLinkLi) {
+            var btnAddResponse = $('<a href="#" class="btn btn-primary">Ajouter une réponse</a>');
+            var responsesCollection = $('div#responses');
+            var newLinkLi = $('<li></li>');
+
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
 
@@ -69,20 +65,24 @@
 
             // Display the form in the page in an li, before the "Add a tag" link li
             var $newFormLi = $('<li></li>').append(newForm);
-            var prototype2 = $newFormLi.data('prototype');
-
 
             // also add a remove button, just for this example
             $newFormLi.append('<a href="#" class="remove-tag">x</a>');
+            $newFormLi.append(btnAddResponse);
 
-            $newLinkLi.before($newFormLi);
+            $('#questions').before($newFormLi);
+
+            responsesCollection.data('index', responsesCollection.find(':input').length);
+
+            btnAddResponse.on('click', function(e){
+               e.preventDefault();
+               addResponseForm(responsesCollection, newLinkLi);
+            });
 
             // handle the removal, just for this example
             $('.remove-tag').click(function (e) {
                 e.preventDefault();
-
                 $(this).parent().remove();
-
                 return false;
             });
         }
@@ -107,7 +107,7 @@
             // also add a remove button, just for this example
             $newFormLi.append('<a href="#" class="remove-tag">x</a>');
 
-            $newLinkLi.before($newFormLi);
+            $('#responses').append($newFormLi);
 
             // handle the removal, just for this example
             $('.remove-tag').click(function (e) {

@@ -10,6 +10,7 @@ use App\Service\QcmService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -91,14 +92,18 @@ class QcmController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $data = $formQcm->getData();
             $questions = $data->getQuestions();
+
             foreach ($questions as $q) {
+                $responses = $q->getResponses();
                 $q->setAuthor($user);
                 $q->setQcm($qcm);
             }
+
             $qcm->setAuthorId($user);
             $em->persist($qcm);
             $em->flush();
 
+            dump($qcm);exit;
             return $this->redirectToRoute('showQcms');
         }
 

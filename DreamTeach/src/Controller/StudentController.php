@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Badge;
 use App\Entity\FriendshipRelation;
 use App\Entity\Grade;
+use App\Entity\Hangman;
 use App\Entity\Memory;
 use App\Entity\Message;
 use App\Entity\Result;
@@ -344,15 +345,18 @@ class StudentController extends Controller
 
 
     /**
-     * @Route("/tableauScore", name="tableauscore")
+     * @param $idJeu
+     * @Route("/tableauScore/{idJeu}", name="tableauscore")
      */
-    public function voirTableauScore(){
+    public function voirTableauScore($idJeu){
         $memoryRepo = $this->getDoctrine()->getRepository(Memory::class);
+        $hangmanRepo = $this->getDoctrine()->getRepository(Hangman::class);
 
-        $tags = $memoryRepo->findBy(
-            array(), array('time' => 'ASC')
-        );
-        //dump($result);exit();
+        if($idJeu == 0) {
+            $tags = $hangmanRepo->findBestScoreByStudent();
+        } else {
+            $tags = $memoryRepo->findBestScoreByStudent();
+        }
         return $this->render(
             'tableauScore.html.twig',
             [

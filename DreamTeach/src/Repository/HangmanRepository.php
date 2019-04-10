@@ -19,6 +19,24 @@ class HangmanRepository extends ServiceEntityRepository
         parent::__construct($registry, Hangman::class);
     }
 
+    /**
+     * @return Hangman[] Returns an array of Hangman objects
+     */
+    public function findBestScoreByStudent()
+    {
+        return $this->createQueryBuilder('h')
+            ->select('h, min(h.time)')
+            ->groupBy('h.student')
+            ->getQuery()
+            ->getResult()
+            ;
+        /*
+         SELECT student_id_id, id, min(time)
+         from memory
+         group by student_id_id;
+         */
+    }
+
     // /**
     //  * @return Hangman[] Returns an array of Hangman objects
     //  */

@@ -42,7 +42,13 @@
                         <label class="custom-control-label" for="customSwitchesCreateSubject">Créer une matière</label>
                     </div>
                     <br>
-
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="inputEmail4">Mot de passe de la séance </label>
+                            {{ form_widget(formSessionCreation.password) }}
+                        </div>
+                    </div>
+                    <br>
                     <label for="exampleFormControlTextarea1">Description séance</label>
                     {{ form_widget(formSessionCreation.description) }}
                 </div>

@@ -9,6 +9,7 @@ use App\Entity\Grade;
 use App\Entity\Hangman;
 use App\Entity\Memory;
 use App\Entity\Message;
+use App\Entity\Quote;
 use App\Entity\Result;
 use App\Entity\Session;
 use App\Entity\Student;
@@ -44,6 +45,9 @@ class StudentController extends Controller
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
+        $quoteList=$this->getDoctrine()->getRepository(Quote::class)->findAll();
+        $quoteId=array_rand($quoteList);
+        $quote=$quoteList[$quoteId];
 
         /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
         $now = new DateTime("now");
@@ -103,6 +107,7 @@ class StudentController extends Controller
             'nbSessionOrganized' => $nbSessionOrganized,
             'nbSessionAttended' => $nbSessionAttended,
             "messages" => $messagesTmp,
+            "quote" => $quote
         ]);
     }
 

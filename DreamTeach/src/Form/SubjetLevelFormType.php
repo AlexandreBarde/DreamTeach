@@ -17,18 +17,14 @@ class SubjetLevelFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $subjectList = $options['subject'];
+
         $builder->add(
             'subjectid',
-            EntityType::class,
+            ChoiceType::class,
             [
-                'class' => Subject::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('s');
-                },
-                'choice_label' => 'name',
-                'attr' => [
-                    'class'=>'custom-select'
-                ]
+                'choices' => $subjectList,
+                'choice_label' => 'name'
             ]
         )
             ->add(
@@ -52,6 +48,7 @@ class SubjetLevelFormType extends AbstractType
         $resolver->setDefaults(
             [
                 "data_class" => Subjectlevel::class,
+                'subject' => null,
             ]
         );
     }

@@ -106,15 +106,11 @@
     <div class="row">
         <div class="col align-self-baseline">
             {% for a in subjectlevel %}
-
-                <p class="font-weight-bolder">{{ a.subjectid.name }} <br/>
+                <p class="font-weight-bolder">{{ a.subjectid.name }} <a href="{{ path('delete_subject_level', {'id': a.subjectlvlid}) }}"><span class="fas fa-times-circle text-danger"></span></a><br/>
                 {% for i in 1..a.mark %}
                     <span class="fa fa-star" style="color:orange"></span>
                 {% endfor %}
                 </p>
-
-
-
             {% endfor %}
 
         </div>

@@ -18,7 +18,6 @@ use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Form\ProfileFormType;
 use App\Form\SubjetLevelFormType;
-use App\Service\SubjectService;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -260,6 +259,18 @@ class StudentController extends Controller
                 'subjectList' => $subjectList
             ]
         );
+    }
+
+    /**
+     * @Route("/delete-subject-level/{id}", name="delete_subject_level")
+     */
+    public function deleteSubjectLevel(Request $request, Subjectlevel $subjectlevel)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($subjectlevel);
+        $em->flush();
+
+        return $this->redirectToRoute('student_profile');
     }
 
     /**

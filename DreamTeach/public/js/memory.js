@@ -72,6 +72,8 @@ function selectCard(clickedCard1, clickedCard2) {
             }
             $(clickedCard1).attr("disabled", false);
             $(clickedCard2).attr("disabled", false);
+            $(clickedCard1).text("Card");
+            $(clickedCard2).text("Card");
         }
     });
 

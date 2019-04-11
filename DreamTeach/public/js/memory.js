@@ -1,16 +1,25 @@
 $(document).ready(function() {
     start();
     var clickedButtonCounter = 0;
+    var clickedCard1;
     var clickedCard2;
+
     $("button").click(function (e) {
         clickedButtonCounter++;
         if(clickedButtonCounter == 2) {
             $(this).attr("disabled", true);
             $(this).text($(this).val());
             clickedButtonCounter = 0;
-            var clickedCard1 = this;
+            clickedCard1 = this;
             selectCard(clickedCard1, clickedCard2);
+
         } else {
+            $(clickedCard1).attr("disabled", false);
+            $(clickedCard2).attr("disabled", false);
+
+            $(clickedCard1).text("Card");
+            $(clickedCard2).text("Card");
+
             $(this).attr("disabled", true);
             $(this).text($(this).val());
             clickedCard2 = this;
@@ -33,9 +42,6 @@ function selectCard(clickedCard1, clickedCard2) {
         },
 
         success : function(response){
-            $(clickedCard1).attr("disabled", false);
-            $(clickedCard2).attr("disabled", false);
-
             if(response['goodAnswer']) {
                 $("#" + clickedCard1.id + "").remove();
                 $("#" + clickedCard2.id + "").remove();
@@ -70,10 +76,6 @@ function selectCard(clickedCard1, clickedCard2) {
                     }
                 }
             }
-            $(clickedCard1).attr("disabled", false);
-            $(clickedCard2).attr("disabled", false);
-            $(clickedCard1).text("Card");
-            $(clickedCard2).text("Card");
         }
     });
 

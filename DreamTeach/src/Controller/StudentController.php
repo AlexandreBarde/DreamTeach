@@ -149,17 +149,22 @@ class StudentController extends Controller
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
+        $user = $this->getUser();
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
             [
                 "studentid" => $this->getUser(),
 
             ]);
         $subjectlevel = new Subjectlevel();
-        $form = $this->createForm(SubjetLevelFormType::class, $subjectlevel);
+        $em = $this->getDoctrine()->getManager();
+
+        $subjectList = $this->get('subject_service')->getSubjectListForSubjectLevelingForUser($user);
+        $form = $this->createForm(SubjetLevelFormType::class, $subjectlevel, [
+            'subject' => $subjectList
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $subjectlevel->setStudentid($this->getUser());
             $em->persist($subjectlevel);
             $em->flush();
@@ -250,9 +255,22 @@ class StudentController extends Controller
             [
                 'form' => $form->createView(),
                 'subjectlevel' => $subjectLevelStudent,
-                'noteUser' => $noteUser
+                'noteUser' => $noteUser,
+                'subjectList' => $subjectList
             ]
         );
+    }
+
+    /**
+     * @Route("/delete-subject-level/{id}", name="delete_subject_level")
+     */
+    public function deleteSubjectLevel(Request $request, Subjectlevel $subjectlevel)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($subjectlevel);
+        $em->flush();
+
+        return $this->redirectToRoute('student_profile');
     }
 
     /**

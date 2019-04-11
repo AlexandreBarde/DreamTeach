@@ -18,6 +18,7 @@ use App\Entity\Subjectlevel;
 use App\Entity\Training;
 use App\Form\ProfileFormType;
 use App\Form\SubjetLevelFormType;
+use App\Service\SubjectService;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -149,17 +150,22 @@ class StudentController extends Controller
 
     public function studentProfileAction(Request $request, ObjectManager $manager)
     {
+        $user = $this->getUser();
         $noteUser = $this->getDoctrine()->getRepository(Subjectlevel::class)->findBy(
             [
                 "studentid" => $this->getUser(),
 
             ]);
         $subjectlevel = new Subjectlevel();
-        $form = $this->createForm(SubjetLevelFormType::class, $subjectlevel);
+        $em = $this->getDoctrine()->getManager();
+
+        $subjectList = $this->get('subject_service')->getSubjectListForSubjectLevelingForUser($user);
+        $form = $this->createForm(SubjetLevelFormType::class, $subjectlevel, [
+            'subject' => $subjectList
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $subjectlevel->setStudentid($this->getUser());
             $em->persist($subjectlevel);
             $em->flush();
@@ -250,7 +256,8 @@ class StudentController extends Controller
             [
                 'form' => $form->createView(),
                 'subjectlevel' => $subjectLevelStudent,
-                'noteUser' => $noteUser
+                'noteUser' => $noteUser,
+                'subjectList' => $subjectList
             ]
         );
     }

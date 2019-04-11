@@ -5,10 +5,6 @@
 {% endblock %}
 
 {% block body %}
-    <select name="" id="">
-        <option value="hangman">Hangman</option>
-        <option value="memory">Memory</option>
-    </select>
     <div class="row mt-4">
         <div class="col-8 mx-auto">
             <form action="{{ path('search_xp_view') }}" method="get" id="search_xp_form">
@@ -30,31 +26,35 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <table data-toggle="table" class="table table-striped">
-                <thead>
-                <tr>
-                    <th class="text-center" scope="col">
-                        Classement
-                    </th>
-                    <th class="text-center" scope="col">
-                        Nom
-                    </th>
-                    <th class="text-center" scope="col">
-                        Prénom
-                    </th>
-                    <th class="text-center" scope="col">
-                        Ville
-                    </th>
-                    <th class="text-center" scope="col">
-                        Ecole
-                    </th>
-                    <th class="text-center" scope="col">
-                        Temps
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% if classementMemory is not null %}
+            {% if classementMemory is empty %}
+                <div class="alert alert-warning" role="alert">
+                    Aucun résultat trouvé
+                </div>
+            {% else %}
+                <table data-toggle="table" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="text-center" scope="col">
+                            Classement
+                        </th>
+                        <th class="text-center" scope="col">
+                            Nom
+                        </th>
+                        <th class="text-center" scope="col">
+                            Prénom
+                        </th>
+                        <th class="text-center" scope="col">
+                            Ville
+                        </th>
+                        <th class="text-center" scope="col">
+                            Ecole
+                        </th>
+                        <th class="text-center" scope="col">
+                            Temps
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {% for classement, i in classementMemory %}
                         {% set medaille = "" %}
                         {% if classement == 0 %}
@@ -70,20 +70,20 @@
 
                             <td class="text-center"> {{ medaille | raw }} </td>
 
-                            <td class="text-center"> {{ i.studentId.lastName }}</td>
+                            <td class="text-center"> {{ i[0].student.lastName }}</td>
 
-                            <td class="text-center"> {{ i.studentId.firstName }}</td>
+                            <td class="text-center"> {{ i[0].student.firstName }}</td>
 
-                            <td class="text-center">{{ i.studentId.city }}</td>
+                            <td class="text-center">{{ i[0].student.city }}</td>
 
-                            <td class="text-center">  {{ i.studentId.trainingID.schoolID.name }}</td>
+                            <td class="text-center">  {{ i[0].student.trainingID.schoolID.name }}</td>
 
-                            <td class="text-center">  {{ i.time }} s</td>
+                            <td class="text-center">  {{ i[1] }} s</td>
                         </tr>
                     {% endfor %}
-                {% endif %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            {% endif %}
         </div>
     </div>
     {% block javascripts %}

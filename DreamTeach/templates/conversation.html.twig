@@ -6,55 +6,156 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
 {% endblock %}
+{% block javascripts %}
+    <script>
+        
+            var element = document.getElementById("messageScroll");
+            element.scrollTop = element.scrollHeight;
+
+    </script>
+{% endblock %}
 
 {% block body %}
     <style>
-        .col
-        {
-            border: 1px solid rgba(86,61,124,.2);
+        /* CSS talk bubble */
+        .talk-bubble {
+            margin: 40px;
+            display: inline-block;
+            position: relative;
+            width: 500px;
+            height: auto;
+            background-color: lightgrey;
         }
+
+        .talk-bubble2 {
+            margin: 40px;
+            display: inline-block;
+            position: relative;
+            width: 500px;
+            height: auto;
+            background-color: #6d7fcc;
+        }
+
+
+        .tri-right.left-top:after {
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: -20px;
+            right: auto;
+            top: 0px;
+            bottom: auto;
+            border: 22px solid;
+            border-color: lightgrey transparent transparent transparent;
+        }
+
+        .tri-right.right-top:after {
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: auto;
+            right: -20px;
+            top: 0px;
+            bottom: auto;
+            border: 20px solid;
+            border-color: #6d7fcc transparent transparent transparent;
+        }
+
+        .talktext {
+            padding: 1em;
+            text-align: left;
+            line-height: 1.5em;
+        }
+
+        .talktext p {
+            /* remove webkit p margins */
+            -webkit-margin-before: 0em;
+            -webkit-margin-after: 0em;
+            color: black;
+        }
+
+        .talktext2 p {
+            /* remove webkit p margins */
+            -webkit-margin-before: 0em;
+            -webkit-margin-after: 0em;
+            color: white;
+        }
+
+        .talktext2 {
+            padding: 1em;
+            text-align: left;
+            line-height: 1.5em;
+            color: white;
+        }
+
+        .espace {
+            width: 6%;
+        }
+
+        .info {
+            margin-left: 3vw;
+            color: grey;
+
+        }
+
+        .info2 {
+            margin-right: 3vw;
+            color: grey;
+
+        }
+
+
     </style>
-    <div class="container mt-5">
-        <h1 class="display-4 text-center">Conversation avec {{ sender.firstname }} {{ sender.lastname }}</h1>
+    <div class="container mt-0" id="fix">
+        <h1 class="display-4 text-center">{{ sender.firstname }} {{ sender.lastname }}</h1>
+        <hr style="background-color: #6d7fcc;"/>
     </div>
-        <div class="container mt-5">
-            <div class="row text-center">
-                <div class="col col-lg-2 pt-1"><h5>Utilisateur</h5></div>
-                <div class="col pt-1"><h5>Derniers messages</h5></div>
-            </div>
+        <div  id="messageScroll" style="overflow-y: scroll; height: 55VH;">
             {% for m in messages %}
-                <div class="row messageDiv">
-                    <div class="text-center col col-lg-2 pt-3 pb-3">
-                        <h6>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</h6>
-                        {% if m.idSender.avatar %}
-                            <img class="img-thumbnail img-fluid" height="100px" width="100px" src={{ asset('uploads/avatars/' ~ m.idSender.avatar) }}>
-                        {% else %}
-                            <img class="img-thumbnail img-fluid" height="100px" width="100px" src="{{ asset('img/tom_bg.jpg') }}"
-                            >
-                        {% endif %}
+                {% if m.idSender == app.user %}
+                    <div class="info2 text-right">{{ m.date|date("d/m/Y") }}</div>
+
+                    <div class="row">
+                        <div class="espace"></div>
+                        <div style="width: 26vw"></div>
+                        <div class="talk-bubble2 tri-right right-top  mb-0 mt-0">
+                            <div class="talktext2">
+                                <p>{{ m.content }} </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col pt-3"><p>{{ m.content}}</p></div>
-                </div>
+                    <div class="info2 text-right">  {{ m.date|date("H:i") }}</div>
+
+
+                {% else %}
+                    <div class="info">{{ m.date|date("d/m/Y") }}  </div>
+                    <div class="row">
+                        <div class="talk-bubble tri-right left-top mb-0 mt-0">
+                            <div class="talktext">
+                                <p> {{ m.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">{{ m.date|date("H:i") }} </div>
+                {% endif %}
             {% endfor %}
-            <div class="row">
-                <div class="col pt-3 pb-3">
-                    {{ form_start(form) }}
-                        {{ form_widget(form.content, {"attr" : {"class" : "form-control", "placeholder" : "Votre message...", "required" : ""}}) }}
-                    <input type="submit" value="Envoyer" class="btn btn-primary btn-lg btn-block pt-2 pb-2">
-                    {{ form_end(form) }}
-                    <!--<textarea class="form-control" id="description" name="description" rows="3"></textarea><br />-->
-                </div>
+        </div>
+        <hr style="background-color: #6d7fcc;"/>
+        <div class="row">
+            <div class="col pt-3 pb-3">
+                {{ form_start(form) }}
+                {{ form_widget(form.content, {"attr" : {"class" : "form-control", "placeholder" : "Votre message...", "required" : ""}}) }}
+                <br>
+                <input type="submit" value="Envoyer" style="background-color: #6d7fcc; color: white;"
+                       class="btn btn-lg btn-block pt-2 pb-2">
+                {{ form_end(form) }}
+                <!--<textarea class="form-control" id="description" name="description" rows="3"></textarea><br />-->
             </div>
         </div>
 {% endblock %}
-{% block javascripts %}
-    <script>
-        $('#description').summernote({
-            placeholder: '...',
-            tabsize: 2,
-            height: 100
-        });
-    </script>
-{% endblock %}
+
+
 
 

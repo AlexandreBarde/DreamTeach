@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Subjectlevel
  *
  * @ORM\Table(name="subjectlevel", indexes={@ORM\Index(name="IDX_550538D35621423", columns={"subjectID"}), @ORM\Index(name="IDX_550538D3A3D10F50", columns={"studentID"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\SubjectLevelRepository")
  */
 class Subjectlevel
 {

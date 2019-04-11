@@ -8,9 +8,9 @@
 {% endblock %}
 {% block javascripts %}
     <script>
-        
-            var element = document.getElementById("messageScroll");
-            element.scrollTop = element.scrollHeight;
+
+        var element = document.getElementById("messageScroll");
+        element.scrollTop = element.scrollHeight;
 
     </script>
 {% endblock %}
@@ -89,22 +89,14 @@
             line-height: 1.5em;
             color: white;
         }
-
-        .espace {
-            width: 6%;
-        }
-
-        .info {
-            margin-left: 3vw;
-            color: grey;
-
-        }
-
         .info2 {
-            margin-right: 3vw;
-            color: grey;
-
+            margin-right: 3%;
         }
+        .info{
+            margin-left: 3%;
+        }
+
+
 
 
     </style>
@@ -112,48 +104,43 @@
         <h1 class="display-4 text-center">{{ sender.firstname }} {{ sender.lastname }}</h1>
         <hr style="background-color: #6d7fcc;"/>
     </div>
-        <div  id="messageScroll" style="overflow-y: scroll; height: 55VH;">
-            {% for m in messages %}
-                {% if m.idSender == app.user %}
-                    <div class="info2 text-right">{{ m.date|date("d/m/Y") }}</div>
-
-                    <div class="row">
-                        <div class="espace"></div>
-                        <div style="width: 26vw"></div>
-                        <div class="talk-bubble2 tri-right right-top  mb-0 mt-0">
-                            <div class="talktext2">
-                                <p>{{ m.content }} </p>
-                            </div>
+    <div id="messageScroll" style="overflow-y: scroll; height: 55VH;">
+        {% for m in messages %}
+            {% if m.idSender == app.user %}
+                <div class="info2 text-right">{{ m.date|date("d/m/Y") }}</div>
+                <div class="row justify-content-end">
+                    <div class="talk-bubble2 tri-right right-top  mb-0 mt-0">
+                        <div class="talktext2">
+                            <p>{{ m.content }} </p>
                         </div>
                     </div>
-                    <div class="info2 text-right">  {{ m.date|date("H:i") }}</div>
-
-
-                {% else %}
-                    <div class="info">{{ m.date|date("d/m/Y") }}  </div>
-                    <div class="row">
-                        <div class="talk-bubble tri-right left-top mb-0 mt-0">
-                            <div class="talktext">
-                                <p> {{ m.content }}</p>
-                            </div>
+                </div>
+                <div class="info2 text-right">  {{ m.date|date("H:i") }}</div>
+            {% else %}
+                <div class="info">{{ m.date|date("d/m/Y") }}  </div>
+                <div class="row">
+                    <div class="talk-bubble tri-right left-top mb-0 mt-0">
+                        <div class="talktext">
+                            <p> {{ m.content }}</p>
                         </div>
                     </div>
-                    <div class="info">{{ m.date|date("H:i") }} </div>
-                {% endif %}
-            {% endfor %}
+                </div>
+                <div class="info">{{ m.date|date("H:i") }} </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <hr style="background-color: #6d7fcc;"/>
+    <div class="row">
+        <div class="col pt-3 pb-3">
+            {{ form_start(form) }}
+            {{ form_widget(form.content, {"attr" : {"class" : "form-control", "placeholder" : "Votre message...", "required" : ""}}) }}
+            <br>
+            <input type="submit" value="Envoyer" style="background-color: #6d7fcc; color: white;"
+                   class="btn btn-lg btn-block pt-2 pb-2">
+            {{ form_end(form) }}
+            <!--<textarea class="form-control" id="description" name="description" rows="3"></textarea><br />-->
         </div>
-        <hr style="background-color: #6d7fcc;"/>
-        <div class="row">
-            <div class="col pt-3 pb-3">
-                {{ form_start(form) }}
-                {{ form_widget(form.content, {"attr" : {"class" : "form-control", "placeholder" : "Votre message...", "required" : ""}}) }}
-                <br>
-                <input type="submit" value="Envoyer" style="background-color: #6d7fcc; color: white;"
-                       class="btn btn-lg btn-block pt-2 pb-2">
-                {{ form_end(form) }}
-                <!--<textarea class="form-control" id="description" name="description" rows="3"></textarea><br />-->
-            </div>
-        </div>
+    </div>
 {% endblock %}
 
 

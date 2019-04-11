@@ -18,6 +18,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -77,6 +78,13 @@ class SessionFormType extends AbstractType
                     'class' => 'form-control',
                     'min' => $now->format("Y-m-d")
                 ]
+            ])
+            ->add('password', PasswordType::class,[
+                'attr' => [
+                    'placeholder' => "Laisser vide pour une session ouverte..",
+                    'class' => 'form-control'
+                ],
+                'required' => false
             ])
             ->add('isVirtual', CheckboxType::class)
             ->add('maxnbparticipant', NumberType::class, [

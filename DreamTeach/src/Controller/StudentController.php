@@ -256,7 +256,8 @@ class StudentController extends Controller
             [
                 'form' => $form->createView(),
                 'subjectlevel' => $subjectLevelStudent,
-                'noteUser' => $noteUser
+                'noteUser' => $noteUser,
+                'subjectList' => $subjectList
             ]
         );
     }

@@ -25,14 +25,15 @@ class CheckPasswordSession extends AbstractType
                 'placeholder' => "Mot de passe de la séance",
                 'class' => 'form-control'
             ],
-            'required' => false
+            'required' => false,
+            'mapped' => false
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Session::class
+            'data_class' => null
         ]);
     }
 

@@ -213,7 +213,7 @@
                     </div>
                     <hr>
                     <div class="row">
-                        {% for participant in session.studentid %}
+                        {% for participant in session.studentid if participant != session.organizerid %}
                             <div class="col-4 p-2 border">
                                 {% if participant.avatar %}
                                     <img class="rounded-circle img-fluid"

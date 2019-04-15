@@ -124,22 +124,21 @@ class SessionController extends Controller
     }
 
     /**
-     * @Route("/accueil/displaySession/{idSession}", name="displaySession")
+     * @Route("/accueil/displaySession/{session}", name="displaySession")
      * @param $idSession
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function displaySession($idSession, Request $request)
+    public function displaySession(Request $request, Session $session)
     {
         $comment = new Sessioncomment();
-        $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         $sessionComment = $this->createForm(AddCommentSessionFormType::class, $comment);
 
-        $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession));
+        $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $session));
         $sessionComment->handleRequest($request);
         if ($sessionComment->isSubmitted() && $sessionComment->isValid()) {
-            if ($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession, 'idStudent' => $this->getUser()->getId()))) {
+            if ($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $session, 'idStudent' => $this->getUser()->getId()))) {
                 $this->addFlash('success', "Commentaire non envoyé car vous avez déjà envoyé un commentaire pour cette session");
-                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+                return $this->redirectToRoute("displaySession", ["idSession" => $session]);
             } else {
                 $em = $this->getDoctrine()->getManager();
                 $comment->setIdSession($session);
@@ -148,7 +147,7 @@ class SessionController extends Controller
 
                 $em->persist($comment);
                 $em->flush();
-                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+                return $this->redirectToRoute("displaySession", ["idSession" => $session]);
             }
         }
         return $this->render("displaySession.html.twig", [

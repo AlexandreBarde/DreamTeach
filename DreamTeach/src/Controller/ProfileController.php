@@ -128,7 +128,7 @@ class ProfileController extends Controller
             array_push($listeSessionEtudiant, $ss);
         }
 
-        if(in_array($idSession,$listeSessionEtudiant))
+        if(in_array($idSession->getId(),$listeSessionEtudiant))
         {
             die("c'est déjà dans ton agenda");
         }

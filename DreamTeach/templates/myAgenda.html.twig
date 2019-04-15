@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/fullcalendar/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fullcalendar/core.css') }}">
     <script src="{{ asset('js/jQuery.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/core/main.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/interaction/main.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/daygrid/main.js') }}"></script>
@@ -39,7 +40,20 @@
           {
               title: '{{ i.name() }}',
               start: '{{ i.date.format("Y-m-d") }}T{{ i.startingTime.format("H:i:s") }}',
-              end: '{{ i.date.format("Y-m-dT") }}T{{  i.endingTime.format("H:i:s") }}'
+              end: '{{ i.date.format("Y-m-dT") }}T{{  i.endingTime.format("H:i:s") }}',
+          {% if app.user.id == i.organizerId.id %}
+            {% if i.closed %}
+              url: 'javascript:orgaClosed("{{ i.name() }}", {{ i.id }})'
+            {% else %}
+              url: 'javascript:orgaNotClosed("{{ i.name() }}", {{ i.id }})'
+            {% endif %}
+          {% else %}
+            {% if i.closed %}
+              url: 'javascript:userClosed("{{ i.name() }}", {{ i.id }})'
+            {% else %}
+              url: 'javascript:userNotClosed("{{ i.name() }}", {{ i.id }})'
+            {% endif %}
+          {% endif %}
           },
           {% endfor %}
         {
@@ -50,7 +64,6 @@
         }
       ]
     });
-
     calendar.render();
   });
 
@@ -141,6 +154,115 @@
         #}
     </div>
     <div id="calendar"></div>
+    <div id="orgaClosed" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Informations de la séance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><span id="sessionCommentOrgaClosed"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <a id="orgaClosedModify" href="#" class="button btn btn-primary disabled"><i class="fas fa-edit"></i> Modifier</a>
+                    <a id="orgaClosedDelete" href="#" class="button btn btn-primary disabled"><i class="fas fa-trash-alt"></i>Supprimer</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="orgaNotClosed" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Informations de la séance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><span id="sessionCommentOrgaNotClosed"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <a id="orgaNotClosedModify" href="#" class="button btn btn-primary"><i class="fas fa-edit"></i> Modifier</a>
+                    <a id="orgaNotClosedDelete" href="#" class="button btn btn-primary"><i class="fas fa-trash-alt"></i>Supprimer</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="userClosed" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Informations de la séance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><span id="sessionCommentUserClosed"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <a id="linkpartage" href="#" class="button btn btn-primary disabled"><i class="fas fa-times"></i> Se désinscrire</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="userNotClosed" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Informations de la séance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><span id="sessionCommentUserNotClosed"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <a id="userNotClosedUnSubscribe" href="#" class="button btn btn-primary"><i class="fas fa-times"></i> Se désinscrire</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function orgaClosed(name, id)
+        {
+            $('#sessionCommentOrgaClosed').html(name);
+            $('#orgaClosed').modal('toggle');
+        }
+
+        function orgaNotClosed(name, id)
+        {
+            $('#sessionCommentOrgaNotClosed').html(name);
+            $('#orgaNotClosedModify').attr("href", "/accueil/updateSession/" + id);
+            $('#orgaNotClosedDelete').attr("href", "/accueil/deleteSession/" + id);
+            $('#orgaNotClosed').modal('toggle');
+        }
+
+        function userClosed(name, id)
+        {
+            $('#sessionCommentUserClosed').html(name);
+            $('#userClosed').modal('toggle');
+        }
+
+        function userNotClosed(name, id)
+        {
+            $('#userNotClosedUnSubscribe').attr("href", "/accueil/removeSession/" + id);
+            $('#sessionCommentUserNotClosed').html(name);
+            $('#userNotClosed').modal('toggle');
+        }
+    </script>
 {% endblock %}
 {% block javascripts %}
 {% endblock %}

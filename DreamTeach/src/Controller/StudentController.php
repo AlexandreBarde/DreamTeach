@@ -12,6 +12,7 @@ use App\Entity\Message;
 use App\Entity\Quote;
 use App\Entity\Result;
 use App\Entity\Session;
+use App\Entity\Sessioncomment;
 use App\Entity\Student;
 use App\Entity\Subject;
 use App\Entity\Subjectlevel;
@@ -19,6 +20,7 @@ use App\Entity\Training;
 use App\Form\ProfileFormType;
 use App\Form\SubjetLevelFormType;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -45,9 +47,13 @@ class StudentController extends Controller
         $nbSessionOrganized = $this->getDoctrine()->getRepository(Session::class)->countNbSessionOrganizedByUser(
             $this->getUser()
         );
-        $quoteList=$this->getDoctrine()->getRepository(Quote::class)->findAll();
-        $quoteId=array_rand($quoteList);
-        $quote=$quoteList[$quoteId];
+
+        //quotes generator
+        $quoteList = $this->getDoctrine()->getRepository(Quote::class)->findAll();
+        $quoteId = array_rand($quoteList);
+        $quote = $quoteList[$quoteId];
+        //end quote generator
+
 
         /*calcul du nombre de sessions passées où l'étudiant a été inscrit*/
         $now = new DateTime("now");
@@ -55,12 +61,23 @@ class StudentController extends Controller
 
         $listSessionAttended = $this->getUser()->getSessionid();
         $nbSessionAttended = 0;
-        foreach ($listSessionAttended as $sessionAttended) {
-            if ($sessionAttended->getDate() < $now) {
-                $nbSessionAttended++;
-            }
-        }
+        $listSessionDone = new ArrayCollection();
 
+        foreach ($listSessionAttended as $sessionAttended) {
+            //on recupère la liste des commentaires sur la session parcourue
+            $listcommentaires = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $sessionAttended->getId(), 'idStudent' => $this->getUser()->getId()));
+            if ($sessionAttended->getDate() < $now) {
+
+                //la session est passée, on incrémente le compteur de séances assistées
+                $nbSessionAttended++;
+                //s'il n'y a pas de commentaires de l'utilisateur connecté sur la session, on l'ajoute en affichage des sessions a commenter
+                if (empty($listcommentaires)) {
+                    $listSessionDone->add($sessionAttended);
+                }
+
+            }
+
+        }
 
         foreach ($session as $key => $value) {
             $now = new \DateTime();
@@ -91,12 +108,10 @@ class StudentController extends Controller
         $messagesTmp = array();
         $arrayIdSender = array();
         // On parcourt les messages
-        foreach ($messages as $m)
-        {
+        foreach ($messages as $m) {
             // Si l'ID de la personne qui a envoyé le message n'est pas dans le tableau
-            if(!( in_array($m->getIdSender()->getId(), $arrayIdSender)))
-            {
-                array_push($arrayIdSender,$m->getIdSender()->getId());
+            if (!(in_array($m->getIdSender()->getId(), $arrayIdSender))) {
+                array_push($arrayIdSender, $m->getIdSender()->getId());
                 array_push($messagesTmp, $m);
             }
         }
@@ -107,7 +122,8 @@ class StudentController extends Controller
             'nbSessionOrganized' => $nbSessionOrganized,
             'nbSessionAttended' => $nbSessionAttended,
             "messages" => $messagesTmp,
-            "quote" => $quote
+            "quote" => $quote,
+            "doneSessions" => $listSessionDone
         ]);
     }
 
@@ -183,72 +199,72 @@ class StudentController extends Controller
             if (!is_null($request->request->get('editer'))) {
                 $repository = $this->getDoctrine()->getRepository(Student::class);
 
-        /* @var Training $formations */
+                /* @var Training $formations */
 
-        $user = $this->getUser();
-        $studentId = $repository->find($this->getUser()->getId());
+                $user = $this->getUser();
+                $studentId = $repository->find($this->getUser()->getId());
 
-        $form = $this->createForm(ProfileFormType::class, $user);
+                $form = $this->createForm(ProfileFormType::class, $user);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $studentId->getAvatar();
-            if ($file != null) {
-                unlink($this->getParameter('avatar_directory') . '/' . $oldFileName);
-                $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $file = $studentId->getAvatar();
+                    if ($file != null) {
+                        unlink($this->getParameter('avatar_directory') . '/' . $oldFileName);
+                        $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
-                try {
-                    $file->move(
-                        $this->getParameter('avatar_directory'),
-                        $fileName
-                    );
-                } catch (FileException $e) {
-                    // TODO Gérer les erreurs
+                        try {
+                            $file->move(
+                                $this->getParameter('avatar_directory'),
+                                $fileName
+                            );
+                        } catch (FileException $e) {
+                            // TODO Gérer les erreurs
+                        }
+                        $user->setAvatar($fileName);
+
+
+                    } else {
+
+                        $studentId->setavatar($avatar);
+                    }
+
+
+                    $manager->persist($user);
+                    $manager->flush();
+
+                    return $this->redirectToRoute("student_profile");
+
                 }
-                $user->setAvatar($fileName);
 
+                return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
 
-            } else {
+            } else if (!is_null($request->request->get('matieres'))) {
+                $repository = $this->getDoctrine()->getRepository(Subject::class);
+                $subject = new Subject();
+                $form = $this->createFormBuilder($subject)
+                    ->add('name')
+                    ->getForm();
 
-                $studentId->setavatar($avatar);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if ($repository->findBy(
+                        ['name' => $form->get('name')->getData()]
+                    )) {
+
+                    } else {
+                        $manager->persist($subject);
+                        $manager->flush();
+
+                        return $this->redirectToRoute("student_profile");
+                    }
+                }
+
+                return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
             }
 
-
-            $manager->persist($user);
-            $manager->flush();
-
-            return $this->redirectToRoute("student_profile");
-
         }
-
-        return $this->render("updateProfile.html.twig", ["formUser" => $form->createView(), "user" => $this->getUser()]);
-
-    } else if (!is_null($request->request->get('matieres'))) {
-        $repository = $this->getDoctrine()->getRepository(Subject::class);
-        $subject = new Subject();
-        $form = $this->createFormBuilder($subject)
-            ->add('name')
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($repository->findBy(
-                ['name' => $form->get('name')->getData()]
-            )) {
-
-            } else {
-                $manager->persist($subject);
-                $manager->flush();
-
-                return $this->redirectToRoute("student_profile");
-            }
-        }
-
-        return $this->render("informASubject.html.twig", ["formSubject" => $form->createView()]);
-    }
-
-}
 
         return $this->render(
             "viewProfile.html.twig",
@@ -351,7 +367,8 @@ class StudentController extends Controller
     /**
      * @Route("/classementxp", name="classementXp")
      */
-    public function classementXp(){
+    public function classementXp()
+    {
         $classement = $this->getDoctrine()->getEntityManager();
         $tags = $classement->getRepository(Student::class)->findBy(
             array(), array('xpwon' => 'DESC')
@@ -371,11 +388,12 @@ class StudentController extends Controller
      * @param $idJeu
      * @Route("/tableauScore/{idJeu}", name="tableauscore")
      */
-    public function voirTableauScore($idJeu){
+    public function voirTableauScore($idJeu)
+    {
         $memoryRepo = $this->getDoctrine()->getRepository(Memory::class);
         $hangmanRepo = $this->getDoctrine()->getRepository(Hangman::class);
 
-        if($idJeu == 0) {
+        if ($idJeu == 0) {
             $tags = $hangmanRepo->findBestScoreByStudent();
         } else {
             $tags = $memoryRepo->findBestScoreByStudent();
@@ -388,29 +406,33 @@ class StudentController extends Controller
         );
 
     }
+
     /**
      * @Route("/testbadge", name="testbadge")
      */
-    public function addBadge(){
+    public function addBadge()
+    {
         $badge = $this->getDoctrine()->getRepository(Badge::class)->find(3);
-        $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
+        $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
         return new JsonResponse();
     }
 
     /**
      * @Route("/testgrade", name="testgrade")
      */
-    public function addGrade(){
+    public function addGrade()
+    {
         $grade = $this->getDoctrine()->getRepository(Grade::class)->find(2);
-        $this->get('ajout_grade')->addGrade($this->getUser(),$grade);
+        $this->get('ajout_grade')->addGrade($this->getUser(), $grade);
         return new JsonResponse();
     }
 
     /**
      * @Route("/testxp", name="testxp")
      */
-    public function xpWon(){
-        $this->get('xp_won')->wonXp($this->getUser(),100);
+    public function xpWon()
+    {
+        $this->get('xp_won')->wonXp($this->getUser(), 100);
         return new JsonResponse();
     }
 
@@ -446,10 +468,10 @@ class StudentController extends Controller
                 $request->get('search_score')
             );
             $tab = [];
-            foreach ($result_score as $result){
+            foreach ($result_score as $result) {
 
                 $tab = $this->getDoctrine()->getRepository(Result::class)->findBy(
-                    [ 'id' => $result->getId(),]
+                    ['id' => $result->getId(),]
                 );
             }
             return $this->render(

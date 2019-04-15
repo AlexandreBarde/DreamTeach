@@ -19,7 +19,8 @@
             <footer class="blockquote-footer"><cite title="Source Title">{{ quote.author }}</cite></footer>
 
         </div>
-        <div class="col-4 align-bottom alert" style="background-color: #F4F4F4;color: black; border-style: solid;  border-width:1px; border-color: lightgray;" >
+        <div class="col-4 align-bottom alert"
+             style="background-color: #F4F4F4;color: black; border-style: solid;  border-width:1px; border-color: lightgray;">
             <div class="row">
                 <h1 class="col-12 mb-0 justify-content-center d-flex">
                     <span class="level_text d-none d-lg-flex">Niveau &nbsp;</span><span>{{ (app.user.xpWon / 50)|slice(0,1) }}</span>
@@ -42,17 +43,22 @@
         </div>
     </div>
     <div class="row mt-4">
-        <div class="col-8 mx-auto">
+        <div class="col-12 mx-auto">
             <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
                 <div class="form-group">
-                    <div class="row">
-                        <div class="col-8">
-                            <input type="text" id="rechercherInput" class="form-control"
-                                   placeholder="Recherchez un étudiant.."
-                                   name="search_student">
-                        </div>
-                        <div class="col-3">
-                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn" style="background-color: #6d7fcc; color: white;">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" id="rechercherInput" class="form-control"
+                                           placeholder="Recherchez un étudiant.."
+                                           name="search_student">
+                                </div>
+                                <div class="col-4">
+                                    <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-block"
+                                           style="background-color: #6d7fcc; color: white;">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,10 +67,14 @@
     </div>
     <div class="container-fluid">
         <div class="row justify-content-between mt-3">
-            <div class="col-5 alert alert text-center" style="background-color: #F4F4F4;color: black; border-style: solid;  border-width:1px; border-color: lightgray;" ><h6>Séances
+            <div class="col-5 alert alert text-center"
+                 style="background-color: #F4F4F4;color: black; border-style: solid;  border-width:1px; border-color: lightgray;">
+                <h6>Séances
                     dirigées</h6>{{ nbSessionOrganized }}</div>
             <div class="col-2 text-center"></div>
-            <div class="col-5  mx-auto alert alert text-center" style="background-color: #F4F4F4;color: black; border-style: solid;  border-width:1px; border-color: lightgray;" ><h6>Séances
+            <div class="col-5  mx-auto alert alert text-center"
+                 style="background-color: #F4F4F4;color: black; border-style: solid;  border-width:1px; border-color: lightgray;">
+                <h6>Séances
                     assistées</h6>{{ nbSessionAttended }}</div>
         </div>
     </div>
@@ -72,39 +82,39 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-            <div class="card-header">
-                <h6><i class="fas fa-exclamation-circle"></i> Séances passées en attente de feedback</h6>
-            </div>
-            <div class="card-body pb-0">
-                {% if doneSessions.empty %}
-                    <p>Aucun feedback à donner pour l'instant! Merci pour votre participation :) </p>
-                {% endif %}
-                {% for i in doneSessions %}
-                    <div class="row border ml-1 mr-1"
-                         onclick="location.href =`{{ path('displaySession', {'session' : i.id()}) }}`"
-                         style="cursor: pointer">
-                        <div class="col-6 pt-2">
-                            <u>{{ i.name()|slice(0, 41) }}{% if i.name()|length > 41 %} ...{% endif %}</u>
-                        </div>
+                <div class="card-header">
+                    <h6><i class="fas fa-exclamation-circle"></i> Séances passées en attente de feedback</h6>
+                </div>
+                <div class="card-body pb-0">
+                    {% if doneSessions.empty %}
+                        <p>Aucun feedback à donner pour l'instant! Merci pour votre participation :) </p>
+                    {% endif %}
+                    {% for i in doneSessions %}
+                        <div class="row border ml-1 mr-1"
+                             onclick="location.href =`{{ path('displaySession', {'session' : i.id()}) }}`"
+                             style="cursor: pointer">
+                            <div class="col-6 pt-2">
+                                <u>{{ i.name()|slice(0, 41) }}{% if i.name()|length > 41 %} ...{% endif %}</u>
+                            </div>
 
-                        <div class="col-6">
-                            <div class="col-12 text-right pr-0 pt-2 ">
-                                <p class="mb-0">{{ i.date.format('d-m-Y') }}</p>
+                            <div class="col-6">
+                                <div class="col-12 text-right pr-0 pt-2 ">
+                                    <p class="mb-0">{{ i.date.format('d-m-Y') }}</p>
+                                </div>
+                                <div class="col-12 text-right pr-0">
+                                    <p class="mb-0">{{ i.startingTime.format('H:i') }}
+                                        - {{ i.endingTime.format('H:i') }}</p>
+                                </div>
+                                </br>
                             </div>
-                            <div class="col-12 text-right pr-0">
-                                <p class="mb-0">{{ i.startingTime.format('H:i') }}
-                                    - {{ i.endingTime.format('H:i') }}</p>
-                            </div>
+
                             </br>
                         </div>
-
                         </br>
-                    </div>
-                    </br>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="row">
     <div class="col-12 col-lg-8 col-xl-6 mx-auto my-2">

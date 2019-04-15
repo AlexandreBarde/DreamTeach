@@ -73,7 +73,7 @@
             <div class="card-body pb-0">
                 {% for i in session %}
                     <div class="row border ml-1 mr-1"
-                         onclick="location.href =`{{ path('displaySession', {'idSession' : i.id()}) }}`"
+                         onclick="location.href =`{{ path('displaySession', {'session' : i.id()}) }}`"
                          style="cursor: pointer">
                         <div class="col-6 pt-2">
                             <u>{{ i.name()|slice(0, 41) }}{% if i.name()|length > 41 %} ...{% endif %}</u>

@@ -33,7 +33,7 @@
                 {% else %}
                     <tr>
                 {% endif %}
-                <td><u><a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name() }}</a></u></td>
+                <td><u><a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a></u></td>
                 <td>{{ i.date.format('d-m-Y') }}</td>
                 <td>{{ i.startingTime.format('H:i') }}</td>
                 <td>{{ i.description()|slice(0, 50) }}{% if i.description()|length > 50 %}....{% endif %}</td>

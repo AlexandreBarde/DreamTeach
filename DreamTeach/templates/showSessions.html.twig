@@ -37,9 +37,9 @@
                                 {% endif %}
                                 <td><u>
                                         {% if i.password %}
-                                            <a href="{{ path('displaySession', {"idSession" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
+                                            <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
                                         {%  else %}
-                                            <a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name() }}</a>
+                                            <a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a>
                                         {% endif %}
                                     </u>
                                 </td>
@@ -111,9 +111,9 @@
                                 <td>
                                     <u>
                                         {% if i.password %}
-                                            <a href="{{ path('displaySession', {"idSession" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
+                                            <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
                                         {%  else %}
-                                            <a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name() }}</a>
+                                            <a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a>
                                         {% endif %}
                                     </u>
                                 </td>

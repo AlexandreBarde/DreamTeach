@@ -138,7 +138,7 @@
                 <br/>
                 <div class="row">
                     <div class="col-3">
-                        <button id="envoyerCommentaire" type="submit">envoyer</button>
+                        <button id="envoyerCommentaire" type="submit" class="btn btn-info">envoyer</button>
                         {{ form_end(formComment) }}
                     </div>
                 </div>
@@ -147,9 +147,34 @@
         </div>
     </div>
 
-     <br />
+    {% if ("now"|date('Y-m-d')) > session.date|date('Y-m-d') %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h2>Donnez une note..</h2>
+            </div>
+            <div class="card-body">
+                {% if app.user != session.organizerid and app.user in session.studentid and userHasAlreadyMarked is null %}
+                    {{ form_start(formMarking) }}
+                    <div class="form-group">
+                        {{ form_row(formMarking.markingAmbience) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_row(formMarking.markingEfficiency) }}
+                    </div>
+                    <input type="submit" value="Valider" class="btn btn-info">
+                    {{ form_end(formMarking) }}
+                {% elseif userHasAlreadyMarked %}
+                    Vous avez deja noté cette scéance :
+                    <br>
+                    Ambience : {{ userHasAlreadyMarked.markingAmbience }}/5
+                    <br>
+                    Efficacité : {{ userHasAlreadyMarked.markingEfficiency }}/5
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
 
-    <div class="card">
+    <div class="card mt-4">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
             <h2>Partager la séance</h2>
         </div>

@@ -3,14 +3,64 @@
 {% block title %}Mon agenda{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/register.css') }}">{% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fullcalendar/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fullcalendar/core.css') }}">
+    <script src="{{ asset('js/jQuery.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar/core/main.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar/interaction/main.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar/daygrid/main.js') }}"></script>
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
+    <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      plugins: [ 'interaction', 'dayGrid' ],
+      header: {
+        left: 'prevYear,prev,next,nextYear today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      },
+      defaultDate: '2019-04-12',
+      navLinks: true, // can click day/week names to navigate views
+      editable: false,
+      eventLimit: true, // allow "more" link when too many events
+      events: [
+          {% for i in user.getSessionid() %}
+          {
+              title: '{{ i.name() }}',
+              start: '{{ i.date.format("Y-m-d") }}T{{ i.startingTime.format("H:i:s") }}',
+              end: '{{ i.date.format("Y-m-dT") }}T{{  i.endingTime.format("H:i:s") }}'
+          },
+          {% endfor %}
+        {
+            /**
+          title: 'Click for Google',
+          url: 'http://google.com/',
+          start: '2019-04-28' **/
+        }
+      ]
+    });
+
+    calendar.render();
+  });
+
+</script>
     <div class="container mt-5">
         {% for flash in app.flashes %}
             {{ flash }}
         {% endfor %}
         <h1 class="display-4 text-center">Vos séances</h1>
+        {#
         {% if user.getSessionid()|length > 0 %}
         <table class="table table-hover">
             <thead>
@@ -33,7 +83,7 @@
                 {% else %}
                     <tr>
                 {% endif %}
-                <td><u><a href="{{ path('displaySession', {"idSession" : i.id()}) }}">{{ i.name() }}</a></u></td>
+                <td><u><a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a></u></td>
                 <td>{{ i.date.format('d-m-Y') }}</td>
                 <td>{{ i.startingTime.format('H:i') }}</td>
                 <td>{{ i.description()|slice(0, 50) }}{% if i.description()|length > 50 %}....{% endif %}</td>
@@ -88,7 +138,11 @@
                 </div>
             </div>
         {% endif %}
+        #}
     </div>
+    <div id="calendar"></div>
+{% endblock %}
+{% block javascripts %}
 {% endblock %}
 
 

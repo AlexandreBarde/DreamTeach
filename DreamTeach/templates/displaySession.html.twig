@@ -8,7 +8,7 @@
     {% for flash in app.flashes %}
         {{ flash }}
     {% endfor %}
-    <p id="sessionID" class="hidden">{{ session.id }}</p>
+    <p id="sessionID" hidden>{{ session.id }}</p>
     <div class="card">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
             <h2>Description séance</h2>
@@ -170,6 +170,48 @@
         </div>
     </div>
 
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Liste des participants</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4 mx-auto">
+                            <div class="card border border-primary">
+                                <div class="card-body text-center">
+                                    {{ session.organizerid.firstName ~ " " ~ session.organizerid.lastName }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        {% for participant in session.studentid %}
+                            <div class="col-4 p-2 border">
+                                {% if participant.avatar %}
+                                    <img class="rounded-circle img-fluid"
+                                         src="{{ asset('uploads/avatars/' ~ participant.avatar) }}" width="60px"
+                                         height="60px"/>
+                                {% else %}
+                                    <img class="rounded-circle img-fluid"
+                                         src="{{ asset('img/imageBaseProfil.png') }}" width="60px"
+                                         height="60px"/>
+                                {% endif %}
+                                <a href="{{ path('student_other_profile', {'uuid_student':participant.uuid}) }}"
+                                   class="float-right text-primary">{{ participant.firstName~" "~participant.lastName }}</a>
+                                <div class="clearfix"></div>
+                                {% if app.user == session.organizerid %}
+                                <a href="#"><span class="fas fa-times-circle text-danger float-right"></span></a>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="modalid" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

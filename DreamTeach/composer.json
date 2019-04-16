@@ -31,9 +31,11 @@
         "toiba/fullcalendar-bundle": "^6.2"
     },
     "require-dev": {
+        "symfony/browser-kit": "4.2.*",
+        "symfony/css-selector": "4.2.*",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/phpunit-bridge": "*",
+        "symfony/phpunit-bridge": "4.2.*",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
         "symfony/web-server-bundle": "4.2.*"

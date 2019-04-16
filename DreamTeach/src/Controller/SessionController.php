@@ -7,6 +7,7 @@ use App\Entity\Badge;
 use App\Entity\MarkingNotation;
 use App\Entity\Session;
 use App\Entity\Sessioncomment;
+use App\Entity\Student;
 use App\Entity\Subject;
 use App\Form\AddCommentSessionFormType;
 use App\Form\AddMarkingNotationFormType;
@@ -182,6 +183,25 @@ class SessionController extends Controller
             'formComment' => $sessionComment->createView(),
             'formMarking' => $markingNotationForm->createView(),
             'userHasAlreadyMarked' => $userHasAlreadyMarked
+        ]);
+    }
+
+    /**
+     * @Route("/delete-participant/{session}/{student}", name="delete_participant_in_session")
+     */
+
+    public function deleteParticipant(Request $request, Session $session, Student $student)
+    {
+        if ($session->getOrganizerid() != $this->getUser()) {
+            $this->createAccessDeniedException();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $session->removeStudentid($student);
+        $em->flush();
+
+        return $this->redirectToRoute('displaySession', [
+            'session' => $session->getId()
         ]);
     }
 

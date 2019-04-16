@@ -3,26 +3,23 @@
 namespace App\Controller;
 
 
+use App\Entity\Badge;
+use App\Entity\MarkingNotation;
 use App\Entity\Session;
+use App\Entity\Sessioncomment;
 use App\Entity\Student;
 use App\Entity\Subject;
-use App\Entity\Badge;
-use App\Entity\Sessioncomment;
 use App\Form\AddCommentSessionFormType;
+use App\Form\AddMarkingNotationFormType;
+use App\Form\SessionFormType;
 use App\Form\SubjectType;
 use App\Form\TransferSessionRightsFormType;
 use App\Repository\SearchStudentRepository;
-use DateTime;
-use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use App\Form\SessionFormType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class StudentController
@@ -55,6 +52,7 @@ class SessionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($subject);
             $em->flush();
+
             return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
 
         }
@@ -72,15 +70,18 @@ class SessionController extends Controller
                 $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
                 /* Ajout de l'xp  */
                 $this->get('xp_won')->wonXp($this->getUser(), 50);
+
                 return $this->redirectToRoute('AddSession', ["idSession" => $id]);
 
             } else {
 
                 $this->addFlash("error", "L'heure de fin ne peut pas être infériere à l'heure de début.");
+
                 return $this->redirectToRoute('sessionCreation');
 
             }
         }
+
         return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
     }
 
@@ -124,22 +125,29 @@ class SessionController extends Controller
     }
 
     /**
-     * @Route("/accueil/displaySession/{idSession}", name="displaySession")
+     * @Route("/accueil/displaySession/{session}", name="displaySession")
      * @param $idSession
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function displaySession($idSession, Request $request)
+    public function displaySession(Request $request, Session $session)
     {
         $comment = new Sessioncomment();
-        $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         $sessionComment = $this->createForm(AddCommentSessionFormType::class, $comment);
 
-        $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession));
+        $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $session));
         $sessionComment->handleRequest($request);
+
+        $markingNotationForm = $this->createForm(
+            AddMarkingNotationFormType::class,
+            $markingNotation = new MarkingNotation()
+        );
+        $markingNotationForm->handleRequest($request);
+
         if ($sessionComment->isSubmitted() && $sessionComment->isValid()) {
-            if ($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $idSession, 'idStudent' => $this->getUser()->getId()))) {
+            if ($this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $session, 'idStudent' => $this->getUser()->getId()))) {
                 $this->addFlash('success', "Commentaire non envoyé car vous avez déjà envoyé un commentaire pour cette session");
-                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+
+                return $this->redirectToRoute("displaySession", ["session" => $session]);
             } else {
                 $em = $this->getDoctrine()->getManager();
                 $comment->setIdSession($session);
@@ -148,13 +156,52 @@ class SessionController extends Controller
 
                 $em->persist($comment);
                 $em->flush();
-                return $this->redirectToRoute("displaySession", ["idSession" => $idSession]);
+
+                return $this->redirectToRoute("displaySession", ["session" => $session->getId()]);
             }
         }
+
+        if ($markingNotationForm->isSubmitted() && $markingNotationForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $markingNotation->setSession($session);
+            $markingNotation->setStudent($this->getUser());
+
+            $em->persist($markingNotation);
+            $em->flush();
+
+            return $this->redirectToRoute("displaySession", ["session" => $session->getId()]);
+        }
+
+        $userHasAlreadyMarked = $this->getDoctrine()->getRepository(MarkingNotation::class)->findOneBy([
+            'student' => $this->getUser(),
+            'session' => $session
+        ]);
+
         return $this->render("displaySession.html.twig", [
             'allSessionComments' => $allSessionComments,
             'session' => $session,
-            'formComment' => $sessionComment->createView()
+            'formComment' => $sessionComment->createView(),
+            'formMarking' => $markingNotationForm->createView(),
+            'userHasAlreadyMarked' => $userHasAlreadyMarked
+        ]);
+    }
+
+    /**
+     * @Route("/delete-participant/{session}/{student}", name="delete_participant_in_session")
+     */
+
+    public function deleteParticipant(Request $request, Session $session, Student $student)
+    {
+        if ($session->getOrganizerid() != $this->getUser()) {
+            $this->createAccessDeniedException();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $session->removeStudentid($student);
+        $em->flush();
+
+        return $this->redirectToRoute('displaySession', [
+            'session' => $session->getId()
         ]);
     }
 
@@ -170,6 +217,7 @@ class SessionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($session);
             $em->flush();
+
             return $this->redirectToRoute('student_agenda');
         }
     }
@@ -195,6 +243,7 @@ class SessionController extends Controller
             if ($path === "showSessions") return $this->redirectToRoute("showSessions");
             else if ($path === "agenda") return $this->redirectToRoute("student_agenda");
         }
+
         return $this->redirectToRoute("student_agenda");
     }
 
@@ -217,6 +266,7 @@ class SessionController extends Controller
 
         if($participantsWithoutAdmin->isEmpty()){
             $this->addFlash('danger', "Pas encore de participants pour cette séance...");
+
             return $this->redirectToRoute("showSessions");
         }
 
@@ -241,8 +291,6 @@ class SessionController extends Controller
 
 
     }
-
-
 
 
 }

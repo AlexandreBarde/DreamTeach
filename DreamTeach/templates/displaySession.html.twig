@@ -228,7 +228,7 @@
                                    class="float-right text-primary">{{ participant.firstName~" "~participant.lastName }}</a>
                                 <div class="clearfix"></div>
                                 {% if app.user == session.organizerid %}
-                                <a href="#"><span class="fas fa-times-circle text-danger float-right"></span></a>
+                                <a href="{{ path('delete_participant_in_session', {'session': session.id, 'student': participant.id}) }}"><span class="fas fa-times-circle text-danger float-right"></span></a>
                                 {% endif %}
                             </div>
                         {% endfor %}

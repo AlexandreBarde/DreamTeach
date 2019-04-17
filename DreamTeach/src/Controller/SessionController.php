@@ -136,7 +136,7 @@ class SessionController extends Controller
     }
 
     /**
-     * @Route("/accueil/displaySession/{session}", name="displaySession")
+     * @Route("/displaySession/{session}", name="displaySession")
      * @param $idSession
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
@@ -147,6 +147,11 @@ class SessionController extends Controller
 
         $allSessionComments = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $session));
         $sessionComment->handleRequest($request);
+
+        $averageMarkingAmbience = $this->getDoctrine()->getRepository(MarkingNotation::class)->getMarkingAmbienceAverage(
+            $session);
+        $averageMarkingEfficiency = $this->getDoctrine()->getRepository(MarkingNotation::class)->getMarkingEfficiencyAverage(
+            $session);
 
         $markingNotationForm = $this->createForm(
             AddMarkingNotationFormType::class,
@@ -193,7 +198,9 @@ class SessionController extends Controller
             'session' => $session,
             'formComment' => $sessionComment->createView(),
             'formMarking' => $markingNotationForm->createView(),
-            'userHasAlreadyMarked' => $userHasAlreadyMarked
+            'userHasAlreadyMarked' => $userHasAlreadyMarked,
+            'averageAmbience' => $averageMarkingAmbience,
+            'averageEfficiency' => $averageMarkingEfficiency
         ]);
     }
 

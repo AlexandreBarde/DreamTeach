@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un fichier à la séance{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+<h1>Ajouter un fichier à la séance</h1>
+<div class="form-group">
+    {{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Avatar </label>
+                                {{ form_row(form.filename) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input name="editer" class="btn btn-block" type="submit" value="Enregistrer" style="background-color: #6d7fcc; color: white;">
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+

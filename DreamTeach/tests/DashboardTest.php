@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DashboardTest extends WebTestCase
 {
-    public function testValidConnexion($userEmail = 'adel.mekki1998@hotmail.com', $userPassword = 'adelmekki')
+    public function testValidConnexion($userEmail = 'test@mail.com', $userPassword = 'test12345678')
     {
         $client = static::createClient();
 

@@ -293,4 +293,25 @@ class SessionController extends Controller
     }
 
 
+    /**
+     * @Route("/searchSession", name="search_session")
+     */
+    public function searchSession(Request $request)
+    {
+        if ($request->get('search_session')) {
+            $result_session = $this->getDoctrine()->getRepository(Session::class)->searchSession(
+                $request->get('search_session')
+            );
+            return $this->render(
+                'classementxp.html.twig',
+                [
+                    'sessionSearch' => $result_session,
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
+    }
+
+
 }

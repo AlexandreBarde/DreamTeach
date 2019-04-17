@@ -45,7 +45,7 @@ class HomepageTest extends WebTestCase
 
     }
 
-    public function testValidConnexion($userEmail = 'adel.mekki1998@hotmail.com', $userPassword = 'adelmekki')
+    public function testValidConnexion($userEmail = 'camille.laurence196@gmail.com', $userPassword = '12345678')
     {
         $client = static::createClient();
 
@@ -150,7 +150,7 @@ class HomepageTest extends WebTestCase
     }
 
     // "Adel" est enregistré en base
-    function testValidStudentSearch($studentName = 'adel') {
+    function testValidStudentSearch($studentName = 'Camille') {
         $client = static::createClient();
         $client = $this->testValidConnexion();
         $crawler = $client->request('GET', '/dashboard');

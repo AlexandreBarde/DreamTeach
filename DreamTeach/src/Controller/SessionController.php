@@ -96,17 +96,28 @@ class SessionController extends Controller
 
         $allSessions = $this->getDoctrine()->getRepository(Session::class)->findall();
 
+        $em = $this->getDoctrine()->getManager();
         foreach ($allSessions as $key => $value) {
             $now = new \DateTime();
             if ($value->getDate() >= $now) {
                 array_push($listSessionAVenir, $value);
             } else {
                 array_push($listSessionTerminees, $value);
+                $value->setClosed(true);
+                $em->flush();
 
             }
         }
 
         $currentStudent = $this->getUser();
+        $sessionUserList=$currentStudent->getSessionid();
+        $sessionUser=array();
+
+        foreach ($sessionUserList as $session) {
+            // On ajoute les séances
+            array_push($sessionUser, $session->getId());
+        }
+
 
         //seance "je suis le createur"
         $sessionWhereStudentCreator= array();
@@ -131,7 +142,8 @@ class SessionController extends Controller
             'sessionToCome' => $listSessionAVenir,
             'sessionWhereStudentCreator' => $sessionWhereStudentCreator,
             'historiqueSession'=> $historiqueSession,
-            'sessionUser' => $currentStudent
+            'currentStudent' => $currentStudent,
+            'sessionUser' => $sessionUser
         ]);
     }
 

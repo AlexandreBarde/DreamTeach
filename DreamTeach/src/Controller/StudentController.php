@@ -48,7 +48,9 @@ class StudentController extends Controller
             $this->getUser()
         );
 
-        //quotes generator
+
+
+            //quotes generator
         $quoteList = $this->getDoctrine()->getRepository(Quote::class)->findAll();
         $quoteId = array_rand($quoteList);
         $quote = $quoteList[$quoteId];

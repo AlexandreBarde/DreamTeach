@@ -1,17 +1,30 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Adel
- * Date: 17/04/2019
- * Time: 13:39
- */
 
-namespace App\Tests;
-
+use PHPUnit\Framework\TestCase;
+use App\tests\HomepageTest;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DashboardTest extends WebTestCase
+/**
+ * Created by PhpStorm.
+ * User: alexandre
+ * Date: 22/03/19
+ * Time: 16:12
+ */
+class JeuTest extends WebTestCase
 {
+
+    function connexionLoginPage($client, $username, $password)
+    {
+        // Remplissage du formulaire avec identifiants valides sur la page de login
+        $crawler = $client->request('GET', '/');
+        $form = $crawler->selectButton('Connexion')->form();
+
+        $form['emailaddress'] = $username;
+        $form['password'] = $password;
+        return $client->submit($form);
+        // On vérifie que la page ne contient pas le message de bienvenue (connexion invalide)
+    }
+
     public function testValidConnexion($userEmail = 'test@mail.com', $userPassword = 'test12345678')
     {
         $client = static::createClient();
@@ -39,34 +52,42 @@ class DashboardTest extends WebTestCase
         return $client;
     }
 
-    function connexionLoginPage ($client, $username, $password)
-    {
-        // Remplissage du formulaire avec identifiants valides sur la page de login
-        $crawler = $client->request('GET', '/');
-        $form = $crawler->selectButton('Connexion')->form();
-
-        $form['emailaddress'] = $username;
-        $form['password'] =  $password;
-        return $client->submit($form);
-        // On vérifie que la page ne contient pas le message de bienvenue (connexion invalide)
-    }
-
-    function testContentDashboard ()
+    public function testRouteHangman()
     {
         $client = $this->testValidConnexion();
-        $crawler = $client->request('GET', '/dashboard');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/hangman');
+        $this->assertEquals('http://localhost/hangman', $crawler->getUri());
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Bonjour")')->count()
-        );
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('html:contains("Séances")')->count()
-        );
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('html:contains("Messages récents")')->count()
+            $crawler->filter('html:contains("Jeu du pendu")')->count()
         );
     }
+
+    public function testhangmanCheat()
+    {
+        $client = $this->testValidConnexion();
+        $crawler = $client->request('GET', '/hangmanWinner');
+        $this->assertEquals('http://localhost/hangmanWinner', $crawler->getUri());
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("Hmmm, c\'est pas normal ça !")')->count()
+        );
+    }
+
+    public function testMemoryRoute()
+    {
+        $client = $this->testValidConnexion();
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', 'games/memory');
+        $this->assertEquals('http://localhost/games/memory', $crawler->getUri());
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("Memory")')->count()
+        );
+    }
+
+
+
+
 }

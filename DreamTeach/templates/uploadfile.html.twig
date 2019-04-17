@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un fichier à la séance{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+<h1>Ajouter un fichier à la séance</h1>
+<div class="form-group">
+    {{ form_start(form) }}
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                {{ form_row(form.filename) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input name="editer" class="btn btn-block" type="submit" value="Enregistrer" style="background-color: #6d7fcc; color: white;">
+            </div>
+        </div>
+        {{ form_end(form) }}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Fichiers disponibles</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if session.fileUploads %}
+                            <ul class="list-group">
+                                {% for file in session.fileUploads %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <a href="{{ asset("uploads/files/") ~ file.filename}}">{{ file.filename }}</a>
+                                        <span class="badge badge-primary badge-pill"><a href="#"><i class="fas fa-times"></i></a></span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="alert alert-danger" role="alert">
+                                Aucun fichier disponible !
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

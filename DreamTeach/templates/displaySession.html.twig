@@ -181,6 +181,34 @@
         </div>
     {% endif %}
 
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Fichiers disponibles</h2>
+                </div>
+                <div class="card-body">
+                    {% if session.fileUploads %}
+                        <ul class="list-group">
+                    {% for file in session.fileUploads %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ asset("uploads/files/") ~ file.filename}}">{{ file.filename }}</a>
+                            <span class="badge badge-primary badge-pill"><a href="#"><i class="fas fa-times"></i></a></span>
+                        </li>
+                    {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="alert alert-danger" role="alert">
+                            Aucun fichier disponible !
+                        </div>
+                    {% endif %}
+                    <br />
+                    <a href="{{ path('AddFile', {'session' : session.id}) }}" class="btn btn-block" style="background-color: #6d7fcc; color: white;">Ajouter un fichier</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card mt-4">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
             <h2>Partager la séance</h2>

@@ -56,7 +56,7 @@ class HomepageTest extends WebTestCase
         // Connexion avec les identifiants passés en paramètres de la fonction (identifiants valides et à modifier selon le pc
         $crawler = $this->connexionLoginPage($client, $userEmail, $userPassword);
 
-        // On vérifie que sur la route "/" (requête effectuée par la fonction connexionLoginPage) on a pas le message de bienvenue
+        // On vérifie que sur la rou te "/" (requête effectuée par la fonction connexionLoginPage) on a pas le message de bienvenue
         $this->assertLessThan(
             1,
             $crawler->filter('html:contains("Bienvenue sur votre espace personnel")')->count()
@@ -106,7 +106,7 @@ class HomepageTest extends WebTestCase
         $userEmail = 'Jean.Donacien@outlook.fr';
 
         $form = $crawler->selectButton('S\'inscrire')->form();
-        $form['register[trainingid]']->select('1');
+        $form['register[trainingid]']->select('3');
         $form['register[lastname]'] = $userLastName;
         $form['register[firstname]'] = $userFirstName;
         $form['register[emailaddress]'] = $userEmail;
@@ -151,7 +151,6 @@ class HomepageTest extends WebTestCase
 
     // "Adel" est enregistré en base
     function testValidStudentSearch($studentName = 'adel') {
-        $client = static::createClient();
         $client = $this->testValidConnexion();
         $crawler = $client->request('GET', '/dashboard');
         $form = $crawler->selectButton('Rechercher')->form();

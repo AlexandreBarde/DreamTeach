@@ -28,8 +28,7 @@ env:
 # Update composer
 before-install:
   - composer self-update
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS dreamteach;'
-  - mysql -u root -p dreamteach < dreamteach.sql
+  - mysql -e 'CREATE DATABASE dreamteach;'
 
 # Install composer dependencies,
 # Create database, schema and fixtures

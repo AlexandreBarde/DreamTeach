@@ -87,15 +87,7 @@ class JeuTest extends WebTestCase
         );
     }
 
-    public function testRelancerMemory()
-    {
-        $client = $this->testValidConnexion();
-        $crawler = $client->request('GET', 'games/memory');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
-
-
-    }
 
 
 }

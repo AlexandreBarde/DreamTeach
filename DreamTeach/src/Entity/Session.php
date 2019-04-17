@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -154,6 +155,17 @@ class Session
      * @Assert\Length(min="8", minMessage="min 8 caractères")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\FileUpload", mappedBy="idSession", orphanRemoval=true)
+     */
+    private $fileUploads;
+
+    public function __construct()
+    {
+        $this->fileUploads = new ArrayCollection();
+        $this->studentid = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -371,6 +383,37 @@ class Session
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FileUpload[]
+     */
+    public function getFileUploads(): Collection
+    {
+        return $this->fileUploads;
+    }
+
+    public function addFileUpload(FileUpload $fileUpload): self
+    {
+        if (!$this->fileUploads->contains($fileUpload)) {
+            $this->fileUploads[] = $fileUpload;
+            $fileUpload->setIdSession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFileUpload(FileUpload $fileUpload): self
+    {
+        if ($this->fileUploads->contains($fileUpload)) {
+            $this->fileUploads->removeElement($fileUpload);
+            // set the owning side to null (unless already changed)
+            if ($fileUpload->getIdSession() === $this) {
+                $fileUpload->setIdSession(null);
+            }
+        }
 
         return $this;
     }

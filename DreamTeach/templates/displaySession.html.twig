@@ -152,7 +152,7 @@
                 <h2>Donnez une note..</h2>
             </div>
             <div class="card-body">
-                {% if app.user != session.organizerid and app.user in session.studentid and userHasAlreadyMarked is null %}
+                {% if not userHasAlreadyMarked %}
                     {{ form_start(formMarking) }}
                     <div class="form-group">
                         {{ form_row(formMarking.markingAmbience, {'id': 'markingAmbience'}) }}

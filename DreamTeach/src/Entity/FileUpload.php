@@ -25,7 +25,7 @@ class FileUpload
     /**
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+     * @Assert\NotBlank(message="Merci de mettre en ligne un fichier PDF.")
      * @Assert\File(mimeTypes={ "application/pdf" })
      */
     private $filename;

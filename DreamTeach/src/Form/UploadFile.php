@@ -23,7 +23,7 @@ class UploadFile extends AbstractType
         $builder
             ->add('filename', FileType::class, [
                 'required' => false,
-                'label' => 'Image (Fichier jpg)', 'data_class' => null,
+                'label' => 'Fichier PDF uniquement !', 'data_class' => null,
                 'attr' => [
                     'class' => 'form-control']
             ])

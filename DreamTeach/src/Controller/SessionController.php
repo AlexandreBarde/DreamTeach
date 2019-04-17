@@ -329,20 +329,23 @@ class SessionController extends Controller
         {
             /** @var UploadedFile $file */
             $file = $form->get('filename')->getData();
-            $filename = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+            dump($file);
+            $filename = str_replace(".pdf", "", $file->getClientOriginalName()) . '_' . $this->generateUniqueFileName() . '.' . $file->guessExtension();
             try
             {
                 $file->move(
                     $this->getParameter('file_directory'),
                     $filename
                 );
+                $this->addFlash("success", "Fichier ajouté !");
+                $fileUp->setFilename($filename);
                 $fileUp->setIdSession($session);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($fileUp);
                 $em->flush();
             } catch (FileException $e) {}
         }
-        return $this->render("uploadfile.html.twig", ['form' => $form->createView()]);
+        return $this->render("uploadfile.html.twig", ['form' => $form->createView(), 'session' => $session]);
     }
 
     /**

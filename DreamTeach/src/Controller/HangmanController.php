@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class MessageController
  * @package App\Controller
  * @IsGranted("ROLE_USER")
  */
-class HangmanController extends AbstractController
+class HangmanController extends Controller
 {
     /**
      * @Route("/hangman", name="PlayHangman")
@@ -147,6 +147,7 @@ class HangmanController extends AbstractController
         if($session->get('winner'))
         {
             $session->set("winner", false);
+            $this->get('xp_won')->wonXp($this->getUser(),10);
             return $this->render("hangman.winner.html.twig", ["word" => $session->get("word")]);
         }
         else

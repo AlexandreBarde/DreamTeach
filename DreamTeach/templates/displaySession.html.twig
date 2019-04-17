@@ -160,7 +160,7 @@
                 <br/>
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="text" class="form-control" placeholder="Nom de la personne" onkeyup="showResult(this.value)">
+                        <input type="text" class="form-control" placeholder="Ecrire le nom de l'étudiant" onkeyup="showResult(this.value)">
                         <div id="livesearch"></div>
                     </div>
                     <br/>
@@ -179,9 +179,9 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4 mx-auto">
-                            <div class="card border border-primary">
+                            <div class="card border border-dark">
                                 <div class="card-body text-center">
-                                    {{ session.organizerid.firstName ~ " " ~ session.organizerid.lastName }}
+                                    <i class="fas fa-crown"></i> {{ session.organizerid.firstName ~ " " ~ session.organizerid.lastName }}
                                 </div>
                             </div>
                         </div>

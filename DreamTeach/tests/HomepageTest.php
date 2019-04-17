@@ -45,7 +45,7 @@ class HomepageTest extends WebTestCase
 
     }
 
-    public function testValidConnexion($userEmail = 'adel.mekki1998@hotmail.com', $userPassword = 'adelmekki')
+    public function testValidConnexion($userEmail = 'test@mail.com', $userPassword = 'test12345678')
     {
         $client = static::createClient();
 
@@ -106,7 +106,7 @@ class HomepageTest extends WebTestCase
         $userEmail = 'Jean.Donacien@outlook.fr';
 
         $form = $crawler->selectButton('S\'inscrire')->form();
-        $form['register[trainingid]']->select('3');
+        $form['register[trainingid]']->select('1');
         $form['register[lastname]'] = $userLastName;
         $form['register[firstname]'] = $userFirstName;
         $form['register[emailaddress]'] = $userEmail;
@@ -150,7 +150,7 @@ class HomepageTest extends WebTestCase
     }
 
     // "Adel" est enregistré en base
-    function testValidStudentSearch($studentName = 'adel') {
+    function testValidStudentSearch($studentName = 'Hugo') {
         $client = $this->testValidConnexion();
         $crawler = $client->request('GET', '/dashboard');
         $form = $crawler->selectButton('Rechercher')->form();

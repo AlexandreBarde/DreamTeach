@@ -90,37 +90,48 @@ class SessionController extends Controller
      */
     public function showSessions()
     {
-        $tpm = array();
-        $session = $this->getDoctrine()->getRepository(Session::class)->findall();
+        //seances a venir
+        $listSessionAVenir = array();
+        $listSessionTerminees= array();
 
-        foreach ($session as $key => $value) {
+        $allSessions = $this->getDoctrine()->getRepository(Session::class)->findall();
+
+        foreach ($allSessions as $key => $value) {
             $now = new \DateTime();
             if ($value->getDate() >= $now) {
-                array_push($tpm, $value);
+                array_push($listSessionAVenir, $value);
+            } else {
+                array_push($listSessionTerminees, $value);
+
             }
         }
 
-        $student = $this->getUser();
-        /** @var Session $listeSession */
-        $listeSession = $student->getSessionid();
+        $currentStudent = $this->getUser();
 
-        $tmp = array();
-        $listeSessionEtudiant = array();
+        //seance "je suis le createur"
+        $sessionWhereStudentCreator= array();
 
-        // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
-        foreach ($listeSession as $sessionTMP) {
-            // On ajoute les séances
-            array_push($tmp, $sessionTMP->getId());
+        foreach ($listSessionAVenir as $key => $value){
+            if ($value->getOrganizerId()->getId()==$currentStudent->getId()){
+                array_push($sessionWhereStudentCreator, $value);
+            }
         }
 
-        foreach ($tmp as $ss) {
-            // On ajoute les ID des sessions
-            array_push($listeSessionEtudiant, $ss);
+        $historiqueSession= array();
+        foreach($listSessionTerminees as $key => $value){
+            $listParticipants=$value->getStudentId();
+            foreach($listParticipants as $student){
+                if ($student->getId()==$currentStudent->getId()){
+                   array_push($historiqueSession, $value);
+                }
+            }
         }
 
         return $this->render("showSessions.html.twig", [
-            'session' => $tpm,
-            'sessionUser' => $listeSessionEtudiant
+            'sessionToCome' => $listSessionAVenir,
+            'sessionWhereStudentCreator' => $sessionWhereStudentCreator,
+            'historiqueSession'=> $historiqueSession,
+            'sessionUser' => $currentStudent
         ]);
     }
 

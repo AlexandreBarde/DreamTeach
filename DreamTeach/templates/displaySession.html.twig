@@ -170,6 +170,13 @@
                     <br>
                     Efficacité : {{ userHasAlreadyMarked.markingEfficiency }}/5
                 {% endif %}
+                {% if averageAmbience and averageEfficiency > 0 %}
+                    Pour cette session, la moyenne est de :
+                    <br>
+                    Ambiance : <span class="badge badge-primary">{{ averageAmbience|round(2, 'ceil') }} / 5</span>
+                    <br>
+                    Efficacité : <span class="badge badge-warning">{{ averageEfficiency|round(2, 'ceil') }} / 5</span>
+                {% endif %}
             </div>
         </div>
     {% endif %}

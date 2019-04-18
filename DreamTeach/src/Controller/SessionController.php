@@ -73,7 +73,7 @@ class SessionController extends Controller
                 $badge = $this->getDoctrine()->getRepository(Badge::class)->find(1);
                 $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
                 /* Ajout de l'xp  */
-                $this->get('xp_won')->wonXp($this->getUser(), 50);
+                $this->get('xp_won')->wonXp($this->getUser(), 25);
 
                 return $this->redirectToRoute('AddSession', ["idSession" => $id]);
 

@@ -334,30 +334,38 @@ class SessionController extends Controller
      */
     public function addFile(Request $request, Session $session)
     {
-        $fileUp = new FileUpload();
-        $form = $this->createForm(UploadFile::class, $fileUp);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
+        if($this->getUser() == $session->getOrganizerid())
         {
-            /** @var UploadedFile $file */
-            $file = $form->get('filename')->getData();
-            dump($file);
-            $filename = str_replace(".pdf", "", $file->getClientOriginalName()) . '_' . $this->generateUniqueFileName() . '.' . $file->guessExtension();
-            try
+            $fileUp = new FileUpload();
+            $form = $this->createForm(UploadFile::class, $fileUp);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid())
             {
-                $file->move(
-                    $this->getParameter('file_directory'),
-                    $filename
-                );
-                $this->addFlash("success", "Fichier ajouté !");
-                $fileUp->setFilename($filename);
-                $fileUp->setIdSession($session);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($fileUp);
-                $em->flush();
-            } catch (FileException $e) {}
+                /** @var UploadedFile $file */
+                $file = $form->get('filename')->getData();
+                dump($file);
+                $filename = str_replace(".pdf", "", $file->getClientOriginalName()) . '_' . $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                try
+                {
+                    $file->move(
+                        $this->getParameter('file_directory'),
+                        $filename
+                    );
+                    $this->addFlash("success", "Fichier ajouté !");
+                    $fileUp->setFilename($filename);
+                    $fileUp->setIdSession($session);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($fileUp);
+                    $em->flush();
+                } catch (FileException $e) {}
+            }
+            return $this->render("uploadfile.html.twig", ['form' => $form->createView(), 'session' => $session]);
         }
-        return $this->render("uploadfile.html.twig", ['form' => $form->createView(), 'session' => $session]);
+        else
+        {
+            $this->addFlash("alert", "Vous n'avez pas la permission d'ajouter un fichier !");
+            return $this->redirectToRoute("showSessions");
+        }
     }
 
     /**

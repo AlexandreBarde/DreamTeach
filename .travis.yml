@@ -21,17 +21,6 @@ matrix:
     - php: 7.1
     - php: 7.2
 
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
-
-dist: trusty
-
-sudo: required
-
 # Define an environment variable
 env:
   - SYMFONY_VERSION="4.2.*" DB=mysql

@@ -90,7 +90,7 @@ class SessionController extends Controller
     }
 
     /**
-     * @Route("showSessions", name="showSessions")
+     * @Route("/showSessions", name="showSessions")
      */
     public function showSessions()
     {
@@ -405,14 +405,18 @@ class SessionController extends Controller
      */
     public function searchSession(Request $request)
     {
-        if ($request->get('search_session')) {
+        if ($request->get('date_session')) {
+            $user = $this->getUser();
             $result_session = $this->getDoctrine()->getRepository(Session::class)->searchSession(
-                $request->get('search_session')
+                $request->get('date_session'),
+                $request->get('subject_session')
             );
+            $sessionListUser = $user->getSessionid();
             return $this->render(
-                'showSessions.html.twig',
+                'search.session.html.twig',
                 [
-                    'sessionSearch' => $result_session,
+                    'results' => $result_session,
+                    'sessionUser' => $sessionListUser
                 ]
             );
         } else {

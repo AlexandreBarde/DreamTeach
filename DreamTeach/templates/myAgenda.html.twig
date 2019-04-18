@@ -182,8 +182,8 @@
         function orgaNotClosed(name, id)
         {
             $('#sessionCommentOrgaNotClosed').html(name);
-            $('#orgaNotClosedModify').attr("href", "/accueil/updateSession/" + id);
-            $('#orgaNotClosedDelete').attr("href", "/accueil/deleteSession/" + id);
+            $('#orgaNotClosedModify').attr("href", "/index.php/accueil/updateSession/" + id);
+            $('#orgaNotClosedDelete').attr("href", "/index.php/accueil/deleteSession/" + id);
             $('#orgaNotClosed').modal('toggle');
         }
 
@@ -195,7 +195,7 @@
 
         function userNotClosed(name, id)
         {
-            $('#userNotClosedUnSubscribe').attr("href", "/accueil/removeSession/" + id);
+            $('#userNotClosedUnSubscribe').attr("href", "/index.php/accueil/removeSession/" + id);
             $('#sessionCommentUserNotClosed').html(name);
             $('#userNotClosed').modal('toggle');
         }

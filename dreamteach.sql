@@ -18,6 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+USE dreamteach;
+
 --
 -- Base de données :  `dreamteach`
 --
@@ -527,6 +529,14 @@ CREATE TABLE IF NOT EXISTS `word` (
 -- Contraintes pour les tables déchargées
 --
 
+INSERT INTO `word` (`id`, `theme`, `content`, `definition`) VALUES
+(1, 1, 'Cercle', 'C\'est un truc rond'),
+(2, 1, 'Triangle', 'C\'est un truc qui a 3 lignes'),
+(3, 1, 'Pythagore', 'C\'est un mec');
+
+
+INSERT INTO `theme` (`id`, `content`) VALUES
+(1, 'maths');
 --
 -- Contraintes pour la table `file_upload`
 --

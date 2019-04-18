@@ -157,14 +157,14 @@ class Session
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FileUpload", mappedBy="idSession", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\FileUpload", mappedBy="idSession")
      */
     private $fileUploads;
 
     public function __construct()
     {
-        $this->fileUploads = new ArrayCollection();
         $this->studentid = new ArrayCollection();
+        $this->fileUploads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -417,9 +417,5 @@ class Session
 
         return $this;
     }
-
-
-
-
 
 }

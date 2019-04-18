@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Badge;
+use App\Entity\FileUpload;
 use App\Entity\MarkingNotation;
 use App\Entity\Session;
 use App\Entity\Sessioncomment;
@@ -14,11 +15,14 @@ use App\Form\AddMarkingNotationFormType;
 use App\Form\SessionFormType;
 use App\Form\SubjectType;
 use App\Form\TransferSessionRightsFormType;
+use App\Form\UploadFile;
 use App\Repository\SearchStudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -96,17 +100,28 @@ class SessionController extends Controller
 
         $allSessions = $this->getDoctrine()->getRepository(Session::class)->findall();
 
+        $em = $this->getDoctrine()->getManager();
         foreach ($allSessions as $key => $value) {
             $now = new \DateTime();
             if ($value->getDate() >= $now) {
                 array_push($listSessionAVenir, $value);
             } else {
                 array_push($listSessionTerminees, $value);
+                $value->setClosed(true);
+                $em->flush();
 
             }
         }
 
         $currentStudent = $this->getUser();
+        $sessionUserList=$currentStudent->getSessionid();
+        $sessionUser=array();
+
+        foreach ($sessionUserList as $session) {
+            // On ajoute les séances
+            array_push($sessionUser, $session->getId());
+        }
+
 
         //seance "je suis le createur"
         $sessionWhereStudentCreator= array();
@@ -131,7 +146,8 @@ class SessionController extends Controller
             'sessionToCome' => $listSessionAVenir,
             'sessionWhereStudentCreator' => $sessionWhereStudentCreator,
             'historiqueSession'=> $historiqueSession,
-            'sessionUser' => $currentStudent
+            'currentStudent' => $currentStudent,
+            'sessionUser' => $sessionUser
         ]);
     }
 
@@ -308,6 +324,100 @@ class SessionController extends Controller
         return $this->render("transferSessionRights.html.twig", ['session' => $session, 'form' => $form->createView()]);
 
 
+    }
+
+    /**
+     * @Route("/addFile/{session}", name="AddFile")
+     * @param Request $request
+     * @param Session $session
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addFile(Request $request, Session $session)
+    {
+        if($this->getUser() == $session->getOrganizerid())
+        {
+            $fileUp = new FileUpload();
+            $form = $this->createForm(UploadFile::class, $fileUp);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid())
+            {
+                /** @var UploadedFile $file */
+                $file = $form->get('filename')->getData();
+                dump($file);
+                $filename = str_replace(".pdf", "", $file->getClientOriginalName()) . '_' . $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                try
+                {
+                    $file->move(
+                        $this->getParameter('file_directory'),
+                        $filename
+                    );
+                    $this->addFlash("success", "Fichier ajouté !");
+                    $fileUp->setFilename($filename);
+                    $fileUp->setIdSession($session);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($fileUp);
+                    $em->flush();
+                } catch (FileException $e) {}
+            }
+            return $this->render("uploadfile.html.twig", ['form' => $form->createView(), 'session' => $session]);
+        }
+        else
+        {
+            $this->addFlash("alert", "Vous n'avez pas la permission d'ajouter un fichier !");
+            return $this->redirectToRoute("showSessions");
+        }
+    }
+
+    /**
+     * @Route("/removeFile/{idFile}", name="RemoveFile")
+     * @param FileUpload $idFile
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeFile(FileUpload $idFile)
+    {
+        if($this->getUser() == $idFile->getIdSession()->getOrganizerid())
+        {
+            $this->addFlash("success", "Fichier supprimé !");
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($idFile);
+            $entityManager->flush();
+        }
+        else
+        {
+            $this->addFlash("alert", "Vous n'avez pas la permission de supprimer ce fichier !");
+        }
+        return $this->redirectToRoute("AddFile", ["session" => $idFile->getIdSession()->getId()]);
+    }
+
+    /**
+     * @return string
+     */
+    private function generateUniqueFileName()
+    {
+        // md5() reduces the similarity of the file names generated by
+        // uniqid(), which is based on timestamps
+        return md5(uniqid());
+    }
+
+
+    /**
+     * @Route("/searchSession", name="search_session")
+     */
+    public function searchSession(Request $request)
+    {
+        if ($request->get('search_session')) {
+            $result_session = $this->getDoctrine()->getRepository(Session::class)->searchSession(
+                $request->get('search_session')
+            );
+            return $this->render(
+                'showSessions.html.twig',
+                [
+                    'sessionSearch' => $result_session,
+                ]
+            );
+        } else {
+            return $this->redirectToRoute('default_student_connected');
+        }
     }
 
 

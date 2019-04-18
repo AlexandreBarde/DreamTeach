@@ -7,7 +7,7 @@ sudo: false
 # Start mysql service
 services:
   - mysql
-
+      
 # Cache composer packages so "composer install" is faster
 cache:
   directories:
@@ -26,17 +26,23 @@ env:
   - SYMFONY_VERSION="4.2.*" DB=mysql
 
 # Update composer
-before-install:
+before_install:
   - composer self-update
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS dreamteach;'
+  - mysql -u root --password="" < dreamteach.sql
 
+  
 # Install composer dependencies,
 # Create database, schema and fixtures
 install:
   - cd DreamTeach && composer install
-  - php bin/console doctrine:database:create --env=test
-  - php bin/console doctrine:schema:create --env=test
-  - php bin/console doctrine:schema:update --force
+  #- php bin/console doctrine:database:create --env=test
+  #- php bin/console doctrine:schema:create --env=test
+  #- php bin/console doctrine:schema:update --force
 
+after_failure:
+  - "mysql -e 'show databases;'"
+  
 # Run script
 script:
   - ./vendor/bin/simple-phpunit

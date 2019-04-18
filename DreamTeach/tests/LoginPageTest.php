@@ -117,6 +117,7 @@ class LoginPageTest extends WebTestCase
         $this->assertEquals('http://localhost/register', $crawler->getUri());
         return $crawler;
     }
+    /*
 
     /*
     public function testInscriptionValide()

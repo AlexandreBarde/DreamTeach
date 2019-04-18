@@ -6,6 +6,31 @@
 
 {% block body %}
     <div class="container mt-5">
+        <form action="{{ path('search_session') }}" method="get" id="search_session">
+            <div class="form-group">
+                <div class="card">
+                    <div class="card-body">
+                        <input name="champdate" type="date" class="form-control" data-date-format="mm/dd/yyyy">
+                        <select name="champmatiere">
+                            {% for i in sessionToCome %}
+                                <option value="{{ i.id }}">{{ i.subjectId.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="col-8">
+                            <input name="champtexte" type="text" id="rechercherInput" class="form-control"
+                                   placeholder="Recherchez une séance.."
+                                   name="search_student">
+                        </div>
+                        <div class="col-4">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-block"
+                                   style="background-color: #6d7fcc; color: white;">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+
         <h1 class="display-4 text-center">Séances</h1>
         <div class="row">
         </div>
@@ -28,7 +53,6 @@
                 </thead>
 
 
-
                 <tbody>
                 {% for i in sessionWhereStudentCreator if i.organizerId.id==app.user.id %}
                     {% if i.closed %}
@@ -39,8 +63,9 @@
                     <td>
                         <u>
                             {% if i.password %}
-                                <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
-                            {%  else %}
+                                <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i
+                                            class="fas fa-key"></i> {{ i.name() }}</a>
+                            {% else %}
                                 <a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a>
                             {% endif %}
                         </u>
@@ -74,75 +99,77 @@
         </div>
 
         <h5><i class="fas fa-book-reader"></i>&nbsp; Disponibles sur le site</h5>
-                <div class="row">
-                    <table class="table table-hover">
-                        <thead>
+        <div class="row">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Heure</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Organisateur</th>
+                    <th></th>
+                    <th></th>
+
+                </tr>
+                </thead>
+
+
+                <tbody>
+                {% for i in sessionToCome if i.organizerId.id!=app.user.id %}
+                    {% if i.closed %}
+                        <tr class="table-active">
+                    {% else %}
                         <tr>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Heure</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Organisateur</th>
-                            <th></th>
-                            <th></th>
+                    {% endif %}
+                    <td><u>
+                            {% if i.password %}
+                                <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i
+                                            class="fas fa-key"></i> {{ i.name() }}</a>
+                            {% else %}
+                                <a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a>
+                            {% endif %}
+                        </u>
+                    </td>
+                    <td>{{ i.date.format('d-m-Y') }}</td>
+                    <td>{{ i.startingTime.format('H:i') }}</td>
+                    <td>{{ i.description()|slice(0, 50) }}{% if i.description()|length > 50 %}....{% endif %}</td>
+                    <td>{{ i.organizerid.lastname()~" "~i.organizerid.firstname() }}</td>
+                    {% if i.closed %}
 
-                        </tr>
-                        </thead>
+                        {% if i.id() in sessionUser %}
+                            <td><a href="#" class="btn btn-danger disabled"><i class="fas fa-times"></i> Se
+                                    désinscrire</a></td>
+                        {% else %}
+                            <td><a href="#" class="btn btn-success disabled"><i class="fa fa-check"></i>
+                                    S'inscrire</a></td>
+                        {% endif %}
 
+                    {% else %}
 
+                        {% if i.id() in sessionUser %}
+                            <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}"
+                                   class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a>
+                            </td>
+                        {% else %}
+                            <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}"
+                                   class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
+                        {% endif %}
 
-                            <tbody>
-                            {% for i in sessionToCome if i.organizerId.id!=app.user.id %}
-                                {% if i.closed %}
-                                    <tr class="table-active">
-                                {% else %}
-                                    <tr>
-                                {% endif %}
-                                <td><u>
-                                        {% if i.password %}
-                                            <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
-                                        {%  else %}
-                                            <a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a>
-                                        {% endif %}
-                                    </u>
-                                </td>
-                                <td>{{ i.date.format('d-m-Y') }}</td>
-                                <td>{{ i.startingTime.format('H:i') }}</td>
-                                <td>{{ i.description()|slice(0, 50) }}{% if i.description()|length > 50 %}....{% endif %}</td>
-                                <td>{{ i.organizerid.lastname()~" "~i.organizerid.firstname() }}</td>
-                                {% if i.closed %}
-
-                                    {% if i.id() in sessionUser %}
-                                        <td><a href="#" class="btn btn-danger disabled"><i class="fas fa-times"></i> Se
-                                                désinscrire</a></td>
-                                    {% else %}
-                                        <td><a href="#" class="btn btn-success disabled"><i class="fa fa-check"></i>
-                                                S'inscrire</a></td>
-                                    {% endif %}
-
-                                {% else %}
-
-                                    {% if i.id() in sessionUser %}
-                                        <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}"
-                                               class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a>
-                                        </td>
-                                    {% else %}
-                                        <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}"
-                                               class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
-                                    {% endif %}
-
-                                {% endif %}
+                    {% endif %}
 
 
 
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                    </table>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-            </div>
+        </div>
 
-        <h5><i class="fas fa-history"></i> Historique</h5>
+        <h5><i class="fas fa-history"></i> Historique
+            <small class="text-muted">(les sessions passées sont automatiquement clôturées)</small>
+        </h5>
         <div class="row">
             <table class="table table-hover">
                 <thead>
@@ -158,7 +185,6 @@
                 </thead>
 
 
-
                 <tbody>
                 {% for i in historiqueSession %}
                     {% if i.closed %}
@@ -168,8 +194,9 @@
                     {% endif %}
                     <td><u>
                             {% if i.password %}
-                                <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i class="fas fa-key"></i> {{ i.name() }}</a>
-                            {%  else %}
+                                <a href="{{ path('displaySession', {"session" : i.id()}) }}"><i
+                                            class="fas fa-key"></i> {{ i.name() }}</a>
+                            {% else %}
                                 <a href="{{ path('displaySession', {"session" : i.id()}) }}">{{ i.name() }}</a>
                             {% endif %}
                         </u>
@@ -178,7 +205,7 @@
                     <td>{{ i.startingTime.format('H:i') }}</td>
                     <td>{{ i.description()|slice(0, 50) }}{% if i.description()|length > 50 %}....{% endif %}</td>
                     <td>{{ i.organizerid.lastname()~" "~i.organizerid.firstname() }}</td>
-                   
+
 
 
 
@@ -192,8 +219,7 @@
         </br>
 
 
-
-        </div>
-        </div>
+    </div>
+    </div>
     </div>
 {% endblock %}

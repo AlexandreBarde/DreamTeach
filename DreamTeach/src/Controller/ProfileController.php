@@ -3,22 +3,14 @@
 namespace App\Controller;
 
 
+use App\Entity\Badge;
 use App\Entity\Session;
 use App\Entity\Student;
-use App\Entity\Training;
 use App\Form\CheckPasswordSession;
-use App\Form\UploadPicture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use App\Entity\Badge;
 
 /**
  * Class StudentController
@@ -65,46 +57,47 @@ class ProfileController extends Controller
     public function addSession(Request $request, Session $idSession)
     {
         //TODO : Gérer les erreurs
-        if($request->get('password'))
-        {
-           $correctPassword = $idSession->getPassword();
-           if($correctPassword == $request->get('password'))
-           {
-               $student = $this->getUser();
-               $repository = $this->getDoctrine()->getRepository(Session::class);
-               $session = $repository->find($idSession);
-               $student->addSessionid($session);
-               $em = $this->getDoctrine()->getManager();
-               $em->persist($student);
-               $em->flush();
-               /* Ajout du badge  */
-               if($session->getOrganizerid()->getId()!=$student->getId()) {
-                   $badge = $this->getDoctrine()->getRepository(Badge::class)->find(2);
-                   $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
-                   $this->get('xp_won')->wonXp($this->getUser(), 25);
-               }
-               return $this->redirectToRoute("showSessions");
-           }
-           else
-           {
-               $this->addFlash("info", "Mot de passe incorrect !");
-               return $this->render("session.password.html.twig", ["session" => $idSession]);
-           }
-           exit();
+        if ((sizeof($idSession->getStudentid()) - 1) >= $idSession->getMaxnbparticipant()) {
+            return $this->redirectToRoute('default_student_connected');
+        }
+        if ($request->get('password')) {
+            $correctPassword = $idSession->getPassword();
+            if ($correctPassword == $request->get('password')) {
+                $student = $this->getUser();
+                $repository = $this->getDoctrine()->getRepository(Session::class);
+                $session = $repository->find($idSession);
+                $student->addSessionid($session);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($student);
+                $em->flush();
+                /* Ajout du badge  */
+                if ($session->getOrganizerid()->getId() != $student->getId()) {
+                    $badge = $this->getDoctrine()->getRepository(Badge::class)->find(2);
+                    $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
+                    $this->get('xp_won')->wonXp($this->getUser(), 25);
+                }
+
+                return $this->redirectToRoute("showSessions");
+            } else {
+                $this->addFlash("info", "Mot de passe incorrect !");
+
+                return $this->render("session.password.html.twig", ["session" => $idSession]);
+            }
+            exit();
         }
         $repository = $this->getDoctrine()->getRepository(Session::class);
         /** @var Session $session */
         $session = $repository->find($idSession);
-        if($session->getPassword() != "")
-        {
+        if ($session->getPassword() != "") {
             $form = $this->createForm(CheckPasswordSession::class, $session);
             $form->handleRequest($request);
-            if($form->isSubmitted() && $form->isValid())
-            {
-               $data = $form->getData();
-               dump($data);exit;
+            if ($form->isSubmitted() && $form->isValid()) {
+                $data = $form->getData();
+                dump($data);
+                exit;
             }
-              return $this->render("session.password.html.twig", ["session" => $session, 'form' => $form->createView()]);
+
+            return $this->render("session.password.html.twig", ["session" => $session, 'form' => $form->createView()]);
 
         }
 
@@ -118,30 +111,26 @@ class ProfileController extends Controller
         $listeSessionEtudiant = array();
 
         // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
-        foreach($listeSession as $session)
-        {
+        foreach ($listeSession as $session) {
             // On ajoute les séances
             array_push($tmp, $session->getId());
         }
 
-        foreach ($tmp as $ss)
-        {
+        foreach ($tmp as $ss) {
             // On ajoute les ID des sessions
             array_push($listeSessionEtudiant, $ss);
         }
 
-        if(in_array($idSession->getId(),$listeSessionEtudiant))
-        {
+        if (in_array($idSession->getId(), $listeSessionEtudiant)) {
             die("c'est déjà dans ton agenda");
-        }
-        else
-        {
+        } else {
             $repository = $this->getDoctrine()->getRepository(Session::class);
             $session = $repository->find($idSession);
             $student->addSessionid($session);
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
+
             return $this->redirectToRoute("showSessions");
         }
     }
@@ -163,20 +152,17 @@ class ProfileController extends Controller
         $listeSessionEtudiant = array();
 
         // On parcourt les séances auxquelles l'utilisateur est déjà inscrit
-        foreach($listeSession as $session)
-        {
+        foreach ($listeSession as $session) {
             // On ajoute les séances
             array_push($tmp, $session->getId());
         }
 
-        foreach ($tmp as $ss)
-        {
+        foreach ($tmp as $ss) {
             // On ajoute les ID des sessions
             array_push($listeSessionEtudiant, $ss);
         }
 
-        if(in_array($idSession,$listeSessionEtudiant))
-        {
+        if (in_array($idSession, $listeSessionEtudiant)) {
             // On supprime
             $repository = $this->getDoctrine()->getRepository(Session::class);
             /** @var Session $session */
@@ -185,10 +171,9 @@ class ProfileController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($student);
             $em->flush();
+
             return $this->redirectToRoute("showSessions");
-        }
-        else
-        {
+        } else {
             die("Ce n'est pas dans ton agenda !");
         }
     }

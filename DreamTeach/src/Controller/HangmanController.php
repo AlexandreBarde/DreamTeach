@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Entity\Badge;
 
 /**
  * Class MessageController
@@ -147,6 +148,8 @@ class HangmanController extends Controller
         if($session->get('winner'))
         {
             $session->set("winner", false);
+            $badge = $this->getDoctrine()->getRepository(Badge::class)->find(4);
+            $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
             $this->get('xp_won')->wonXp($this->getUser(),10);
             return $this->render("hangman.winner.html.twig", ["word" => $session->get("word")]);
         }

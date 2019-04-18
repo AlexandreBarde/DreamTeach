@@ -48,7 +48,8 @@ class LoginPageTest extends WebTestCase
 
         $form['emailaddress'] = $username;
         $form['password'] =  $password;
-        return $client->submit($form);
+        $crawler = $client->submit($form);
+        return $crawler;
         // On vérifie que la page ne contient pas le message de bienvenue (connexion invalide)
     }
 
@@ -118,6 +119,7 @@ class LoginPageTest extends WebTestCase
     }
     /*
 
+    /*
     public function testInscriptionValide()
     {
         $client = static::createClient();

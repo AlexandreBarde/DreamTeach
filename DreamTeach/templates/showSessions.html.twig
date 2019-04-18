@@ -155,13 +155,17 @@
                                 S'inscrire</a></td>
                     {% endif %}
                 {% else %}
-                    {% if i.id() in sessionUser %}
+                    {% if i.id in sessionUser %}
                         <td><a href="{{ path('RemoveSession', {"idSession" : i.id()}) }}"
                                class="btn btn-danger"><i class="fas fa-times"></i> Se désinscrire</a>
                         </td>
-                    {% else %}
+                    {% elseif i.studentid|length-1 >= i.maxnbparticipant %}
+                        <td>
+                            <button class="btn btn-secondary" disabled>Nombre de participant maximum atteint</button>
+                        </td>
+                    {% elseif i.id not in sessionUser %}
                         <td><a href="{{ path('AddSession', {"idSession" : i.id()}) }}"
-                               class="btn btn-success"><i class="fa fa-check"></i> S'inscrire</a></td>
+                               class="btn btn-success"><i class="fa fa-check"></i>S'inscrire</a></td>
                     {% endif %}
                 {% endif %}
                 </tr>

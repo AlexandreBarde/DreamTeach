@@ -37,8 +37,8 @@ before_install:
 install:
   - cd DreamTeach && composer install
   #- php bin/console doctrine:database:create --env=test
-  - php bin/console doctrine:schema:create --env=test
-  - php bin/console doctrine:schema:update --force
+  #- php bin/console doctrine:schema:create --env=test
+  #- php bin/console doctrine:schema:update --force
 
 after_failure:
   - "mysql -e 'show databases;'"

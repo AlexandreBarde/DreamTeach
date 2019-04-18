@@ -39,7 +39,7 @@ env:
 # Update composer
 before_install:
   - composer self-update
-  - mysql -e 'CREATE DATABASE dreamteach;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS dreamteach;'
   - mysql -u root dreamteach < dreamteach.sql
 
 # Install composer dependencies,

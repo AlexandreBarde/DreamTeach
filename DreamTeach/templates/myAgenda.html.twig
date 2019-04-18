@@ -12,9 +12,26 @@
     <script src="{{ asset('js/fullcalendar/interaction/main.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/daygrid/main.js') }}"></script>
     <style>
-        #calendar {
+        #calendar
+        {
             max-width: 900px;
             margin: 0 auto;
+        }
+        .event-mine
+        {
+            background-color: #6C49B8;
+            border-color: #6C49B8;
+            /**
+            #379392
+            #4FB0C6
+            #4F86C6
+            #6C49B8
+            **/
+        }
+        .event-normal
+        {
+            background-color: #4FB0C6;
+            border-color: #4FB0C6;
         }
     </style>
 {% endblock %}
@@ -43,16 +60,18 @@
               end: '{{ i.date.format("Y-m-dT") }}T{{  i.endingTime.format("H:i:s") }}',
           {% if app.user.id == i.organizerId.id %}
             {% if i.closed %}
-              url: 'javascript:orgaClosed("{{ i.name() }}", {{ i.id }})'
+              url: 'javascript:orgaClosed("{{ i.name() }}", {{ i.id }})',
             {% else %}
-              url: 'javascript:orgaNotClosed("{{ i.name() }}", {{ i.id }})'
+              url: 'javascript:orgaNotClosed("{{ i.name() }}", {{ i.id }})',
             {% endif %}
+              className: 'event-mine'
           {% else %}
             {% if i.closed %}
-              url: 'javascript:userClosed("{{ i.name() }}", {{ i.id }})'
+              url: 'javascript:userClosed("{{ i.name() }}", {{ i.id }})',
             {% else %}
-              url: 'javascript:userNotClosed("{{ i.name() }}", {{ i.id }})'
+              url: 'javascript:userNotClosed("{{ i.name() }}", {{ i.id }})',
             {% endif %}
+              className: 'event-normal'
           {% endif %}
           },
           {% endfor %}

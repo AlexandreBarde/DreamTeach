@@ -461,7 +461,8 @@ class SessionController extends Controller
             $user = $this->getUser();
             $result_session = $this->getDoctrine()->getRepository(Session::class)->searchSession(
                 $request->get('date_session'),
-                $request->get('subject_session')
+                $request->get('subject_session'),
+                $request->get('vocal_session')
             );
             $sessionListUser = $user->getSessionid();
             return $this->render(

@@ -69,6 +69,9 @@ class SessionController extends Controller
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($this->getUser() != $session->getOrganizerid()) {
+                $this->createAccessDeniedException();
+            }
             $em = $this->getDoctrine()->getManager();
             if (($form->get('endingTime')->getData()) > ($form->get('startingTime')->getData())) {
                 $tabDiff = [];

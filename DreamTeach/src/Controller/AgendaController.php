@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AgendaController extends AbstractController
 {
     /**
-     * @Route("accueil/agenda", name="student_agenda")
+     * @Route("/agenda", name="student_agenda")
      */
 
     public function sessionAction()

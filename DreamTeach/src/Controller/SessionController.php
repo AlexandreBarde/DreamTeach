@@ -20,6 +20,7 @@ use App\Repository\SearchStudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -38,13 +39,20 @@ class SessionController extends Controller
      * @Route("/accueil/updateSession/{idSession}", name="updateSession")
      * @param $idSession
      */
-    public function sessionCreationAndUpdate(Request $request, $idSession = null)
+    public function sessionCreationAndUpdate(Request $request, Swift_Mailer $mailer, $idSession = null)
     {
         $session = new Session();
         $subject = new Subject();
         if ($idSession != null) {
             $session = $this->getDoctrine()->getRepository(Session::class)->find($idSession);
         }
+
+        $oldDescription = $session->getDescription();
+        $oldSubject = $session->getSubjectid();
+        $oldStartingTime = $session->getStartingtime();
+        $oldEndingTime = $session->getEndingtime();
+        $oldDate = $session->getDate();
+        $oldIsVirtual = $session->getIsvirtual();
 
         $form = $this->createForm(SessionFormType::class, $session);
         $formSubject = $this->createForm(SubjectType::class, $subject);
@@ -58,17 +66,59 @@ class SessionController extends Controller
             $em->flush();
 
             return $this->render("sessionCreation.html.twig", ['formSessionCreation' => $form->createView(), 'formSubjectCreation' => $formSubject->createView()]);
-
         }
-        if ($form->isSubmitted() && $form->isValid()) {
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             if (($form->get('endingTime')->getData()) > ($form->get('startingTime')->getData())) {
+                $tabDiff = [];
+                $data = $form->getData();
+                if ($data->getDescription() != $oldDescription) {
+                    $tabDiff[] = "Nouvelle description : ".$data->getDescription();
+                }
+
+                if ($data->getSubjectid() != $oldSubject) {
+                    $tabDiff[] = "La nouvelle matière est : ".$data->getSubjectid()->getName();
+                }
+
+                if ($oldDate != $data->getDate()) {
+                    $tabDiff[] = "Nouvelle date : ".$data->getDate()->format('Y-m-d');
+                }
+
+                if ($oldStartingTime != $data->getStartingtime()) {
+                    $tabDiff[] = "Nouvelle heure de début : ".$data->getStartingtime()->format('H:i');
+                }
+
+                if ($oldEndingTime != $data->getEndingtime()) {
+                    $tabDiff[] = "Nouvelle heure de fin : ".$data->getEndingtime()->format('H:i');
+                }
+
+                if ($oldIsVirtual != $data->getIsvirtual()) {
+                    if ($data->getIsvirtual()) {
+                        $tabDiff[] = "La séance est maintenant virtuel, le logiciel vocal est :".$data->getVocalSoftware(
+                            );
+                    } else {
+                        $tabDiff[] = "La séance n'est plus virtuelle";
+                    }
+                }
                 $this->addFlash("success", "La session a bien été créée");
-                $em = $this->getDoctrine()->getManager();
                 $session->setOrganizerid($this->getUser());
                 $session->setClosed(false);
                 $em->persist($session);
                 $em->flush();
+
+                $body = $this->renderView(
+                    'mail.modify.session.html.twig',
+                    [
+                        'changements' => $tabDiff,
+                    ]
+                );
+                $this->getDoctrine()->getRepository(Session::class)->sendMailToParticipantsAfterModifySession(
+                    $session,
+                    $body,
+                    $mailer
+                );
+
                 $id = $session->getId();
                 $badge = $this->getDoctrine()->getRepository(Badge::class)->find(1);
                 $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
@@ -82,7 +132,6 @@ class SessionController extends Controller
                 $this->addFlash("error", "L'heure de fin ne peut pas être infériere à l'heure de début.");
 
                 return $this->redirectToRoute('sessionCreation');
-
             }
         }
 

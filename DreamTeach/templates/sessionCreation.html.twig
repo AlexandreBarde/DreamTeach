@@ -1,4 +1,10 @@
 {% extends "base.html.twig" %}
+{% set current_path = app.request.get('_route') %}
+{% if current_path == "updateSession" %}
+    {% set disabled = true %}
+{% else %}
+    {% set disabled = false %}
+{% endif %}
 {% block title %}Créer une session - DreamTeach{% endblock %}
 
 {% block body %}
@@ -21,7 +27,7 @@
 
                             {{ form_start(formSubjectCreation) }}
                             <label for="inputEmail4">Matière étudiée</label>
-                            {{ form_widget(formSubjectCreation.name) }}
+                            {{ form_widget(formSubjectCreation.name, {'attr': {'readonly': disabled}}) }}
                             <br/>
                             <button type="submit" class="btn btn-primary">Créer</button>
                             {{ form_end(formSubjectCreation) }}
@@ -30,11 +36,11 @@
                         <div class="form-group col" id="matiereEtudiee">
                             {{ form_start(formSessionCreation) }}
                             <label for="inputEmail4">Matière étudiée </label>
-                            {{ form_widget(formSessionCreation.subjectid) }}
+                            {{ form_widget(formSessionCreation.subjectid, {'attr': {'readonly': disabled}}) }}
                         </div>
                         <div class="col">
                             <label for="inputEmail4">Nom Session </label>
-                            {{ form_widget(formSessionCreation.name) }}
+                            {{ form_widget(formSessionCreation.name, {'attr': {'readonly': disabled}}) }}
                         </div>
                     </div>
                     <div class="custom-control custom-switch">
@@ -45,7 +51,7 @@
                     <div class="form-row">
                         <div class="col">
                             <label for="inputEmail4">Mot de passe de la séance </label>
-                            {{ form_widget(formSessionCreation.password) }}
+                            {{ form_widget(formSessionCreation.password, {'attr': {'readonly': disabled}}   ) }}
                         </div>
                     </div>
                     <br>
@@ -88,7 +94,7 @@
 
                 <div class="form-group col-md-4">
                     <label for="inputEmail4">Nombre max de participants</label>
-                    {{ form_widget(formSessionCreation.maxnbparticipant) }}
+                    {{ form_widget(formSessionCreation.maxnbparticipant, {'attr': {'readonly': disabled}}) }}
                 </div>
                 <div class="form-group col-md-8">
                     <label for="inputEmail4">Logiciel vocal</label>
@@ -100,12 +106,12 @@
 
                 <div class="form-group col-md-6">
                     <label for="inputEmail4">Ville </label>
-                    {{ form_widget(formSessionCreation.city) }}
+                    {{ form_widget(formSessionCreation.city, {'attr': {'readonly': disabled}}) }}
 
                 </div>
                 <div class="form-group col-md-6">
                     <label for="inputEmail4">Etablissement </label>
-                    {{ form_widget(formSessionCreation.place) }}
+                    {{ form_widget(formSessionCreation.place, {'attr': {'readonly': disabled}}) }}
 
                 </div>
 
@@ -123,8 +129,6 @@
     {% block javascripts %}
         <script>
             $(document).ready(function () {
-
-
                 var ckbox = $('#customSwitch1');
                 $(document).ready(function() {
                     if ($("#customSwitchesCreateSubject").is(':checked')) {
@@ -134,7 +138,7 @@
                         $("#matiereEtudiee").removeClass('d-none').addClass('d-block');
                         $("#creerMatiere").removeClass('d-block').addClass('d-none');
                     }
-                })
+                });
                                 $('#customSwitchesCreateSubject').on('change', function() {
                     if ($("#customSwitchesCreateSubject").is(':checked')) {
                         $("#matiereEtudiee").removeClass('d-block').addClass('d-none');
@@ -143,7 +147,7 @@
                         $("#creerMatiere").removeClass('d-block').addClass('d-none');
                         $("#matiereEtudiee").removeClass('d-none').addClass('d-block');
                     }
-                })
+                });
                 $('input').on('click',function () {
                     //run code
                     if (ckbox.is(':checked')) {
@@ -158,9 +162,6 @@
                         $("#session_form_city").prop('disabled', false);
                     }
                 })
-
-
-
             });
         </script>
     {% endblock %}

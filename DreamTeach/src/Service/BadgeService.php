@@ -33,7 +33,7 @@ class BadgeService
         }
         $student->addBadgeid($badge);
         $this->em->flush();
-        $this->serviceXp->wonXp($student,100);
+        $this->serviceXp->wonXp($student,25);
 
     }
 

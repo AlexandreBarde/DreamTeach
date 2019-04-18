@@ -52,6 +52,8 @@
                                         <a href="{{ path('student_other_profile', {'uuid_student':wa.student1.uuid}) }}"
                                            class="float-right text-primary">{{ wa.student1.firstName~" "~wa.student1.lastName }}</a>
                                         <div class="clearfix"></div>
+                                        <a href="{{ path('accept_friend', {'student1': wa.student1.id, 'student2': app.user.id, 'id': wa.id, 'uuid': app.user.uuid}) }}"><span
+                                                    class="btn btn-success float-right fas fa-check"></span></a>
                                     </div>
                                 </div>
                             {% endfor %}

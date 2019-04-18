@@ -22,7 +22,7 @@ class EmailService
      * @param $body
      * @param \Swift_Mailer $mailer
      */
-    public function sendMail($receiver, $subject, $body, \Swift_Mailer $mailer)
+    public static function sendMail($receiver, $subject, $body, \Swift_Mailer $mailer)
     {
         $message = (new \Swift_Message($subject))
             ->setFrom("ptutdreamteach@gmail.com")

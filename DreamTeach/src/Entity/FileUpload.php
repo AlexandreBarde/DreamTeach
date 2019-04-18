@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FileUploadRepository")
@@ -17,37 +18,21 @@ class FileUpload
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Student", inversedBy="fileUploads")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $idStudent;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Session", inversedBy="fileUploads")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $idSession;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Merci de mettre en ligne un fichier PDF.")
+     * @Assert\File(mimeTypes={ "application/pdf" })
      */
     private $filename;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdStudent(): ?Student
-    {
-        return $this->idStudent;
-    }
-
-    public function setIdStudent(?Student $idStudent): self
-    {
-        $this->idStudent = $idStudent;
-
-        return $this;
     }
 
     public function getIdSession(): ?Session

@@ -147,21 +147,20 @@
         </div>
     </div>
 
-    {% if ("now"|date('Y-m-d')) > session.date|date('Y-m-d') %}
         <div class="card mt-4">
             <div class="card-header">
                 <h2>Donnez une note..</h2>
             </div>
             <div class="card-body">
-                {% if app.user != session.organizerid and app.user in session.studentid and userHasAlreadyMarked is null %}
+                {% if not userHasAlreadyMarked %}
                     {{ form_start(formMarking) }}
                     <div class="form-group">
-                        {{ form_row(formMarking.markingAmbience) }}
+                        {{ form_row(formMarking.markingAmbience, {'id': 'markingAmbience'}) }}
                     </div>
                     <div class="form-group">
-                        {{ form_row(formMarking.markingEfficiency) }}
+                        {{ form_row(formMarking.markingEfficiency, {'id': 'markingEfficiency'}) }}
                     </div>
-                    <input type="submit" value="Valider" class="btn btn-info">
+                    <input id="submitMarking" type="submit" value="Valider" class="btn btn-info">
                     {{ form_end(formMarking) }}
                 {% elseif userHasAlreadyMarked %}
                     Vous avez deja noté cette scéance :
@@ -171,6 +170,8 @@
                     Efficacité : {{ userHasAlreadyMarked.markingEfficiency }}/5
                 {% endif %}
                 {% if averageAmbience and averageEfficiency > 0 %}
+                    <hr>
+                    <br>
                     Pour cette session, la moyenne est de :
                     <br>
                     Ambiance : <span class="badge badge-primary">{{ averageAmbience|round(2, 'ceil') }} / 5</span>
@@ -179,7 +180,34 @@
                 {% endif %}
             </div>
         </div>
-    {% endif %}
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Fichiers disponibles</h2>
+                </div>
+                <div class="card-body">
+                    {% if session.fileUploads %}
+                        <ul class="list-group">
+                    {% for file in session.fileUploads %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ asset("uploads/files/") ~ file.filename}}">{{ file.filename }}</a>
+                            <span class="badge badge-primary badge-pill"><a href="#"><i class="fas fa-times"></i></a></span>
+                        </li>
+                    {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="alert alert-danger" role="alert">
+                            Aucun fichier disponible !
+                        </div>
+                    {% endif %}
+                    <br />
+                    <a href="{{ path('AddFile', {'session' : session.id}) }}" class="btn btn-block" style="background-color: #6d7fcc; color: white;">Ajouter un fichier</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="card mt-4">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
@@ -274,11 +302,17 @@
                     $("#envoyerCommentaire").attr('disabled', true);
                     $("#commentaire").attr('disabled', true);
                     $("#note").attr('disabled', true);
+                    $("#submitMarking").attr('disabled', true);
+                    $("#markingAmbience").attr('disabled', true);
+                    $("#markingEfficiency").attr('disabled', true);
                 } else {
                     if("{{ 'now'|date('Y-m-d') }}" == sessionDate && "{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
                         $("#envoyerCommentaire").attr('disabled', true);
                         $("#commentaire").attr('disabled', true);
                         $("#note").attr('disabled', true);
+                        $("#submitMarking").attr('disabled', true);
+                        $("#markingAmbience").attr('disabled', true);
+                        $("#markingEfficiency").attr('disabled', true);
                     }
                 }
 

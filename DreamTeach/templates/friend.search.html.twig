@@ -7,7 +7,25 @@
 {% block body %}
     <div class="row">
         <div class="col-12">
+            <h1 class="display-4 text-center mb-3">Resultat de la recherche</h1>
+            <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8 mx-auto">
+                            <input type="text" id="rechercherInput" class="form-control" placeholder="Recherchez un autre étudiant.."
+                                   name="search_student">
+                        </div>
+                        <div class="col-3">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn" style="background-color: #6d7fcc; color: white;">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <hr style="background-color: #6d7fcc;"/>
             <div class="card">
+                <div class="card-header">
+                    <h6>Resulats</h6>
+                </div>
                 <div class="card-body">
                     {% if students|length %}
                         {% for student in students %}
@@ -37,26 +55,11 @@
                                 </div>
                                 <div class="col text-right">
                                     <a href="{{ path('student_other_profile', {'uuid_student': student.uuid}) }}"
-                                       class="btn btn-primary">Accéder au profil</a>
+                                       class="btn"style="background-color: #6d7fcc; color: white;">Accéder au profil</a>
                                 </div>
                             </div>
                             <div class="dropdown-divider"></div>
                         {% endfor %}
-                        <br/>
-                        <form action="{{ path('search_student_view') }}" method="get" id="search_student_form">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-8 mx-auto">
-                                        <input type="text" id="rechercherInput" class="form-control" placeholder="Recherchez un autre étudiant.."
-                                               name="search_student">
-                                    </div>
-
-                                    <div class="col-3">
-                                        <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-primary">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     {% else %}
                         Desolé, il n'y a aucune résultat, êtes vous sur de votre recherche ?
                         <div class="row mt-4">

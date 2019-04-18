@@ -231,12 +231,6 @@ class Student implements UserInterface
     private $responses;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\FileUpload", mappedBy="idStudent", orphanRemoval=true)
-     */
-    private $fileUploads;
-
-
-    /**
      * Constructor
      * @throws \Exception
      */
@@ -251,7 +245,6 @@ class Student implements UserInterface
         $this->questions = new ArrayCollection();
         $this->qcms = new ArrayCollection();
         $this->responses = new ArrayCollection();
-        $this->fileUploads = new ArrayCollection();
         $this->studentid = new ArrayCollection();
     }
 
@@ -715,37 +708,6 @@ class Student implements UserInterface
             // set the owning side to null (unless already changed)
             if ($response->getUserId() === $this) {
                 $response->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|FileUpload[]
-     */
-    public function getFileUploads(): Collection
-    {
-        return $this->fileUploads;
-    }
-
-    public function addFileUpload(FileUpload $fileUpload): self
-    {
-        if (!$this->fileUploads->contains($fileUpload)) {
-            $this->fileUploads[] = $fileUpload;
-            $fileUpload->setIdStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFileUpload(FileUpload $fileUpload): self
-    {
-        if ($this->fileUploads->contains($fileUpload)) {
-            $this->fileUploads->removeElement($fileUpload);
-            // set the owning side to null (unless already changed)
-            if ($fileUpload->getIdStudent() === $this) {
-                $fileUpload->setIdStudent(null);
             }
         }
 

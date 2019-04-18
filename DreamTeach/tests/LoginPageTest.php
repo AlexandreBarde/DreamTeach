@@ -116,6 +116,7 @@ class LoginPageTest extends WebTestCase
         $this->assertEquals('http://localhost/register', $crawler->getUri());
         return $crawler;
     }
+    /*
 
     public function testInscriptionValide()
     {
@@ -128,7 +129,7 @@ class LoginPageTest extends WebTestCase
         $userEmail = 'Jean.Donacien@outlook.fr';
 
         $form = $crawler->selectButton('S\'inscrire')->form();
-        $form['register[trainingid]']->select('3');
+        $form['register[trainingid]']->select('1');
         $form['register[lastname]'] = $userLastName;
         $form['register[firstname]'] = $userFirstName;
         $form['register[emailaddress]'] = $userEmail;
@@ -138,4 +139,5 @@ class LoginPageTest extends WebTestCase
         //Connexion avec les identifiants d'inscriptions pour vérifier que l'inscription a bien été faite
         $this->testValidConnexion($userEmail, $userPassword);
     }
+    */
 }

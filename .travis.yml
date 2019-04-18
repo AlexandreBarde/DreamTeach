@@ -7,13 +7,6 @@ sudo: false
 # Start mysql service
 services:
   - mysql
-
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
       
 # Cache composer packages so "composer install" is faster
 cache:
@@ -27,6 +20,13 @@ matrix:
   include:
     - php: 7.1
     - php: 7.2
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
 
 # Define an environment variable
 env:

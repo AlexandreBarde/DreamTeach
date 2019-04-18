@@ -6,6 +6,9 @@
 
 {% block body %}
     <h1 class="display-4 text-center">Resultat de la recherche</h1>
+    <form action="{{ path('showSessions') }}" method="POST">
+        <button class="btn btn-block mt-5" style="background-color: #6d7fcc;color: white;" type="submit">Retour a la liste des sessions</button>
+    </form>
     <hr style="background-color: #6d7fcc;"/>
 
     <div class="row">

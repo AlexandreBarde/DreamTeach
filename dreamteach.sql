@@ -529,6 +529,11 @@ CREATE TABLE IF NOT EXISTS `word` (
 -- Contraintes pour les tables déchargées
 --
 
+INSERT INTO `word` (`id`, `theme`, `content`, `definition`) VALUES
+(1, 1, 'Cercle', 'C\'est un truc rond'),
+(2, 1, 'Triangle', 'C\'est un truc qui a 3 lignes'),
+(3, 1, 'Pythagore', 'C\'est un mec');
+
 --
 -- Contraintes pour la table `file_upload`
 --

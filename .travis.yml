@@ -28,7 +28,8 @@ env:
 # Update composer
 before_install:
   - composer self-update
-  - mysql -u root dreamteach < dreamteach.sql
+  - mysql -u root --password="" < dreamteach.sql
+
   
 # Install composer dependencies,
 # Create database, schema and fixtures

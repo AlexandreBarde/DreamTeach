@@ -59,7 +59,7 @@ class ProfileTest extends WebTestCase
         $biography = "Aime le tennis de table et les loukoums";
 
         $client = $this->testValidConnexion();
-        $crawler = $client->request('GET', '/mon-profil/');
+        $crawler = $client->request('GET', '/profile/');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $form = $crawler->selectButton("Modifier")->form();
@@ -77,7 +77,7 @@ class ProfileTest extends WebTestCase
         $form['profile_form[birthDate]'] = "1998-04-15";
 
         $client->submit($form);
-        $crawler = $client->request('GET', '/mon-profil/');
+        $crawler = $client->request('GET', '/profile/');
 
         $this->assertGreaterThan(
             0,
@@ -99,9 +99,9 @@ class ProfileTest extends WebTestCase
             ->link()
         ;
         // Vérifie que la redirection n'a pas encore été effectuée
-        $this->assertNotEquals('http://localhost/mon-profil/', $crawler->getUri());
+        $this->assertNotEquals('http://localhost/profile/', $crawler->getUri());
         $crawler = $client->click($linkRegister);
-        $this->assertEquals('http://localhost/mon-profil/', $crawler->getUri());
+        $this->assertEquals('http://localhost/profile/', $crawler->getUri());
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertGreaterThan(
             0,

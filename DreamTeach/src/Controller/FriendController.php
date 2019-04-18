@@ -19,7 +19,7 @@ class FriendController extends Controller
 {
     /**
      * @param Request $request
-     * @Route("/liste-ami", name="friend_list")
+     * @Route("/friendList", name="friend_list")
      */
     public function listFriendController(Request $request)
     {

@@ -38,6 +38,7 @@ class StudentController extends Controller
 {
     /**
      * @Route("/dashboard", name="default_student_connected")
+     * @throws \Exception
      */
 
     public function homeStudentAction()
@@ -61,6 +62,9 @@ class StudentController extends Controller
         $now = new DateTime("now");
         $now->format('Y-m-d');
 
+        $hourNow = new DateTime('now', new \DateTimeZone('Europe/Paris'));
+        $hourNow->format('H:i:s');
+
         $listSessionAttended = $this->getUser()->getSessionid();
         $nbSessionAttended = 0;
         $listSessionDone = new ArrayCollection();
@@ -68,7 +72,8 @@ class StudentController extends Controller
         foreach ($listSessionAttended as $sessionAttended) {
             //on recupère la liste des commentaires sur la session parcourue
             $listcommentaires = $this->getDoctrine()->getRepository(Sessioncomment::class)->findBy(array('idSession' => $sessionAttended->getId(), 'idStudent' => $this->getUser()->getId()));
-            if ($sessionAttended->getDate() < $now) {
+
+            if ($sessionAttended->getDate() < $now && $sessionAttended->getEndingtime() < $hourNow) {
 
                 //la session est passée, on incrémente le compteur de séances assistées
                 $nbSessionAttended++;

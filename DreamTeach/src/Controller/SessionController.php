@@ -361,6 +361,27 @@ class SessionController extends Controller
     }
 
     /**
+     * @Route("/removeFile/{idFile}", name="RemoveFile")
+     * @param FileUpload $idFile
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeFile(FileUpload $idFile)
+    {
+        if($this->getUser() == $idFile->getIdSession()->getOrganizerid())
+        {
+            $this->addFlash("success", "Fichier supprimé !");
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($idFile);
+            $entityManager->flush();
+        }
+        else
+        {
+            $this->addFlash("alert", "Vous n'avez pas la permission de supprimer ce fichier !");
+        }
+        return $this->redirectToRoute("AddFile", ["session" => $idFile->getIdSession()->getId()]);
+    }
+
+    /**
      * @return string
      */
     private function generateUniqueFileName()

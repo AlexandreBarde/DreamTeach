@@ -167,7 +167,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @Route("/mon-profil/", name="student_profile")
+     * @Route("/profile/", name="student_profile")
      */
 
     public function studentProfileAction(Request $request, ObjectManager $manager)

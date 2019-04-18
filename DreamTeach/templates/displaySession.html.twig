@@ -58,23 +58,23 @@
                     {{ session.maxnbparticipant }}
                 </div>
                 {% if session.isvirtual %}
-                <div class="form-group col-md-8">
-                    <p class="font-weight-bold">Logiciel vocal</p>
-                    {{ session.vocalSoftware }}
-                </div>
+                    <div class="form-group col-md-8">
+                        <p class="font-weight-bold">Logiciel vocal</p>
+                        {{ session.vocalSoftware }}
+                    </div>
                 {% endif %}
             </div>
             {% if session.isvirtual==false %}
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <p class="font-weight-bold">Ville </p>
-                    {{ session.city }}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <p class="font-weight-bold">Ville </p>
+                        {{ session.city }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <p class="font-weight-bold">Etablissement</p>
+                        {{ session.place }}
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <p class="font-weight-bold">Etablissement</p>
-                    {{ session.place }}
-                </div>
-            </div>
             {% endif %}
         </div>
     </div>
@@ -86,7 +86,9 @@
         <div class="card-body">
             <div class="container">
                 <div class="row">
-                    <h5>Autres commentaires</h5>
+                    <div class="col">
+                        <h5>Autres commentaires</h5>
+                    </div>
                 </div>
                 <br/>
                 {% for commentTmp in allSessionComments %}
@@ -119,7 +121,9 @@
                 <br/>
 
                 <div class="row">
-                    <h5>Donnez votre avis sur la séance</h5>
+                    <div class="col">
+                        <h5>Donnez votre avis sur la séance</h5>
+                    </div>
                 </div>
                 <br/>
                 <div class="row">
@@ -131,55 +135,85 @@
                     <div class="col">
                         <label for="commentaire">Note</label>
                         {{ form_widget(formComment.note, {'id': 'note'}) }}
-                    </div>
 
-                    <br/>
+                    </div>
                 </div>
                 <br/>
                 <div class="row">
-                    <div class="col-3">
-                        <button id="envoyerCommentaire" type="submit" class="btn btn-info">envoyer</button>
+                    <div class="col">
+                        <button id="envoyerCommentaire" type="submit" class="btn btn-block"
+                                style="background-color: #6d7fcc; color: white;">envoyer
+                        </button>
                         {{ form_end(formComment) }}
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-        <div class="card mt-4">
-            <div class="card-header">
-                <h2>Donnez une note..</h2>
-            </div>
-            <div class="card-body">
-                {% if not userHasAlreadyMarked %}
-                    {{ form_start(formMarking) }}
-                    <div class="form-group">
-                        {{ form_row(formMarking.markingAmbience, {'id': 'markingAmbience'}) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_row(formMarking.markingEfficiency, {'id': 'markingEfficiency'}) }}
-                    </div>
-                    <input id="submitMarking" type="submit" value="Valider" class="btn btn-info">
-                    {{ form_end(formMarking) }}
-                {% elseif userHasAlreadyMarked %}
-                    Vous avez deja noté cette scéance :
-                    <br>
-                    Ambiance : {{ userHasAlreadyMarked.markingAmbience }}/5
-                    <br>
-                    Efficacité : {{ userHasAlreadyMarked.markingEfficiency }}/5
-                {% endif %}
-                {% if averageAmbience and averageEfficiency > 0 %}
-                    <hr>
-                    <br>
-                    Pour cette session, la moyenne est de :
-                    <br>
-                    Ambiance : <span class="badge badge-primary">{{ averageAmbience|round(2, 'ceil') }} / 5</span>
-                    <br>
-                    Efficacité : <span class="badge badge-warning">{{ averageEfficiency|round(2, 'ceil') }} / 5</span>
-                {% endif %}
-            </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Donnez une note..</h2>
         </div>
+        <div class="card-body">
+            {% if not userHasAlreadyMarked %}
+                {{ form_start(formMarking) }}
+                <div class="form-group">
+                    {{ form_row(formMarking.markingAmbience, {'id': 'markingAmbience'}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(formMarking.markingEfficiency, {'id': 'markingEfficiency'}) }}
+                </div>
+                <input id="submitMarking" type="submit" value="Valider" class="btn btn-block"
+                       style="background-color: #6d7fcc; color: white;">
+                {{ form_end(formMarking) }}
+            {% elseif userHasAlreadyMarked %}
+                Vous avez deja noté cette scéance :
+                <br>
+                Ambiance :
+                {% if userHasAlreadyMarked.markingAmbience > 0 %}
+                    {% for j in 1..userHasAlreadyMarked.markingAmbience %}
+                        <span class="fa fa-star" style="color:orange"></span>
+                    {% endfor %}
+                    {% if userHasAlreadyMarked.markingAmbience < 5 %}
+                        {% for j in 1..5 - userHasAlreadyMarked.markingAmbience %}
+                            <span class="far fa-star"></span>
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% for j in 1..5 %}
+                        <span class="far fa-star"></span>
+                    {% endfor %}
+                {% endif %}
+
+                <br>
+                Efficacité :
+                {% if userHasAlreadyMarked.markingEfficiency > 0 %}
+                    {% for j in 1..userHasAlreadyMarked.markingEfficiency %}
+                        <span class="fa fa-star" style="color:orange"></span>
+                    {% endfor %}
+                    {% if userHasAlreadyMarked.markingEfficiency < 5 %}
+                        {% for j in 1..5 - userHasAlreadyMarked.markingEfficiency %}
+                            <span class="far fa-star"></span>
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% for j in 1..5 %}
+                        <span class="far fa-star"></span>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+            {% if averageAmbience and averageEfficiency > 0 %}
+                <hr>
+                <br>
+                Pour cette session, la moyenne est de :
+                <br>
+                Ambiance : <span class="badge badge-primary">{{ averageAmbience|round(2, 'ceil') }} / 5</span>
+                <br>
+                Efficacité : <span class="badge badge-warning">{{ averageEfficiency|round(2, 'ceil') }} / 5</span>
+            {% endif %}
+        </div>
+    </div>
 
     <div class="row mt-4">
         <div class="col-12">
@@ -190,20 +224,22 @@
                 <div class="card-body">
                     {% if session.fileUploads %}
                         <ul class="list-group">
-                    {% for file in session.fileUploads %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href="{{ asset("uploads/files/") ~ file.filename}}">{{ file.filename }}</a>
-                            <span class="badge badge-primary badge-pill"><a href="#"><i class="fas fa-times"></i></a></span>
-                        </li>
-                    {% endfor %}
+                            {% for file in session.fileUploads %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="{{ asset("uploads/files/") ~ file.filename }}">{{ file.filename }}</a>
+                                    <span class="badge badge-primary badge-pill"><a href="#"><i
+                                                    class="fas fa-times"></i></a></span>
+                                </li>
+                            {% endfor %}
                         </ul>
                     {% else %}
                         <div class="alert alert-danger" role="alert">
                             Aucun fichier disponible !
                         </div>
                     {% endif %}
-                    <br />
-                    <a href="{{ path('AddFile', {'session' : session.id}) }}" class="btn btn-block" style="background-color: #6d7fcc; color: white;">Ajouter un fichier</a>
+                    <br/>
+                    <a href="{{ path('AddFile', {'session' : session.id}) }}" class="btn btn-block"
+                       style="background-color: #6d7fcc; color: white;">Ajouter un fichier</a>
                 </div>
             </div>
         </div>
@@ -220,7 +256,8 @@
                 <br/>
                 <div class="row">
                     <div class="col-lg-12">
-                        <input type="text" class="form-control" placeholder="Ecrire le nom de l'étudiant" onkeyup="showResult(this.value)">
+                        <input type="text" class="form-control" placeholder="Ecrire le nom de l'étudiant"
+                               onkeyup="showResult(this.value)">
                         <div id="livesearch"></div>
                     </div>
                     <br/>
@@ -263,7 +300,8 @@
                                    class="float-right text-primary">{{ participant.firstName~" "~participant.lastName }}</a>
                                 <div class="clearfix"></div>
                                 {% if app.user == session.organizerid %}
-                                <a href="{{ path('delete_participant_in_session', {'session': session.id, 'student': participant.id}) }}"><span class="fas fa-times-circle text-danger float-right"></span></a>
+                                    <a href="{{ path('delete_participant_in_session', {'session': session.id, 'student': participant.id}) }}"><span
+                                                class="fas fa-times-circle text-danger float-right"></span></a>
                                 {% endif %}
                             </div>
                         {% endfor %}
@@ -298,7 +336,7 @@
                 var sessionDate = "{{ session.date|date('Y-m-d') }}";
                 var sessionEndingTime = "{{ session.endingTime|date('H:i:s') }}";
 
-                if("{{ 'now'|date('Y-m-d') }}" < sessionDate) {
+                if ("{{ 'now'|date('Y-m-d') }}" < sessionDate) {
                     $("#envoyerCommentaire").attr('disabled', true);
                     $("#commentaire").attr('disabled', true);
                     $("#note").attr('disabled', true);
@@ -306,7 +344,7 @@
                     $("#markingAmbience").attr('disabled', true);
                     $("#markingEfficiency").attr('disabled', true);
                 } else {
-                    if("{{ 'now'|date('Y-m-d') }}" == sessionDate && "{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
+                    if ("{{ 'now'|date('Y-m-d') }}" == sessionDate && "{{ 'now'|date('H:i:s', "Europe/Paris") }}" < sessionEndingTime) {
                         $("#envoyerCommentaire").attr('disabled', true);
                         $("#commentaire").attr('disabled', true);
                         $("#note").attr('disabled', true);
@@ -319,38 +357,34 @@
             });
         </script>
         <script>
-            function myFunction(str, id)
-            {
+            function myFunction(str, id) {
                 let idSession = $('#sessionID').html();
                 $("#linkpartage").attr("href", "/accueil/shareSession/" + idSession + "/" + id);
                 $('#nomprenom').html(str);
                 $('#modalid').modal('toggle');
             }
-            function showResult(str)
-            {
+
+            function showResult(str) {
                 $.ajax({
                     url: "{{ path('SearchStudent') }}",
                     type: "POST",
                     dataType: "json",
-                    data: {"char" : str},
+                    data: {"char": str},
                     async: true,
-                    success: function(data)
-                    {
+                    success: function (data) {
                         console.log(data['student']);
                         let val = "";
-                        for(let i = 0; i < data['student'].length; i++)
-                        {
+                        for (let i = 0; i < data['student'].length; i++) {
                             val += "<a href=\"javascript:myFunction('" + data['student'][i] + "', '" + data['id'][i] + "')\">" + data['student'][i] + "</a><br/>";
                         }
-                        if(val.length === 0) val = "Aucun résultat";
+                        if (val.length === 0) val = "Aucun résultat";
                         document.getElementById("livesearch").innerHTML = val;
-                        document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+                        document.getElementById("livesearch").style.border = "1px solid #A5ACB2";
                     }
                 });
-                if (str.length==0)
-                {
-                    document.getElementById("livesearch").innerHTML="";
-                    document.getElementById("livesearch").style.border="0px";
+                if (str.length == 0) {
+                    document.getElementById("livesearch").innerHTML = "";
+                    document.getElementById("livesearch").style.border = "0px";
                     return;
                 }
             }

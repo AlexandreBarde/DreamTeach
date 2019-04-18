@@ -534,6 +534,9 @@ INSERT INTO `word` (`id`, `theme`, `content`, `definition`) VALUES
 (2, 1, 'Triangle', 'C\'est un truc qui a 3 lignes'),
 (3, 1, 'Pythagore', 'C\'est un mec');
 
+
+INSERT INTO `theme` (`id`, `content`) VALUES
+(1, 'maths');
 --
 -- Contraintes pour la table `file_upload`
 --

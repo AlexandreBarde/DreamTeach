@@ -10,21 +10,27 @@
             <div class="form-group">
                 <div class="card">
                     <div class="card-body">
-                        <input type="date" class="form-control" data-date-format="mm/dd/yyyy">
-                        <div class="row">
-                            <div class="col-8">
-                                <input type="text" id="rechercherInput" class="form-control"
-                                       placeholder="Recherchez une séance.."
-                                       name="search_student">
-                            </div>
-                            <div class="col-4">
-                                <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-block"
-                                       style="background-color: #6d7fcc; color: white;">
-                            </div>
+                        <input name="champdate" type="date" class="form-control" data-date-format="mm/dd/yyyy">
+                        <select name="champmatiere">
+                            {% for i in sessionToCome %}
+                                <option value="{{ i.id }}">{{ i.subjectId.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="col-8">
+                            <input name="champtexte" type="text" id="rechercherInput" class="form-control"
+                                   placeholder="Recherchez une séance.."
+                                   name="search_student">
+                        </div>
+                        <div class="col-4">
+                            <input type="submit" id="rechercherBtn" value="Rechercher" class="btn btn-block"
+                                   style="background-color: #6d7fcc; color: white;">
+                        </div>
                         </div>
                     </div>
                 </div>
-            </div>
+        </form>
+    </div>
+
         <h1 class="display-4 text-center">Séances</h1>
         <div class="row">
         </div>

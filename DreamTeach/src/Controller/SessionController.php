@@ -321,7 +321,7 @@ class SessionController extends Controller
                 $request->get('search_session')
             );
             return $this->render(
-                'classementxp.html.twig',
+                'showSessions.html.twig',
                 [
                     'sessionSearch' => $result_session,
                 ]

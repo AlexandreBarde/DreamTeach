@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 
+use App\Entity\Session;
 use App\Entity\Student;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityRepository;
 
 class SessionRepository extends EntityRepository
@@ -34,5 +36,18 @@ class SessionRepository extends EntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function sendMailToParticipantsAfterModifySession(Session $session, $body, $mailer)
+    {
+        $participants = $session->getStudentid();
+        foreach ($participants as $participant) {
+            EmailService::sendMail(
+                $participant->getEmailaddress(),
+                "La séance : ".$session->getName()." a été modifiée",
+                $body,
+                $mailer
+            );
+        }
     }
 }

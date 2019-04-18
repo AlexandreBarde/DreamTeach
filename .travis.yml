@@ -50,6 +50,9 @@ install:
   - php bin/console doctrine:schema:create --env=test
   - php bin/console doctrine:schema:update --force
 
+after_failure:
+  - "mysql -e 'show databases;'"
+  
 # Run script
 script:
   - ./vendor/bin/simple-phpunit

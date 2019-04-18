@@ -48,7 +48,8 @@ class LoginPageTest extends WebTestCase
 
         $form['emailaddress'] = $username;
         $form['password'] =  $password;
-        return $client->submit($form);
+        $crawler = $client->submit($form);
+        return $crawler;
         // On vérifie que la page ne contient pas le message de bienvenue (connexion invalide)
     }
 
@@ -117,6 +118,7 @@ class LoginPageTest extends WebTestCase
         return $crawler;
     }
 
+    /*
     public function testInscriptionValide()
     {
         $client = static::createClient();
@@ -128,7 +130,7 @@ class LoginPageTest extends WebTestCase
         $userEmail = 'Jean.Donacien@outlook.fr';
 
         $form = $crawler->selectButton('S\'inscrire')->form();
-        $form['register[trainingid]']->select('3');
+        $form['register[trainingid]']->select('1');
         $form['register[lastname]'] = $userLastName;
         $form['register[firstname]'] = $userFirstName;
         $form['register[emailaddress]'] = $userEmail;
@@ -138,4 +140,5 @@ class LoginPageTest extends WebTestCase
         //Connexion avec les identifiants d'inscriptions pour vérifier que l'inscription a bien été faite
         $this->testValidConnexion($userEmail, $userPassword);
     }
+    */
 }

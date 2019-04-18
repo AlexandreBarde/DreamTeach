@@ -12,6 +12,9 @@
     <div class="card">
         <div class="card-header" style="background-color: rgba(0,0,0,.00);">
             <h2>Description séance</h2>
+            {% if app.user == session.organizerid %}
+                <a href="{{ path('updateSession', {'idSession': session.id}) }}" class="btn btn-primary float-right">Modifier la séance</a>
+            {% endif %}
         </div>
         <div class="card-body">
             <div class="row">

@@ -78,9 +78,11 @@ class ProfileController extends Controller
                $em->persist($student);
                $em->flush();
                /* Ajout du badge  */
-               $badge = $this->getDoctrine()->getRepository(Badge::class)->find(2);
-               $this->get('ajout_badge')->addBadge($this->getUser(),$badge);
-               $this->get('xp_won')->wonXp($this->getUser(),50);
+               if($session->getOrganizerid()->getId()!=$student->getId()) {
+                   $badge = $this->getDoctrine()->getRepository(Badge::class)->find(2);
+                   $this->get('ajout_badge')->addBadge($this->getUser(), $badge);
+                   $this->get('xp_won')->wonXp($this->getUser(), 25);
+               }
                return $this->redirectToRoute("showSessions");
            }
            else

@@ -37,7 +37,7 @@ env:
   - SYMFONY_VERSION="4.2.*" DB=mysql
 
 # Update composer
-before-install:
+before_install:
   - composer self-update
   - mysql -e 'CREATE DATABASE dreamteach;'
   - mysql -u root --password="" < dreamteach.sql

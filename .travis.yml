@@ -40,7 +40,7 @@ env:
 before_install:
   - composer self-update
   - mysql -e 'CREATE DATABASE dreamteach;'
-  - mysql -u root --password="" < dreamteach.sql
+  - mysql -u root < dreamteach.sql
 
 # Install composer dependencies,
 # Create database, schema and fixtures

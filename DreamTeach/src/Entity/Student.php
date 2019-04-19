@@ -168,6 +168,11 @@ class Student implements UserInterface
     private $resetPassword;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $tailleSexe;
+
+    /**
      * @return mixed
      */
     public function getResetId()
@@ -713,5 +718,22 @@ class Student implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTailleSexe()
+    {
+        return $this->tailleSexe;
+    }
+
+    /**
+     * @param mixed $tailleSexe
+     */
+    public function setTailleSexe($tailleSexe): void
+    {
+        $this->tailleSexe = $tailleSexe;
+    }
+
 
 }

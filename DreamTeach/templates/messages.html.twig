@@ -19,7 +19,7 @@
                     class="fas fa-envelope p-3"></i>Nouveau message<i class="fas fa-plus p-3"></i></button>
     </form>
     {% if messages %}
-        <p class="mt-3">Messages recent :</p>
+        <p class="mt-3">Messages récents :</p>
         <div class="container mt-3">
             <div class="row text-center">
             </div>
@@ -40,7 +40,7 @@
                         <h6>{{ m.idSender.firstName }} {{ m.idSender.lastName }}</h6>
                         <hr style="background-color: #6d7fcc;"/>
                         <p>{{ m.content|slice(0, 300) }}{% if m.content|length > 300 %} ...{% endif %}</p>
-                        <p class="text-right">Le : {{ m.date|date("d/m/Y") }}  a {{ m.date|date("H:i") }} </p>
+                        <p class="text-right">Le : {{ m.date|date("d/m/Y") }} à {{ m.date|date("H:i") }} </p>
                     </div>
                 </div>
             {% endfor %}

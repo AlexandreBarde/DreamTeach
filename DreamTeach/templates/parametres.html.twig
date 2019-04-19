@@ -18,7 +18,7 @@
                         <label for="nouveauMotDePasse">Nouveau mot de passe &nbsp;</label>
                         <a href="#"><i class="fas fa-pen" id="editPassword"></i></a>
                         {{ form_widget(formPassword.password, {'id' :  'nouveauMotDePasse', 'disabled': 'disabled', 'class': 'col'})}}
-                        <small id="emailHelp" class="form-text text-muted">Le mot de passe doit contenir 8 caractères min</small>
+                        <small id="emailHelp" class="form-text text-muted">Le mot de passe doit contenir 8 caractères minimum</small>
                     </div>
                     <button type="submit" id="submitPassword" class="btn btn-primary" disabled>Modifier</button>
                     {{ form_end(formPassword) }}
@@ -26,10 +26,10 @@
                 {{ form_start(formEmailAddress) }}
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="nouvelEmail">Modifier l'e-mail &nbsp;</label>
+                        <label for="nouvelEmail">Modifier l'email &nbsp;</label>
                         <a href="#"><i class="fas fa-pen" id="editEmail"></i></a>
                         {{ form_widget(formEmailAddress.emailAddress, {'id' :  'adresseEmail', 'disabled': 'disabled', 'class': 'col'})}}
-                        <small id="emailHelp" class="form-text text-muted">L'e-mail doit être du type xyz@example.com</small>
+                        <small id="emailHelp" class="form-text text-muted">L'email doit être du type xyz@example.com</small>
                     </div>
                     <button type="submit" id="submitEmail" class="btn btn-primary" disabled>Modifier</button>
                     {{ form_end(formEmailAddress) }}
